@@ -1,10 +1,7 @@
 import ReadmeApp from './Readme.svelte';
 
-const app = new ReadmeApp({
-	target: document.querySelector('.readme'),
-	props: {
-		name: 'world'
-	}
+const readmeApp = new ReadmeApp({
+	target: document.querySelector('.readme')
 });
 
-export default app;
+export default readmeApp;
