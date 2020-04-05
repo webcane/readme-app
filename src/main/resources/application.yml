@@ -1,12 +1,16 @@
-#server:
-#  port: 5000
+server:
+  port: 3000
+
+#management:
+#  endpoints.web.cors:
+#    allowed-origins: http://localhost:5000
 
 spring:
   main:
     banner-mode: "off"
 
   datasource:
-    url: jdbc:h2:mem:radb
+    url: jdbc:h2:mem:radb;DB_CLOSE_DELAY=-1
 
   jpa:
     show-sql: true
