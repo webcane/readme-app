@@ -1,5 +1,5 @@
 <script>
-    import Tags from './TagSidebar.svelte';
+    import TagList from './TagList.svelte';
     import Navbar from './Navbar.svelte';
     import Banner from './Banner.svelte';
     import ArticleList from './ArticleList.svelte';
@@ -19,7 +19,7 @@
                 <ArticlePagination />
             </Col>
             <Col md="3">
-                <Tags />
+                <TagList />
             </Col>
         </Row>
     </div>
