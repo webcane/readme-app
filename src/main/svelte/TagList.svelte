@@ -3,36 +3,41 @@
   import { onMount } from "svelte";
   import Tag from './Tag.svelte';
 
-  //const tags = [ 'oop', 'microservice', 'java', 'kubernates', 'azure', 'helm' ];
   let tags = [];
-  let gettingQuote = false;
+  let tagsPromise;
 
-  onMount(() => { loadTags(); });
+  onMount(() => { tagsPromise = loadTags(); });
 
   async function loadTags() {
-  	gettingQuote = true;
     console.log('load Tags');
     const res = await fetch("http://localhost:3000/tags");
-    tags = await res.json();
-    console.log(tags[0]);
-	gettingQuote = false;
+    const json = await res.json();
+
+    if (res.ok) {
+        //tags = json;
+        return json;
+    } else {
+    	log.console(json);
+        throw new Error(json);
+    }
   }
-//  $: fetch('http://localhost:3000/tags')
-//  		.then(r => r.json(); console.log(user))
-//  		.then(data => {
-//  			items = data;
-//  		});
 </script>
 
 <div class="sidebar">
   <p>Popular Tags</p>
   <div class="tag-list">
-  {#if gettingQuote}
+  {#await tagsPromise}
      <p class="loading">loading...</p>
-  {:else}
-  	 {#each tags as tag}
-        <Tag tag={tag} />
-     {/each}
-  {/if}
+  {:then tags}
+    {#if tags}
+        {#each Array.from(tags) as tag}
+            <Tag tag={tag} />
+        {/each}
+    {:else}
+      <p>No Tags available</p>
+    {/if}
+  {:catch error}
+  	<span class="badge badge-danger">Failed to load Tags</span>
+  {/await}
   </div>
 </div>
