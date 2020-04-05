@@ -1,5 +1,6 @@
 <script>
   import { Container, Badge } from 'sveltestrap';
+  import Alert from './Alert.svelte';
   import { onMount } from "svelte";
   import Tag from './Tag.svelte';
 
@@ -37,7 +38,8 @@
       <p>No Tags available</p>
     {/if}
   {:catch error}
-  	<span class="badge badge-danger">Failed to load Tags</span>
+  	<!-- <span class="badge badge-danger">Failed to load Tags</span> -->
+  	<Alert message="Failed to load Tags" />
   {/await}
   </div>
 </div>
