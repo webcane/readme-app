@@ -23,6 +23,10 @@ spring:
     console:
       enabled: true
 
+  devtools:
+    restart:
+      enabled: true
+
 logging:
   level:
     org:
