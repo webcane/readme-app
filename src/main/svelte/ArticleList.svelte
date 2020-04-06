@@ -32,12 +32,13 @@
       console.log('load Articles');
       const res = await fetch("http://localhost:3000/articles");
       const json = await res.json();
+      console.log(json);
 
       if (res.ok) {
           return json;
       } else {
       	log.console(json);
-          throw new Error(json);
+        throw new Error(json);
       }
     }
 </script>
