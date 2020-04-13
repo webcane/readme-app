@@ -7,7 +7,6 @@
     "dev": "rollup -c -w",
     "start": "sirv src/main/resources/public",
     "start:dev": "sirv src/main/resources/public --single --dev",
-    "delete-build": "del-cli src/main/resources/public/build",
     "build:java": "del-cli src/main/resources/public/build && rollup -c"
   },
   "keywords": [
