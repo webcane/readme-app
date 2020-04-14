@@ -1,5 +1,8 @@
 server:
   port: 3000
+  error:
+    whitelabel:
+      enabled: false
 
 #management:
 #  endpoints.web.cors:
@@ -19,6 +22,8 @@ spring:
       ddl-auto: create-drop
       dialect: org.hibernate.dialect.H2Dialect
 
+    open-in-view: false
+
   h2:
     console:
       enabled: true
@@ -27,16 +32,16 @@ spring:
     restart:
       enabled: true
 
-#springfox:
-#  documentation:
-#    swagger:
-#      v2:
-#        # default mapped URL path "/v2/api-docs"
-#        path: "/"
+springfox:
+  documentation:
+    swagger:
+      v2:
+        # default mapped URL path "/v2/api-docs"
+        path: "/swagger"
 
 logging:
   level:
     org:
-      springframework: ERROR
+      springframework: INFO
     cane:
       brothers: DEBUG
