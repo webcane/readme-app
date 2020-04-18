@@ -9,6 +9,7 @@ import java.util.List;
  * Created by cane
  */
 @Service
+//@Transactional
 public class ArticleService {
 
     @Autowired

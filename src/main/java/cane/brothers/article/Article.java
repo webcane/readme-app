@@ -30,16 +30,20 @@ public class Article implements Serializable, Persistable<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ART_ID", unique = true)
     private Long id;
+
     @Column(name = "URL", unique = true)
     private String url;
+
     @Column(name = "TITLE")
     private String title;
+
     @Column(name = "PREAMBLE", length = 1000)
     private String preamble;
+
     //@JsonBackReference
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     /**
@@ -80,7 +84,7 @@ public class Article implements Serializable, Persistable<Long> {
         tag.setArticle(this);
     }
 
-    public void removeComment(Tag tag) {
+    public void removeTag(Tag tag) {
         tags.remove(tag);
         tag.setArticle(null);
     }
