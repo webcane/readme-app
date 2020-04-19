@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author mniedre
  */
 @ExtendWith(MockitoExtension.class)
+public
 class TagServiceTest {
 
     @Mock
@@ -38,7 +39,7 @@ class TagServiceTest {
         assertThat(allTags.get(0).getValue()).isSameAs(testTag.getValue());
     }
 
-    class TagTest implements TagView {
+    public static class TagTest implements TagView {
 
         @Override
         public String getValue() {
