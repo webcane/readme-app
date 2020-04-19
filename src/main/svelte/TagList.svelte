@@ -1,8 +1,11 @@
 <script>
+  import { getContext } from 'svelte';
   import { Container, Badge } from 'sveltestrap';
   import Alert from './Alert.svelte';
   import { onMount } from "svelte";
   import Tag from './Tag.svelte';
+
+  const baseUrl = getContext('baseUrl');
 
   let tags = [];
   let tagsPromise;
@@ -11,7 +14,7 @@
 
   async function loadTags() {
     console.log('load Tags');
-    const res = await fetch("http://localhost:3000/tags");
+    const res = await fetch(baseUrl + "tags");
     const json = await res.json();
 
     if (res.ok) {

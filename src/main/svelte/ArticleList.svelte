@@ -1,4 +1,5 @@
 <script>
+  import { getContext } from 'svelte';
   import { Container,Badge } from 'sveltestrap';
   import Article from './Article.svelte';
   import ArticleMeta from './ArticleMeta.svelte';
@@ -23,6 +24,8 @@
 //    }
 //  ];
 
+  const baseUrl = getContext('baseUrl');
+
   let Articles = [];
   let promise;
 
@@ -30,7 +33,7 @@
 
     async function loadArticles() {
       console.log('load Articles');
-      const res = await fetch("http://localhost:3000/articles");
+      const res = await fetch(baseUrl + "/articles");
       const json = await res.json();
       console.log(json);
 
