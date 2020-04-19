@@ -23,4 +23,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      */
     @Query("select a from Article a")
     <T> List<T> findAll(Class<T> type);
+
+    <T> List<T> findAllByTags_Value(Class<T> type, String value);
 }

@@ -28,8 +28,10 @@ public class Tag implements Serializable, Persistable<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TAG_ID", unique = true)
     private Long id;
+
     @Column(unique = true)
     private String value;
+
     //@JsonIgnore
     //@JsonManagedReference
     @ToString.Exclude
