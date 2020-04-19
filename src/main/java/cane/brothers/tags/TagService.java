@@ -1,6 +1,6 @@
 package cane.brothers.tags;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.List;
  * Created by cane
  */
 @Service
+@RequiredArgsConstructor
 public class TagService {
 
-    @Autowired
-    private TagRepository repo;
+    private final TagRepository repo;
 
     public List<TagView> findAll() {
         return repo.findAll(TagView.class);
