@@ -21,19 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class ArticleRepositoryIT {
 
-
-    @Autowired
     private ArticleRepository repo;
 
     private String tagName_pos = "oop";
     private String tagName_neg = "JavaScript";
 
-    private static final boolean hasTag(Set<TagView> tags, String tagName) {
-        for (TagView tag : tags) {
-            tag.getValue().equals(tagName);
-            return true;
-        }
-        return false;
+    @Autowired
+    public ArticleRepositoryIT(ArticleRepository repo) {
+        this.repo = repo;
     }
 
     @Before
@@ -57,6 +52,14 @@ public class ArticleRepositoryIT {
             assertThat(tags).isNotEmpty();
             assertThat(hasTag(tags, tagName_pos)).isTrue();
         }
+    }
+
+    private static final boolean hasTag(Set<TagView> tags, String tagName) {
+        for (TagView tag : tags) {
+            tag.getValue().equals(tagName);
+            return true;
+        }
+        return false;
     }
 
     @Test
