@@ -14,7 +14,7 @@
 
   async function loadTags() {
     console.log('load Tags');
-    const res = await fetch(baseUrl + "tags");
+    const res = await fetch(baseUrl + "/tags");
     const json = await res.json();
 
     if (res.ok) {
