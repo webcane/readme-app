@@ -81,4 +81,13 @@ public class ArticleControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()));
     }
+
+    @Test
+    void test_whenFilterArticlesByEmptyTag_thenHttp400() throws Exception {
+        final String tagName = "";
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tag=" + tagName))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.BAD_REQUEST.value()));
+    }
 }
