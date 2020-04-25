@@ -28,12 +28,18 @@ spring:
 
   h2:
     console:
-#      path: /h2-console
+      #      path: /h2-console
       enabled: true
 
   devtools:
     restart:
       enabled: true
+
+#  resources:
+#    add-mappings: false
+
+#  mvc:
+#    throw-exception-if-no-handler-found: true
 
 springfox:
   documentation:
