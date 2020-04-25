@@ -1,8 +1,7 @@
 package cane.brothers.article;
 
-import cane.brothers.tags.TagServiceTest;
+import cane.brothers.tags.DummyTag;
 import cane.brothers.tags.TagView;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import java.util.Set;
 /**
  * @author mniedre
  */
-@Slf4j
 public class DummyArticle implements ArticleView {
 
     private static int counter;
@@ -29,7 +27,6 @@ public class DummyArticle implements ArticleView {
         List<ArticleView> testArticles = new ArrayList<>();
         testArticles.add(getArticle(true));
         testArticles.add(getArticle(false));
-        log.info(testArticles.toString());
         return testArticles;
     }
 
@@ -56,7 +53,7 @@ public class DummyArticle implements ArticleView {
     public Set<TagView> getTags() {
         Set<TagView> tags = new HashSet<>();
         if (withTags) {
-            tags.add(new TagServiceTest.TagTest());
+            tags.add(new DummyTag());
         }
         return tags;
     }

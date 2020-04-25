@@ -27,7 +27,7 @@ class TagServiceTest {
 
     @Test
     public void test_findAll() {
-        TagTest testTag = new TagTest();
+        DummyTag testTag = new DummyTag();
         List<TagView> tags = new ArrayList<>();
         tags.add(testTag);
 
@@ -39,11 +39,4 @@ class TagServiceTest {
         assertThat(allTags.get(0).getValue()).isSameAs(testTag.getValue());
     }
 
-    public static class TagTest implements TagView {
-
-        @Override
-        public String getValue() {
-            return "test";
-        }
-    }
 }

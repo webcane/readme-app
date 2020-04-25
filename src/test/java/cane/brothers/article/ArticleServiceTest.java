@@ -32,7 +32,7 @@ public class ArticleServiceTest {
         log.info(allArticles.toString());
 
         assertThat(allArticles).isNotNull();
-        assertThat(allArticles.size()).isEqualTo(1);
+        assertThat(allArticles.size()).isEqualTo(2);
         assertThat(allArticles.get(0).getUrl()).isSameAs(DummyArticle.getArticle(true).getUrl());
     }
 }
