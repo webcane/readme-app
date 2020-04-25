@@ -33,6 +33,7 @@
 
     async function loadArticles() {
       console.log('load Articles');
+      console.log(location);
       const res = await fetch(baseUrl + "/articles");
       const json = await res.json();
       console.log(json);
