@@ -1,6 +1,6 @@
 package cane.brothers.article;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +9,15 @@ import java.util.List;
  * Created by cane
  */
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ArticleService {
 
     private ArticleRepository repo;
+
+    @Autowired
+    public ArticleService(ArticleRepository repo) {
+        this.repo = repo;
+    }
 
     public List<ArticleView> findAll() {
         return repo.findAll(ArticleView.class);
