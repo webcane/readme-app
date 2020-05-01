@@ -334,5 +334,7 @@ dist
 .classpath
 .project
 
+/src/main/resources/public/build/
+
 
 
