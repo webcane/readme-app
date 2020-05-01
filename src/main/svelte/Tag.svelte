@@ -2,10 +2,9 @@
   import { Badge } from 'sveltestrap'
   import Router from 'svelte-spa-router'
   import {link, push, pop, replace, location, querystring} from 'svelte-spa-router'
-  import routes from './routes'
 
   export let tag;
-  console.log({tag});
+  console.log(tag);
 </script>
 
 <!-- <Badge href="/tags/{tag}" color="secondary">{tag}</Badge> -->

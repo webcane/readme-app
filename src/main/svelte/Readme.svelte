@@ -1,19 +1,30 @@
 <script>
+
     import { setContext } from 'svelte'
+    import Router from 'svelte-spa-router'
+    
+
     import TagList from './TagList.svelte'
     import Navbar from './Navbar.svelte'
-    import Banner from './Banner.svelte'
-    import ArticleList from './ArticleList.svelte'
-    import ArticleFilters from './ArticleFilters.svelte'
-    import ArticlePagination from './ArticlePagination.svelte'
-    
+    import Banner from './Banner.svelte'  
     import { Col, Container, Row } from "sveltestrap"
 
-    import Router from 'svelte-spa-router'
-    import routes from './routes'
+    import Articles from './Articles.svelte';
+    import NotFound from './NotFound.svelte';
+
+    const routes = {
+        '/' : Articles,
+        '/tags/:tagName?' : Articles, 
+        // Catch-all, must be last
+        '*' : NotFound 
+    }
 
     export let baseUrl;
     setContext('baseUrl', baseUrl);
+
+  function routeLoaded(event) {
+    console.log(event);
+  }
 </script>
 
 <Navbar />
@@ -22,7 +33,7 @@
     <div class="container page">
         <Row>
             <Col md="9">
-                <Router {routes} />
+                <Router {routes} on:routeLoaded={routeLoaded} />
             </Col>
             <Col md="3">
                 <TagList />
