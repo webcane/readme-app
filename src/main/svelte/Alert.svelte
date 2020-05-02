@@ -1,9 +1,10 @@
 <script>
   import { Alert } from "sveltestrap";
   export let message;
+  export let color;
 </script>
 
 <!-- TODO report bug <Alert warning>{message}</Alert> -->
-<div class="alert alert-danger" role="alert">
+<div class="alert alert-{color}" role="alert">
   {message}
 </div>
