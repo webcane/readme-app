@@ -1,6 +1,6 @@
 <script>
   import { Container, Badge } from 'sveltestrap';
-  import Tag from './Tag.svelte';
+
   export let tags;
 </script>
 
@@ -12,6 +12,5 @@
 {#if tags}
     {#each Array.from(tags) as tag}
         <Badge color="secondary" class="float-right">{tag.value}</Badge>
-        <!-- <Tag class="float-right" tag={tag} /> -->
     {/each}
 {/if}
