@@ -1,12 +1,10 @@
 <script>
-    //import ArticleList from './ArticleList.svelte'
     import { getContext } from "svelte";
     import { Container, Badge } from "sveltestrap";
     import Article from "./Article.svelte";
     import ArticleMeta from "./ArticleMeta.svelte";
     import ArticleTags from "./ArticleTags.svelte";
     import Alert from "./Alert.svelte";
-    //import { onMount } from "svelte";
 
     import ArticleFilters from './ArticleFilters.svelte'
     import ArticlePagination from './ArticlePagination.svelte'
@@ -55,8 +53,6 @@
 </script>
 
 <!-- <ArticleFilters /> -->
-
-<!-- <ArticleList params={promise}/> -->
 
 {#await promise}
   <!-- <p class="loading">loading...</p> -->

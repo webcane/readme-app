@@ -1,15 +1,14 @@
 <script>
   import { getContext } from 'svelte';
+  const baseUrl = getContext('baseUrl');
+  
   import { Container, Badge } from 'sveltestrap';
   import Alert from './Alert.svelte';
-  import { onMount } from "svelte";
-  //import Tag from './Tag.svelte';
-
-  const baseUrl = getContext('baseUrl');
 
   let tags = [];
   let tagsPromise;
 
+  import { onMount } from "svelte";
   onMount(() => { tagsPromise = loadTags(); });
 
   async function loadTags() {
@@ -38,15 +37,14 @@
   {:then tags}
     {#if tags}
         {#each Array.from(tags) as tag}
-           <!-- <Tag tag={tag} /> -->
-           <a href="/tags/{tag.value}" class="tag-default tag-pill" on:click|preventDefault='{() => dispatch("select", { tag })}'>{tag.value}</a>
+           <a href="/tags/{tag.value}" class="tag-default tag-pill" 
+              on:click|preventDefault='{() => dispatch("select", { tag })}'>{tag.value}</a>
         {/each}
     {:else}
       <p>No Tags available</p>
     {/if}
   {:catch error}
-  	<!-- <span class="badge badge-danger">Failed to load Tags</span> -->
-  	<Alert message="Failed to load Tags" />
+  	<Alert message="Failed to load Tags" color="danger" />
   {/await}
   </div>
 </div>
