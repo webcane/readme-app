@@ -37,7 +37,7 @@ public class ArticleController {
     public ResponseEntity<List<ArticleView>> findAllArticles() {
         List<ArticleView> result = svc.findAll();
         if (result.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(result);
     }
@@ -51,12 +51,12 @@ public class ArticleController {
     public ResponseEntity<List<ArticleView>> findArticlesByTag(@ApiParam("Tag name") @RequestParam String tag) {
         if (StringUtils.isEmpty(tag)) {
             log.warn("empty tag request param");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<ArticleView> result = svc.findByTagName(tag);
         if (result != null && result.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(result);
     }

@@ -1,6 +1,5 @@
 package cane.brothers.article;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ import java.util.List;
 /**
  * @author mniedre
  */
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class ArticleControllerTest {
 
