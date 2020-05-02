@@ -47,7 +47,7 @@
       const baseUrl = getContext("baseUrl");
       let url = baseUrl + "/articles";
       if (tagName) {
-        url = url + "/findBy?tag=" + tagName;
+        url = url + "/findBy?tags=" + tagName;
       }
       return url;
     }

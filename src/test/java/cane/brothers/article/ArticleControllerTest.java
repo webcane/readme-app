@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,12 +19,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
  * @author mniedre
  */
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class ArticleControllerTest {
 
     @Mock
@@ -55,11 +60,13 @@ public class ArticleControllerTest {
     @Test
     void test_whenFilterArticlesByExistedTag_thenHttp200_andArticleReturned() throws Exception {
         final String tagName = "test";
+        Collection<String> tagsToSearch = new LinkedHashSet<>();
+        tagsToSearch.add(tagName);
         List<ArticleView> testArticles = new ArrayList<>();
         testArticles.add(DummyArticle.getArticle(true));
-        Mockito.doReturn(testArticles).when(svc).findByTagName(tagName);
+        Mockito.doReturn(testArticles).when(svc).findByTagNames(tagsToSearch);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tag=" + tagName))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tags=" + tagName))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value()))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -72,10 +79,12 @@ public class ArticleControllerTest {
     @Test
     void test_whenFilterArticlesByNotExistedTag_thenHttp404() throws Exception {
         final String tagName = "asd";
+        Collection<String> tagsToSearch = new LinkedHashSet<>();
+        tagsToSearch.add(tagName);
         List<ArticleView> testArticles = new ArrayList<>();
-        Mockito.doReturn(testArticles).when(svc).findByTagName(tagName);
+        Mockito.doReturn(testArticles).when(svc).findByTagNames(tagsToSearch);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tag=" + tagName))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tags=" + tagName))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()));
     }

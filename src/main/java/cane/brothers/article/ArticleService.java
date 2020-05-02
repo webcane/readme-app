@@ -3,6 +3,7 @@ package cane.brothers.article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class ArticleService {
         return repo.findAll(ArticleView.class);
     }
 
-    public List<ArticleView> findByTagName(String tagName) {
-        return repo.findAllByTags_Value(ArticleView.class, tagName);
+    public List<ArticleView> findByTagNames(Collection<String> tagNames) {
+        return repo.findAllByTags_ValueIn(ArticleView.class, tagNames);
     }
 }

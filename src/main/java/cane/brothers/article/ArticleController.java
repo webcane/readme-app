@@ -5,12 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,13 +49,13 @@ public class ArticleController {
             @ApiResponse(code = 200, message = "There are some articles found by tag name"),
             @ApiResponse(code = 400, message = "There is no result"),
             @ApiResponse(code = 404, message = "Bad request, For example missing tag name")})
-    public ResponseEntity<List<ArticleView>> findArticlesByTag(@ApiParam("Tag name") @RequestParam String tag) {
-        if (StringUtils.isEmpty(tag)) {
+    public ResponseEntity<List<ArticleView>> findArticlesByTagNames(@ApiParam("Tag name") @RequestParam Collection<String> tags) {
+        if (CollectionUtils.isEmpty(tags)) {
             log.warn("empty tag request param");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<ArticleView> result = svc.findByTagName(tag);
+        List<ArticleView> result = svc.findByTagNames(tags);
         if (result != null && result.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
