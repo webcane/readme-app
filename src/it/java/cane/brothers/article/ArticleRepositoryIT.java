@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +43,9 @@ public class ArticleRepositoryIT {
     @Test
     public void test_findByTagName_pos() {
         // when
-        List<ArticleView> artsByTags = repo.findAllByTags_Value(ArticleView.class, tagName_pos);
+        Collection<String> tagsToSearch = new ArrayList<>();
+        tagsToSearch.add(tagName_pos);
+        List<ArticleView> artsByTags = repo.findAllByTags_ValueIn(ArticleView.class, tagsToSearch);
 
         // then
         assertThat(artsByTags).isNotNull();
@@ -65,7 +69,9 @@ public class ArticleRepositoryIT {
     @Test
     public void test_findByTagName_neg() {
         // when
-        List<ArticleView> artsByTags = repo.findAllByTags_Value(ArticleView.class, tagName_neg);
+        Collection<String> tagsToSearch = new ArrayList<>();
+        tagsToSearch.add(tagName_neg);
+        List<ArticleView> artsByTags = repo.findAllByTags_ValueIn(ArticleView.class, tagsToSearch);
 
         // then
         assertThat(artsByTags).isNotNull();

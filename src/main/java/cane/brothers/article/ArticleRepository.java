@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,5 +25,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("select a from Article a")
     <T> List<T> findAll(Class<T> type);
 
-    <T> List<T> findAllByTags_Value(Class<T> type, String value);
+    <T> List<T> findAllByTags_ValueIn(Class<T> type, Collection<String> value);
 }
