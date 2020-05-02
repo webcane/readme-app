@@ -14,7 +14,7 @@
 
     const routes = {
         '/' : Articles,
-        '/tags/:tagName?' : Articles, 
+        '/tags/:tagName' : Articles, 
         // Catch-all, must be last
         '*' : NotFound 
     }
@@ -23,7 +23,7 @@
     setContext('baseUrl', baseUrl);
 
   function routeLoaded(event) {
-    console.log(event);
+    console.log("loaded route: \'" + event.detail.location + "\'");
   }
 </script>
 
