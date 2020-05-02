@@ -3,7 +3,7 @@
   import { Container, Badge } from 'sveltestrap';
   import Alert from './Alert.svelte';
   import { onMount } from "svelte";
-  import Tag from './Tag.svelte';
+  //import Tag from './Tag.svelte';
 
   const baseUrl = getContext('baseUrl');
 
@@ -25,6 +25,9 @@
         throw new Error(json);
     }
   }
+
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
 </script>
 
 <div class="sidebar">
@@ -35,7 +38,8 @@
   {:then tags}
     {#if tags}
         {#each Array.from(tags) as tag}
-            <Tag tag={tag} />
+           <!-- <Tag tag={tag} /> -->
+           <a href="/tags/{tag.value}" class="tag-default tag-pill" on:click|preventDefault='{() => dispatch("select", { tag })}'>{tag.value}</a>
         {/each}
     {:else}
       <p>No Tags available</p>

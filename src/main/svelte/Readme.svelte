@@ -1,8 +1,5 @@
 <script>
-
-    import { setContext } from 'svelte'
-    import Router from 'svelte-spa-router'
-    
+    import { setContext } from 'svelte'  
 
     import TagList from './TagList.svelte'
     import Navbar from './Navbar.svelte'
@@ -12,19 +9,13 @@
     import Articles from './Articles.svelte';
     import NotFound from './NotFound.svelte';
 
-    const routes = {
-        '/' : Articles,
-        '/tags/:tagName' : Articles, 
-        // Catch-all, must be last
-        '*' : NotFound 
-    }
-
     export let baseUrl;
     setContext('baseUrl', baseUrl);
 
-  function routeLoaded(event) {
-    console.log("loaded route: \'" + event.detail.location + "\'");
-  }
+    let tag;
+	function setTags({ detail }) {
+		tag = detail.tag;
+	}
 </script>
 
 <Navbar />
@@ -33,10 +24,10 @@
     <div class="container page">
         <Row>
             <Col md="9">
-                <Router {routes} on:routeLoaded={routeLoaded} />
+                <Articles {tag} />
             </Col>
             <Col md="3">
-                <TagList />
+                <TagList on:select='{setTags}' />
             </Col>
         </Row>
     </div>

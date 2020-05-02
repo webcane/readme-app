@@ -13,12 +13,13 @@
 
     let Articles = [];
     
+    export let tag
+   
     let promise
-    export let params
-    $: promise = loadArticles(params)
+    $: promise = loadArticles(tag)
 
-    async function loadArticles(params) {
-      let tagName = getTagName(params);
+    async function loadArticles(tag) {
+      let tagName = getTagName(tag);
 
       let url = getUrl(tagName);
       console.log("load articles by url: " + url);
@@ -35,10 +36,10 @@
       }
     }
 
-    function getTagName(params) {
+    function getTagName(tag) {
       let tagName
-      if(params) {
-        tagName = params.tagName
+      if(tag) {
+        tagName = tag.value
       }
       return tagName;
     }
