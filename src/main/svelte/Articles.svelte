@@ -1,6 +1,7 @@
 <script>
-    //import ArticleList from './ArticleList.svelte'
     import { getContext } from "svelte";
+    const baseUrl = getContext("baseUrl");
+
     import { Container, Badge } from "sveltestrap";
     import Article from "./Article.svelte";
     import ArticleMeta from "./ArticleMeta.svelte";
@@ -12,54 +13,42 @@
     import ArticlePagination from './ArticlePagination.svelte'
 
     let Articles = [];
-    
+
     let promise
     export let params
-    $: promise = loadArticles(params)
-
-    async function loadArticles(params) {
-      let tagName = getTagName(params);
-
-      let url = getUrl(tagName);
-      console.log("load articles by url: " + url);
-
-      const res = await fetch(url);
-      if (res.status === 404) {
-        throw new Error("There is no articles with selected tag");
-      } 
-      else if (res.ok) {
-        return await res.json();
-      } 
-      else {
-        throw new Error("Failed to load Articles");
-      }
+    $: {
+        let tagName
+        if(params) {
+            tagName = params.tagName
+        }
+        promise = loadArticles(tagName);
     }
 
-    function getTagName(params) {
-      let tagName
-      if(params) {
-        tagName = params.tagName
-      }
-      return tagName;
-    }
+    async function loadArticles(tagName) {
+        let url;
+        console.log(tagName);
+        if (tagName) {
+            url = baseUrl + "/articles/findBy?tags=" + tagName;
+        } else {
+            url = baseUrl + "/articles";
+        }
+        const res = await fetch(url);
 
-    function getUrl(tagName) {
-      const baseUrl = getContext("baseUrl");
-      let url = baseUrl + "/articles";
-      if (tagName) {
-        url = url + "/findBy?tags=" + tagName;
-      }
-      return url;
+        if (res.status === 404) {
+            throw new Error("There is no articles with selected tag");
+        } else if (res.ok) {
+            const json = await res.json();
+            return json;
+        } else {
+            throw new Error("Failed to load Articles");
+        }
     }
 </script>
 
 <!-- <ArticleFilters /> -->
 
-<!-- <ArticleList params={promise}/> -->
-
 {#await promise}
-  <!-- <p class="loading">loading...</p> -->
-  <Alert message="loading..." color="secondary" />
+  <p class="loading">loading...</p>
 {:then Articles}
   {#if Articles}
     {#each Array.from(Articles) as art}
@@ -73,8 +62,9 @@
     <p>No Articles available yet</p>
   {/if}
 {:catch error}
-  <Alert message={error.message} color="danger" />
+  <Alert message={error.message} />
 {/await}
 
 <!-- <ArticlePagination /> -->
+
 
