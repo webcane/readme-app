@@ -12,9 +12,9 @@
     export let baseUrl;
     setContext('baseUrl', baseUrl);
 
-    let tag;
+    let tags;
 	function setTags({ detail }) {
-		tag = detail.tag;
+		tags = detail.tagSet;
 	}
 </script>
 
@@ -24,7 +24,7 @@
     <div class="container page">
         <Row>
             <Col md="9">
-                <Articles {tag} />
+                <Articles {tags} />
             </Col>
             <Col md="3">
                 <TagList on:select='{setTags}' />

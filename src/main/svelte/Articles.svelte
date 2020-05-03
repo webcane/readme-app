@@ -11,13 +11,13 @@
 
     let Articles = [];
     
-    export let tag
+    export let tags
    
     let promise
-    $: promise = loadArticles(tag)
+    $: promise = loadArticles(tags)
 
-    async function loadArticles(tag) {
-      let tagName = getTagName(tag);
+    async function loadArticles(tags) {
+      let tagName = getTagNames(tags);
 
       let url = getUrl(tagName);
       console.log("load articles by url: " + url);
@@ -34,12 +34,13 @@
       }
     }
 
-    function getTagName(tag) {
-      let tagName
-      if(tag) {
-        tagName = tag.value
+    function getTagNames(tags) {
+      let tagNames
+      
+      if(tags) {
+        tagNames = Array.from(tags).toString();
       }
-      return tagName;
+      return tagNames;
     }
 
     function getUrl(tagName) {
