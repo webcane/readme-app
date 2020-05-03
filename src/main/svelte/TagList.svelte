@@ -1,4 +1,6 @@
 <script>
+  import Tag from './Tag.svelte';
+  
   import { getContext } from 'svelte';
   const baseUrl = getContext('baseUrl');
   
@@ -30,16 +32,14 @@
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  function onClick(tag) {
-    if(tagSet.has(tag.value)) {
-      tagSet.delete(tag.value);
+  function handleSelect(event) {
+    if(tagSet.has(event.detail.tag.value)) {
+      tagSet.delete(event.detail.tag.value);
     } else {
-      tagSet.add(tag.value);
+      tagSet.add(event.detail.tag.value);
     }
-    //tag.selected = !tag.selected;
-    //console.log("tag selected: " + tag.selected);
     dispatch("select", {tagSet});
-  }
+	}
 </script>
 
 <div class="sidebar">
@@ -51,11 +51,7 @@
   {:then tags}
     {#if tags}
         {#each Array.from(tags) as tag}
-        <!-- 'default' -->
-           <a href="/tags/{tag.value}" class="tag-default tag-pill" 
-              on:click|preventDefault='{() => onClick(tag)}'>{tag.value}</a>
-              <!-- <Badge pill href="/tags/{tag.value}" color="default"
-                on:click|preventDefault='{() => dispatch("select", { tag })}'>{tag.value}</Badge> -->
+          <Tag {tag} on:select={handleSelect} />
         {/each}
     {:else}
       <p>No Tags available</p>
