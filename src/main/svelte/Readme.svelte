@@ -15,20 +15,37 @@
     let tags;
 	function setTags({ detail }) {
 		tags = detail.tagSet;
-	}
+    }
+    
+    let selected = '';
+    function setMenu({ detail }) {
+		selected = detail;
+    }
 </script>
 
-<Navbar />
+<Navbar on:menu='{setMenu}'/>
 <div class="home-page">
-    <Banner />
+    <Banner show={selected}/>
     <div class="container page">
         <Row>
+
+        {#if selected === 'editor'}
+            <Col md="12"> editor...</Col>
+    
+        {:else if selected === 'login'}
+            <Col md="12"> login...</Col>
+
+        {:else if selected === 'register'}
+            <Col md="12"> register...</Col>
+       
+        {:else}
             <Col md="9">
                 <Articles {tags} />
             </Col>
             <Col md="3">
                 <TagList on:select='{setTags}' />
             </Col>
+        {/if}
         </Row>
-    </div>
+    </div>    
 </div>
