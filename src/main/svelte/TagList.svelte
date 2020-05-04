@@ -1,15 +1,16 @@
 <script>
+  import Tag from './Tag.svelte';
+  
   import { getContext } from 'svelte';
+  const baseUrl = getContext('baseUrl');
+  
   import { Container, Badge } from 'sveltestrap';
   import Alert from './Alert.svelte';
-  import { onMount } from "svelte";
-  import Tag from './Tag.svelte';
-
-  const baseUrl = getContext('baseUrl');
 
   let tags = [];
   let tagsPromise;
 
+  import { onMount } from "svelte";
   onMount(() => { tagsPromise = loadTags(); });
 
   async function loadTags() {
@@ -25,24 +26,38 @@
         throw new Error(json);
     }
   }
+
+  let tagSet = new Set();
+
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+
+  function handleSelect(event) {
+    if(tagSet.has(event.detail.tag.value)) {
+      tagSet.delete(event.detail.tag.value);
+    } else {
+      tagSet.add(event.detail.tag.value);
+    }
+    dispatch("select", {tagSet});
+	}
 </script>
 
 <div class="sidebar">
   <p>Popular Tags</p>
   <div class="tag-list">
   {#await tagsPromise}
-     <p class="loading">loading...</p>
+     <!-- <p class="loading">loading...</p> -->
+     <Alert message="loading..." color="secondary" />
   {:then tags}
     {#if tags}
         {#each Array.from(tags) as tag}
-            <Tag tag={tag} />
+          <Tag {tag} on:select={handleSelect} />
         {/each}
     {:else}
       <p>No Tags available</p>
     {/if}
   {:catch error}
-  	<!-- <span class="badge badge-danger">Failed to load Tags</span> -->
-  	<Alert message="Failed to load Tags" />
+  	<Alert message="Failed to load Tags" color="danger" />
   {/await}
   </div>
 </div>

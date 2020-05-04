@@ -7,6 +7,9 @@
     NavItem,
     NavLink
   } from 'sveltestrap';
+
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
 </script>
 
 <Navbar light expand="sm">
@@ -14,13 +17,20 @@
     <NavbarBrand href="/">readme app</NavbarBrand>
     <Nav class="ml-auto" navbar>
       <NavItem>
-        <NavLink href="/">Home</NavLink>
+      <!-- overview -->
+        <NavLink href="#" on:click={() => dispatch('menu', '')}>Home</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/login">Sign in</NavLink>
+        <!-- /editor -->
+        <NavLink href="#" on:click={() => dispatch('menu', 'editor')}>New</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/register">Sign up</NavLink>
+        <!-- /login -->
+        <NavLink href="#" on:click={() => dispatch('menu', 'login')}>Sign in</NavLink>
+      </NavItem>
+      <NavItem>
+        <!-- /register -->
+        <NavLink href="#" on:click={() => dispatch('menu', 'register')}>Sign up</NavLink>
       </NavItem>
     </Nav>
   </Container>

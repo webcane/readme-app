@@ -1,11 +1,15 @@
 <script>
-  import { Badge } from 'sveltestrap'
-  import Router from 'svelte-spa-router'
-  import {link, push, pop, replace, location, querystring} from 'svelte-spa-router'
+	export let tag;
 
-  export let tag;
-  console.log(tag);
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+
+    let active;
+	function onClick(tag) {
+		active = (active ? '' : tag.value);
+        dispatch("select", {tag});
+    }
 </script>
 
-<!-- <Badge href="/tags/{tag}" color="secondary">{tag}</Badge> -->
-<a href="/tags/{tag.value}" use:link class="tag-default tag-pill">{tag.value}</a>
+<a href="/tags/{tag.value}" class="tag-default tag-pill" class:tag-success="{active === tag.value}" 
+              on:click|preventDefault='{() => onClick(tag)}'>{tag.value}</a>

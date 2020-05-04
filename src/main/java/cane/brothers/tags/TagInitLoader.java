@@ -21,7 +21,7 @@ public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent>
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        List<String> tags = Arrays.asList("java", "kubernetes", "docker", "microservice", "helm", "azure");
+        List<String> tags = Arrays.asList("java", "docker", "microservice", "helm", "azure");
         for (String tag : tags) {
             addTag(tag);
         }

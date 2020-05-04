@@ -17,6 +17,8 @@ import java.util.List;
 @Component
 public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
+    private static List<Article> allArticlets = new ArrayList<>();
+
     private ArticleRepository repo;
 
     @Autowired
@@ -24,31 +26,35 @@ public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEv
         this.repo = repo;
     }
 
-    public static List<Article> getArticles() {
-        List<Article> allArticlets = new ArrayList<>();
-        Article a = new Article("https://habr.com/ru/post/491540/",
-                "Сети для начинающего IT-специалиста. Обязательная база",
-                "Часто ли вы задумываетесь – почему что-то сделано так или иначе? Почему у вас микросервисы или монолит, двухзвенка или трехзвенка?");
-        a.addTag(new Tag("oop"));
+    private static void addArticle(String url, String title, String preamble, String... tags) {
+        Article a = new Article(url, title, preamble);
+        addTags(a, tags);
         allArticlets.add(a);
+    }
 
-        a = new Article("https://habr.com/ru/post/263025/",
-                "Про модель, логику, ООП, разработку и остальное",
-                "Примерно 80% из нас, кто заканчивает университет с какой-либо IT-специальностью, в итоге не становится программистом. Многие устраиваются в техническую поддержку, системными администраторами, мастерами по наладке компьютерных устройств, консультантами-продавцами цифровой техники, менеджерами в it-сферу и так далее.");
-        allArticlets.add(a);
-        return allArticlets;
+    private static void addTags(Article a, String[] tags) {
+        if (tags != null && tags.length > 0) {
+            for (String tag : tags) {
+                a.addTag(new Tag(tag));
+            }
+        }
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        addArticle("https://habr.com/ru/post/491540/", "Сети для начинающего IT-специалиста. Обязательная база",
+                "Часто ли вы задумываетесь – почему что-то сделано так или иначе? Почему у вас микросервисы или монолит, двухзвенка или трехзвенка?", "oop");
 
-        for (Article a : getArticles()) {
-            addArticle(a);
+        addArticle("https://habr.com/ru/post/263025/", "Про модель, логику, ООП, разработку и остальное",
+                "Примерно 80% из нас, кто заканчивает университет с какой-либо IT-специальностью, в итоге не становится программистом. Многие устраиваются в техническую поддержку, системными администраторами, мастерами по наладке компьютерных устройств, консультантами-продавцами цифровой техники, менеджерами в it-сферу и так далее.");
+
+        addArticle("https://habr.com/ru/post/453458/", "Настоящее реактивное программирование в Svelte 3.0", "", "svelte");
+
+        addArticle("https://blog.sensu.io/how-kubernetes-works", "How Kubernetes works", "", "kubernetes");
+
+        for (Article a : allArticlets) {
+            Article a2 = repo.save(a);
+            log.info("{} added ", a2);
         }
-    }
-
-    private void addArticle(Article a) {
-        a = repo.save(a);
-        log.info("{} added ", a);
     }
 }
