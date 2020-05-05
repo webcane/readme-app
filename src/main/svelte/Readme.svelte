@@ -7,6 +7,7 @@
     import { Col, Container, Row } from "sveltestrap"
 
     import Articles from './Articles.svelte';
+    import Editor from './editor/Editor.svelte'
     import NotFound from './NotFound.svelte';
 
     export let baseUrl;
@@ -21,6 +22,8 @@
     function setMenu({ detail }) {
 		selected = detail;
     }
+
+    let article = { url: '', title: '', preambule: '', tagList: [] };
 </script>
 
 <Navbar on:menu='{setMenu}'/>
@@ -30,7 +33,9 @@
         <Row>
 
         {#if selected === 'editor'}
-            <Col md="12"> editor...</Col>
+            <Col md="12">
+                <Editor {article} />
+            </Col>
     
         {:else if selected === 'login'}
             <Col md="12"> login...</Col>
