@@ -1,24 +1,24 @@
 <script>
-    //import ArticleList from './ArticleList.svelte'
     import { getContext } from "svelte";
     import { Container, Badge } from "sveltestrap";
+
     import Article from "./Article.svelte";
     import ArticleMeta from "./ArticleMeta.svelte";
     import ArticleTags from "./ArticleTags.svelte";
     import Alert from "./Alert.svelte";
-    //import { onMount } from "svelte";
 
     import ArticleFilters from './ArticleFilters.svelte'
     import ArticlePagination from './ArticlePagination.svelte'
 
     let Articles = [];
+
+    export let tags
     
     let promise
-    export let params
-    $: promise = loadArticles(params)
+    $: promise = loadArticles(tags)
 
-    async function loadArticles(params) {
-      let tagName = getTagName(params);
+    async function loadArticles(tags) {
+      let tagName = getTagName(tags);
 
       let url = getUrl(tagName);
       console.log("load articles by url: " + url);
@@ -35,10 +35,10 @@
       }
     }
 
-    function getTagName(params) {
+    function getTagName(tags) {
       let tagName
-      if(params) {
-        tagName = params.tagName
+      if(tags) {
+        tagName = Array.from(tags).toString();
       }
       return tagName;
     }
@@ -54,8 +54,6 @@
 </script>
 
 <!-- <ArticleFilters /> -->
-
-<!-- <ArticleList params={promise}/> -->
 
 {#await promise}
   <!-- <p class="loading">loading...</p> -->
