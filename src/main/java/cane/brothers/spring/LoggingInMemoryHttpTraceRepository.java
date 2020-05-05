@@ -15,8 +15,8 @@ public class LoggingInMemoryHttpTraceRepository extends InMemoryHttpTraceReposit
 
     public void add(HttpTrace trace) {
         super.add(trace);
-        log.info("Trace:" + ToStringBuilder.reflectionToString(trace));
-        log.info("Request:" + ToStringBuilder.reflectionToString(trace.getRequest()));
-        log.info("Response:" + ToStringBuilder.reflectionToString(trace.getResponse()));
+        log.trace("Trace:" + ToStringBuilder.reflectionToString(trace));
+        log.trace("Request:" + ToStringBuilder.reflectionToString(trace.getRequest()));
+        log.trace("Response:" + ToStringBuilder.reflectionToString(trace.getResponse()));
     }
 }
