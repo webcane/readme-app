@@ -54,3 +54,9 @@ logging:
       springframework: INFO
     cane:
       brothers: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, httptrace
