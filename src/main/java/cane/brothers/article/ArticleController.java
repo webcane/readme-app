@@ -62,7 +62,11 @@ public class ArticleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> postArticle(@Valid @RequestBody ArticleForm request) {
+    @ApiOperation(value = "post new article", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New article were stored in the DB"),
+            @ApiResponse(code = 404, message = "Bad request, For example second attempt to post the same article")})
+    public ResponseEntity<Void> postArticle(@ApiParam("Article") @Valid @RequestBody ArticleForm request) {
         try {
             this.svc.addArticle(request);
             return new ResponseEntity<>(HttpStatus.CREATED);
