@@ -31,7 +31,7 @@ public class Article implements Serializable, Persistable<Long> {
     @Column(name = "ART_ID", unique = true)
     private Long id;
 
-    @Column(name = "URL", unique = true)
+    @Column(name = "URL", unique = true, nullable = false)
     private String url;
 
     @Column(name = "TITLE")
@@ -43,7 +43,7 @@ public class Article implements Serializable, Persistable<Long> {
     //@JsonBackReference
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     /**
