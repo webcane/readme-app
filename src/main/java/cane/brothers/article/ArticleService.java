@@ -6,6 +6,7 @@ import cane.brothers.tags.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,15 +37,16 @@ public class ArticleService {
         return artRepo.findAllByTags_ValueIn(ArticleView.class, tagNames);
     }
 
+    @Transactional
     public boolean addArticle(ArticleForm request) {
-        // TODO mandatory fields validation
         Article a = new Article(request.getUrl(), request.getTitle(), request.getPreamble());
         if (request.getTags() != null && request.getTags().size() > 0) {
             for (TagForm tv : request.getTags()) {
-                a.addTag(getTag(tv));
+                Tag t = getTag(tv);
+                a.addTag(t);
             }
         }
-        a = artRepo.saveAndFlush(a);
+        a = artRepo.save(a);
         return (a != null);
     }
 

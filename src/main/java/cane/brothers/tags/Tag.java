@@ -11,6 +11,8 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by cane
@@ -25,19 +27,20 @@ public class Tag implements Serializable, Persistable<Long> {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TAG_ID", unique = true)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_gen")
+    @SequenceGenerator(name = "tag_gen", sequenceName = "tag_seq")
+    @Column(name = "TAG_ID", unique = true, updatable = false, nullable = false)
     private Long id;
 
     @Column(unique = true)
     private String value;
 
     //@JsonIgnore
-    //@JsonManagedReference
+    //@JsonBackReference
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Article article;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags", targetEntity = Article.class)
+    private Set<Article> articles = new HashSet<>();
 
     /**
      * Constructor
@@ -48,15 +51,14 @@ public class Tag implements Serializable, Persistable<Long> {
         this.value = value;
     }
 
-    /**
-     * Constructor
-     *
-     * @param value
-     * @param article
-     */
-    public Tag(String value, Article article) {
-        this.value = value;
-        this.article = article;
+    public void addArticle(Article article) {
+        articles.add(article);
+        article.getTags().add(this);
+    }
+
+    public void removeArticle(Article article) {
+        articles.remove(article);
+        article.getTags().remove(this);
     }
 
     @Override
