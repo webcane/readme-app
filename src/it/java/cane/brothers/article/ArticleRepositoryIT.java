@@ -2,12 +2,12 @@ package cane.brothers.article;
 
 import cane.brothers.tags.Tag;
 import cane.brothers.tags.TagView;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author mniedre
  */
-@RunWith(SpringRunner.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 public class ArticleRepositoryIT {
 
     private ArticleRepository repo;
@@ -33,8 +33,8 @@ public class ArticleRepositoryIT {
         this.repo = repo;
     }
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         Article testArticle = new Article("http://www.example.com/test/", "test title", "test preamble");
         testArticle.addTag(new Tag(tagName_pos));
         testArticle = repo.save(testArticle);
@@ -58,10 +58,9 @@ public class ArticleRepositoryIT {
         }
     }
 
-    private static final boolean hasTag(Set<TagView> tags, String tagName) {
+    private static boolean hasTag(Set<TagView> tags, String tagName) {
         for (TagView tag : tags) {
-            tag.getValue().equals(tagName);
-            return true;
+            return tag.getValue().equals(tagName);
         }
         return false;
     }
