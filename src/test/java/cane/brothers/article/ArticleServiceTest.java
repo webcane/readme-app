@@ -26,7 +26,7 @@ public class ArticleServiceTest {
     private ArticleService svc;
 
     @Test
-    void findAll() {
+    void test_findAll() {
         Mockito.when(repo.findAll(ArticleView.class)).thenReturn(DummyArticle.get2Articles());
         List<ArticleView> allArticles = svc.findAll();
         log.info(allArticles.toString());

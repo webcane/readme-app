@@ -1,8 +1,7 @@
 package cane.brothers.tags;
 
 import cane.brothers.article.Article;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,11 +16,10 @@ import java.util.Set;
 /**
  * Created by cane
  */
-@Entity
-@Table(name = "TAG")
 @Data
+@Entity
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "TAG")
 public class Tag implements Serializable, Persistable<Long> {
 
     private static final long serialVersionUID = 1;
@@ -35,8 +33,7 @@ public class Tag implements Serializable, Persistable<Long> {
     @Column(unique = true)
     private String value;
 
-    //@JsonIgnore
-    //@JsonBackReference
+    @JsonIgnoreProperties("tags")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags", targetEntity = Article.class)

@@ -16,8 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author mniedre
  */
 @ExtendWith(MockitoExtension.class)
-public
-class TagServiceTest {
+public class TagServiceTest {
 
     @Mock
     private TagRepository repo;

@@ -4,6 +4,7 @@ import cane.brothers.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@Profile("dev")
 public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private static List<Article> allArticlets = new ArrayList<>();

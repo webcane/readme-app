@@ -1,0 +1,3 @@
+articleNoTagJson: '{"url": "http://www.example.com/test/", "title": "test title"}'
+articleTagNewJson: '{"url": "http://www.example.com/test/", "title": "test title", "tags": [{"value": "test"}]}'
+tagJson: '{"value": "test"}'

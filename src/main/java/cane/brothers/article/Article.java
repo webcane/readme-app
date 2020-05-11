@@ -1,9 +1,7 @@
 package cane.brothers.article;
 
 import cane.brothers.tags.Tag;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,11 +16,10 @@ import java.util.Set;
 /**
  * Created by cane
  */
-@Entity
-@Table(name = "ARTICLE")
 @Data
+@Entity
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "ARTICLE")
 public class Article implements Serializable, Persistable<Long> {
 
     private static final long serialVersionUID = 1;
@@ -42,14 +39,15 @@ public class Article implements Serializable, Persistable<Long> {
     @Column(name = "PREAMBLE", length = 1000)
     private String preamble;
 
-    @JsonManagedReference
+    @JsonIgnoreProperties("articles")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = Tag.class,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "ARTICLE_TAG",
             joinColumns = {@JoinColumn(name = "FK_ART_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "FK_TAG_ID")})
+            inverseJoinColumns = {@JoinColumn(name = "FK_TAG_ID")},
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"FK_ART_ID", "FK_TAG_ID"})})
     private Set<Tag> tags = new HashSet<>();
 
     /**
