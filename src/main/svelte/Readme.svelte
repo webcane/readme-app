@@ -23,7 +23,7 @@
 		selected = detail;
     }
 
-    let article = { url: '', title: '', preambule: '', tagList: [] };
+    let article = { url: '', title: '', preambule: '', tags: [] };
 </script>
 
 <Navbar on:menu='{setMenu}'/>
