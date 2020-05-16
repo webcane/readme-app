@@ -34,7 +34,7 @@
 
         {#if selected === 'editor'}
             <Col md="12">
-                <Editor {article} />
+                <Editor {article} on:edit='{setMenu}'/>
             </Col>
     
         {:else if selected === 'login'}

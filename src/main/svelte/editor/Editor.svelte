@@ -1,4 +1,8 @@
 <script>
+	
+  	import { createEventDispatcher } from 'svelte';
+  	const dispatch = createEventDispatcher();
+
 	import { getContext } from "svelte";
 	
 	//import { goto, stores } from '@sapper/app';
@@ -40,10 +44,14 @@
 		);
 		//let result = await response.json();
 		if (!response.ok) {
+			console.log("articles was not posted");
 			console.log(response.status);
-			throw new Error('Ответ сети был не ok.');
+			throw new Error('There is no positive network answer');
 		}
 		inProgress = false;
+
+		// go to home page
+		dispatch("edit", '');
 	}
 
 	function enter(node, callback) {
