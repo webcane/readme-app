@@ -63,7 +63,7 @@
     {#each Array.from(Articles) as art}
       <div class="article-preview">
         <ArticleMeta meta={art.meta} />
-        <Article title={art.title} preamble={art.preamble} link={art.link} />
+        <Article title={art.title} preamble={art.preamble} url={art.url} />
         <ArticleTags tags={art.tags} />
       </div>
     {/each}

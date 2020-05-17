@@ -2,13 +2,14 @@
   import { Container, Badge } from 'sveltestrap';
   export let title;
   export let preamble;
-  export let link;
+  export let url;
 </script>
 
-    <a href="{link}" class="preview-link">
+<!--  class="preview-link" -->
+    
         <h1>{title}</h1>
         {#if preamble}
           <p>{preamble}</p>
         {/if}
-        <span>Read more...</span>
-    </a>
+        <span><a href={url} target="_blank">Read more...</a></span>
+    
