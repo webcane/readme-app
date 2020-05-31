@@ -65,38 +65,39 @@
 			}
 		};
 	}
-</script>                
-                <form>
-					<fieldset>
-						<fieldset class="form-group">
-							<input class="form-control form-control-lg" type="text" placeholder="Article URL" bind:value={article.url}>
-						</fieldset>
+</script>
 
-						<fieldset class="form-group">
-							<input class="form-control" type="text" placeholder="Article title" bind:value={article.title}>
-						</fieldset>
+<form>
+	<fieldset>
+		<fieldset class="form-group">
+			<input class="form-control form-control-lg" type="text" placeholder="Article URL" bind:value={article.url}>
+		</fieldset>
 
-						<fieldset class="form-group">
-							<textarea class="form-control" rows="8" placeholder="What's this article about?" bind:value={article.preambule}/>
-						</fieldset>
+		<fieldset class="form-group">
+			<input class="form-control" type="text" placeholder="Article title" bind:value={article.title}>
+		</fieldset>
 
-						<fieldset class="form-group">
-							<input class="form-control" type="text" placeholder="Enter tags" use:enter={addTag}>
+		<fieldset class="form-group">
+			<textarea class="form-control" rows="8" placeholder="What's this article about?" bind:value={article.preambule}/>
+		</fieldset>
 
-							<div class="tag-list">
-							  {#if article.tags}
-								{#each article.tags as tag, i}
-									<span class="tag-default tag-pill">
-										<i class="ion-close-round" on:click='{() => remove(i)}'/>
-										{tag.value}
-									</span>
-								{/each}
-							  {/if}
-							</div>
-						</fieldset>
+		<fieldset class="form-group">
+			<input class="form-control" type="text" placeholder="Enter tags" use:enter={addTag}>
 
-						<button class="btn btn-lg pull-xs-right btn-primary" type="button" disabled={inProgress} on:click={publish}>
-							Publish Article
-						</button>
-					</fieldset>
-				</form>
+			<div class="tag-list">
+			  {#if article.tags}
+				{#each article.tags as tag, i}
+					<span class="tag-default tag-pill">
+						<i class="ion-close-round" on:click='{() => remove(i)}'/>
+						{tag.value}
+					</span>
+				{/each}
+			  {/if}
+			</div>
+		</fieldset>
+
+		<button class="btn btn-lg pull-xs-right btn-primary" type="button" disabled={inProgress} on:click={publish}>
+			Publish Article
+		</button>
+	</fieldset>
+</form>

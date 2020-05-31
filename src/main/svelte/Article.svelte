@@ -7,9 +7,9 @@
 
 <!--  class="preview-link" -->
     
-        <h1>{title}</h1>
-        {#if preamble}
-          <p>{preamble}</p>
-        {/if}
-        <span><a href={url} target="_blank">Read more...</a></span>
+<h1>{title}</h1>
+{#if preamble}
+    <p>{preamble}</p>
+{/if}
+<span><a href={url} target="_blank">Read more...</a></span>
     
