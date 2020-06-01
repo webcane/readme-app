@@ -1,4 +1,13 @@
+<style>
+.close {
+	font-size: 1rem;
+    font-weight: 400;
+	padding-left: 5px;
+}
+</style>
+
 <script>
+	// import AutoComplete from './AutoComplete.svelte'
 	
   	import { createEventDispatcher } from 'svelte';
   	const dispatch = createEventDispatcher();
@@ -65,6 +74,9 @@
 			}
 		};
 	}
+
+	let availableTags = ["asd", "bsd"];
+
 </script>
 
 <form>
@@ -82,18 +94,22 @@
 		</fieldset>
 
 		<fieldset class="form-group">
-			<input class="form-control" type="text" placeholder="Enter tags" use:enter={addTag}>
-
-			<div class="tag-list">
+			<div class="form-control tags-input">
 			  {#if article.tags}
 				{#each article.tags as tag, i}
 					<span class="tag-default tag-pill">
-						<i class="ion-close-round" on:click='{() => remove(i)}'/>
-						{tag.value}
+						<!-- <i class="icon ion-close-round" on:click='{() => remove(i)}'/> -->
+						<button type="button" class="close" aria-label="Close" on:click='{() => remove(i)}'>
+							<span aria-hidden="true">&times;</span>
+						</button>
+ 						{tag.value}
 					</span>
 				{/each}
-			  {/if}
+			  {/if}	
+				<input type="text" class="shadow-none border-0" use:enter={addTag} />
+				<!-- <AutoComplete class="shadow-none border-0" items="{availableTags}" /> -->
 			</div>
+			<input type="text" placeholder="Enter tags" value="asd" data-role="tags-input" class="d-none" />
 		</fieldset>
 
 		<button class="btn btn-lg pull-xs-right btn-primary" type="button" disabled={inProgress} on:click={publish}>
