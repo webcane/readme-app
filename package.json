@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4",
+    "svelte-tags-input": "^2.4.0",
     "sveltestrap": "^3.3.3"
   }
 }

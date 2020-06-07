@@ -1,13 +1,42 @@
-<style>
-.close {
-	font-size: 1rem;
-    font-weight: 400;
-	padding-left: 5px;
-}
-</style>
-
 <script>
-	// import AutoComplete from './AutoComplete.svelte'
+	import Tags from "svelte-tags-input";
+	let inputTags = "";
+
+	function handleTags(event) {
+	  	var tmp_tags = event.detail.tags;
+	  	article.tags = tmp_tags.toString().split(',').map(function(t) {
+			var tag = new Object();
+			tag.value = t.trim();
+			return tag;
+		});
+	}
+
+	let availableTags = [];
+	let tagsPromise = Promise.resolve([]);
+
+	import { onMount } from "svelte";
+	onMount(() => { 
+		tagsPromise = loadTags(); 
+		console.log('promise' + JSON.stringify(tagsPromise));
+		tagsPromise.then(result => {
+			availableTags = result.map(function(tag) {return tag.value;});
+			console.log('available Tags: ' + availableTags);
+		});
+	});
+
+	async function loadTags() {
+		console.log('preload Tags');
+		const res = await fetch(getContext("baseUrl") + "/tags");
+		const json = await res.json();
+
+		if (res.ok) {
+			return json;
+		} else {
+			log.console(json);
+			throw new Error(json);
+		}
+	}
+
 	
   	import { createEventDispatcher } from 'svelte';
   	const dispatch = createEventDispatcher();
@@ -22,20 +51,12 @@
 	let inProgress = false;
 	let errors;
 
-	//const { session } = stores();
-	function addTag(input) {
-		article.tags = [...article.tags, {'value': input.value}];
-		input.value = '';
-	}
-
-	function remove(index) {
-		article.tags = [...article.tags.slice(0, index), ...article.tags.slice(index + 1)];
-	}
-
 	async function publish() {
 		inProgress = true;
 		const baseUrl = getContext("baseUrl");
 		let url = baseUrl + "/articles";
+
+		console.log("article to publish: " + JSON.stringify(article));
 		  
 		// const response = await (slug
 		// 	? api.put(`articles/${slug}`, { article }, $session.user && $session.user.token)
@@ -62,22 +83,17 @@
 		// go to home page
 		dispatch("edit", '');
 	}
-
-	function enter(node, callback) {
-		function onkeydown(event) {
-			if (event.which === 13) callback(node);
-		}
-		node.addEventListener('keydown', onkeydown);
-		return {
-			destroy() {
-				node.removeEventListener('keydown', onkeydown);
-			}
-		};
-	}
-
-	let availableTags = ["asd", "bsd"];
-
 </script>
+
+<style>
+.tags-input :global(.svelte-tags-input-tag) {
+    background:blue;
+}
+
+.tags-input :global(.svelte-tags-input-layout) {
+    background:yellow;
+}
+</style>
 
 <form>
 	<fieldset>
@@ -86,30 +102,15 @@
 		</fieldset>
 
 		<fieldset class="form-group">
-			<input class="form-control" type="text" placeholder="Article title" bind:value={article.title}>
+			<input class="form-control" type="text" placeholder="Article title" bind:value={article.title} />
 		</fieldset>
 
 		<fieldset class="form-group">
 			<textarea class="form-control" rows="8" placeholder="What's this article about?" bind:value={article.preambule}/>
 		</fieldset>
 
-		<fieldset class="form-group">
-			<div class="form-control tags-input">
-			  {#if article.tags}
-				{#each article.tags as tag, i}
-					<span class="tag-default tag-pill">
-						<!-- <i class="icon ion-close-round" on:click='{() => remove(i)}'/> -->
-						<button type="button" class="close" aria-label="Close" on:click='{() => remove(i)}'>
-							<span aria-hidden="true">&times;</span>
-						</button>
- 						{tag.value}
-					</span>
-				{/each}
-			  {/if}	
-				<input type="text" class="shadow-none border-0" use:enter={addTag} />
-				<!-- <AutoComplete class="shadow-none border-0" items="{availableTags}" /> -->
-			</div>
-			<input type="text" placeholder="Enter tags" value="asd" data-role="tags-input" class="d-none" />
+		<fieldset class="form-group tags-input">
+			<Tags on:tags={handleTags} autoComplete={availableTags} onlyUnique={true} bind:tags={inputTags} />
 		</fieldset>
 
 		<button class="btn btn-lg pull-xs-right btn-primary" type="button" disabled={inProgress} on:click={publish}>
