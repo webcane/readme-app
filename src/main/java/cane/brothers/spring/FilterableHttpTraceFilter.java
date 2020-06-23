@@ -20,7 +20,7 @@ import java.util.List;
 @Profile("management")
 public class FilterableHttpTraceFilter extends HttpTraceFilter {
 
-    private List<String> excludes = Arrays.asList("actuator", "favicon");
+    private List<String> excludes = Arrays.asList("actuator", "management", "favicon", "build");
 
     @Autowired
     public FilterableHttpTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer) {
@@ -30,7 +30,10 @@ public class FilterableHttpTraceFilter extends HttpTraceFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String reqPath = request.getRequestURI();
-        log.trace(reqPath);
-        return excludes.stream().anyMatch(ex -> reqPath.contains(ex));
+        boolean exclude = excludes.stream().anyMatch(ex -> reqPath.contains(ex));
+        if (!exclude) {
+            log.trace(reqPath);
+        }
+        return exclude;
     }
 }
