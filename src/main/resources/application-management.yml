@@ -1,7 +1,13 @@
 management:
+  endpoint:
+    httptrace:
+      enabled: true
   endpoints:
+    #    enabled-by-default: true
+    base-path: /management
     web:
       exposure:
-        include: info, health, metrics, conditions #, env, httptrace, routes, beans
+        # include: httptrace,env,info,health,metrics,conditions,beans,configprops #, env, httptrace, routes, beans
+        include: '*' #, env, httptrace, routes, beans
 #     cors:
 #       allowed-origins: http://localhost:5000

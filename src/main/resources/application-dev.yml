@@ -8,28 +8,12 @@ server:
 
 logging.level:
   org.springframework: INFO
-  cane.brothers: TRACE
+  cane.brothers: DEBUG
+  cane.brothers.spring.FilterableHttpTraceFilter: TRACE
 
 spring:
   main:
     banner-mode: "off"
-
-  datasource:
-    url: jdbc:h2:mem:radb;DB_CLOSE_DELAY=-1
-
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create-drop
-      dialect: org.hibernate.dialect.H2Dialect
-
-    open-in-view: false
-
-  h2:
-    console:
-      #      path: /h2-console
-      enabled: true
 
   devtools:
     restart:
