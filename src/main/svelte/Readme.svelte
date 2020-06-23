@@ -1,5 +1,6 @@
 <script>
     import { setContext } from 'svelte'  
+    import { onMount } from "svelte";
 
     import TagList from './TagList.svelte'
     import Navbar from './Navbar.svelte'
@@ -8,6 +9,7 @@
 
     import Articles from './Articles.svelte';
     import Editor from './editor/Editor.svelte'
+    import Login from './login/Login.svelte'
     import NotFound from './NotFound.svelte';
 
     export let baseUrl;
@@ -23,7 +25,16 @@
 		selected = detail;
     }
 
-    let article = { url: '', title: '', preambule: '', tags: [] };
+    function initArticle() {
+        article = emptyArticle;
+    }
+
+    let emptyArticle = { url: '', title: '', preambule: '', tags: [] };
+    let article;
+    
+    onMount(() => { 
+		initArticle();
+	});
 </script>
 
 <Navbar on:menu='{setMenu}'/>
@@ -34,11 +45,13 @@
 
         {#if selected === 'editor'}
             <Col md="12">
-                <Editor {article} on:edit='{setMenu}'/>
+                <Editor {article} on:edit='{setMenu|initArticle}'/>
             </Col>
     
         {:else if selected === 'login'}
-            <Col md="12"> login...</Col>
+            <Col md="12">
+                <Login on:login='{setMenu}'/>
+            </Col>
 
         {:else if selected === 'register'}
             <Col md="12"> register...</Col>
