@@ -4,6 +4,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import filesize from 'rollup-plugin-filesize';
+import css from 'rollup-plugin-css-only';
+import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -26,6 +28,22 @@ export default {
 			}
 		}),
 
+		// copy bootstrap-social.css, font-awesome.css into extra.css
+		css({ output: "src/main/resources/public/build/extra.css" }),
+
+		// copy font-awesome into fonts folder
+		copy({ 
+			targets: [{ 
+				src: ['./node_modules/font-awesome/fonts/fontawesome-webfont.eot',
+					  './node_modules/font-awesome/fonts/fontawesome-webfont.svg',
+					  './node_modules/font-awesome/fonts/fontawesome-webfont.ttf',
+					  './node_modules/font-awesome/fonts/fontawesome-webfont.woff',
+					  './node_modules/font-awesome/fonts/fontawesome-webfont.woff2'], 
+				dest: './src/main/resources/public/fonts' 
+			}],
+			copyOnce: true
+		}),
+
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration -
@@ -35,6 +53,7 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
+
 		commonjs(),
 
 		// In dev mode, call `npm run start` once
