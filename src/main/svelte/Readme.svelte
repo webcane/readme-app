@@ -9,7 +9,8 @@
 
     import Articles from './Articles.svelte';
     import Editor from './editor/Editor.svelte'
-    import Login from './login/Login.svelte'
+//    import Login from './login/Login.svelte'
+    import Logout from './login/Logout.svelte'
     import NotFound from './NotFound.svelte';
 
     export let baseUrl;
@@ -22,7 +23,7 @@
     
     let selected = '';
     function setMenu({ detail }) {
-		selected = detail;
+        selected = detail;
     }
 
     function initArticle() {
@@ -48,15 +49,15 @@
                 <Editor {article} on:edit='{setMenu|initArticle}'/>
             </Col>
     
-        {:else if selected === 'login'}
+        <!-- {:else if selected === 'login'}
             <Col md="12">
                 <Login on:login='{setMenu}'/>
-            </Col>
+            </Col> -->
 
-        <!-- {:else if selected === 'logout'}
+        {:else if selected === 'logout'}
             <Col md="12">
-                <a href="/logout">Logout</a>
-            </Col>             -->
+                <Logout on:menu='{setMenu}'/>
+            </Col>            
 
         {:else if selected === 'user'}
             <Col md="12">

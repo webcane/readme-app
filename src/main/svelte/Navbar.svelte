@@ -10,6 +10,24 @@
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
+
+  import { getContext } from "svelte";
+  let baseUrl = getContext("baseUrl");
+
+  let inProgress = false;
+  async function logout(event) {
+      inProgress = true;
+      const response = await fetch(baseUrl + "/logout", {
+        method: 'POST'
+      });
+      const text = await response.text();
+      if (response.ok) {
+        dispatch('menu', 'logout');
+      } else {
+        throw new Error(text);
+      }
+      inProgress = false;  
+	}
 </script>
 
 <Navbar light expand="sm">
@@ -30,7 +48,7 @@
       </NavItem>
       <NavItem>
         <!-- /logout -->
-        <NavLink href="/logout">Logout</NavLink>
+        <NavLink href="#" on:click={logout} disabled='{inProgress}'>Logout</NavLink>
       </NavItem>      
       <NavItem>
         <!-- /user -->
