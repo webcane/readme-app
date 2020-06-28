@@ -4,8 +4,8 @@ management:
       enabled: true
   endpoints:
     #    enabled-by-default: true
-    base-path: /management
     web:
+      base-path: /management
       exposure:
         # include: httptrace,env,info,health,metrics,conditions,beans,configprops #, env, httptrace, routes, beans
         include: '*' #, env, httptrace, routes, beans
