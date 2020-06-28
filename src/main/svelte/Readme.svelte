@@ -53,8 +53,15 @@
                 <Login on:login='{setMenu}'/>
             </Col>
 
-        {:else if selected === 'register'}
-            <Col md="12"> register...</Col>
+        <!-- {:else if selected === 'logout'}
+            <Col md="12">
+                <a href="/logout">Logout</a>
+            </Col>             -->
+
+        {:else if selected === 'user'}
+            <Col md="12">
+                <a href="/user">user</a>
+            </Col>
        
         {:else}
             <Col md="9">

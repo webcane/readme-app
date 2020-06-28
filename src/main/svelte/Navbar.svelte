@@ -26,11 +26,15 @@
       </NavItem>
       <NavItem>
         <!-- /login -->
-        <NavLink href="#" on:click={() => dispatch('menu', 'login')}>Sign in</NavLink>
+        <NavLink href="/oauth2/authorization/github" title="Login with GitHub">Sign in</NavLink>
       </NavItem>
       <NavItem>
-        <!-- /register -->
-        <NavLink href="#" on:click={() => dispatch('menu', 'register')}>Sign up</NavLink>
+        <!-- /logout -->
+        <NavLink href="/logout">Logout</NavLink>
+      </NavItem>      
+      <NavItem>
+        <!-- /user -->
+        <NavLink href="#" on:click={() => dispatch('menu', 'user')}>User</NavLink>
       </NavItem>
     </Nav>
   </Container>

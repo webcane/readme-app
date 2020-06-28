@@ -1,0 +1,13 @@
+spring:
+  security:
+    basic:
+      enabled: false
+    #    user:
+    #      name: cane
+
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId:
+            clientSecret:
