@@ -6,14 +6,14 @@ server:
     whitelabel:
       enabled: false
 
-logging.level:
-  web: DEBUG
-  org.springframework: INFO
-  org.springframework.web: DEBUG
-  org.springframework.security: DEBUG
-  cane.brothers: DEBUG
-  cane.brothers.spring.FilterableHttpTraceFilter: TRACE
-
+logging:
+  level:
+    web: DEBUG
+    org.springframework: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    cane.brothers: DEBUG
+    cane.brothers.spring.FilterableHttpTraceFilter: TRACE
 
 spring:
   main:
