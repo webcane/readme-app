@@ -51,10 +51,6 @@
             <Col md="12">
                 <Logout on:menu='{setMenu}'/>
             </Col>
-        {:else if selected === 'user'}
-            <Col md="12">
-                <a href="/user">user</a>
-            </Col>
         {:else}
             <Col md="9">
                 <Articles {tags} />
