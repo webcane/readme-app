@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
  * @author mniedre
  */
 @Slf4j
-@SpringBootTest
+@SpringBootTest(classes = {Environment.class})
 public class ProfileTest {
 
     @Autowired
