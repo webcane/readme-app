@@ -1,5 +1,7 @@
 package cane.brothers.article;
 
+import cane.brothers.AuthMvcIT;
+import cane.brothers.TestConfig;
 import cane.brothers.tags.Tag;
 import cane.brothers.tags.TagRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,17 +12,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
+
 /**
  * @author mniedre
  */
 @Slf4j
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TestConfig.class, AuthMvcIT.TestConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ArticlesIT extends Assertions {
 
@@ -51,6 +63,7 @@ public class ArticlesIT extends Assertions {
     }
 
     @Test
+    @WithUserDetails("testuser")
     void test_transactional_persist_articles_with_tag_pos() throws Exception {
         printStatus();
 
@@ -64,6 +77,7 @@ public class ArticlesIT extends Assertions {
     }
 
     @Test
+    @WithUserDetails("testuser")
     void test_transactional_persist_same_articles_neg() throws Exception {
         printStatus();
 
@@ -79,6 +93,7 @@ public class ArticlesIT extends Assertions {
     }
 
     @Test
+    @WithUserDetails("testuser")
     void test_transactional_persist_article_tag_exist() throws Exception {
         printStatus();
 
@@ -97,5 +112,26 @@ public class ArticlesIT extends Assertions {
     private void printStatus() {
         log.info("articles {}", artRepo.findAll());
         log.info("tags {}", tagRepo.findAll());
+    }
+
+
+    @TestConfiguration
+    public static class TestConfig {
+
+        @Bean
+        @Primary
+        public UserDetailsService userDetailsService() {
+            User basicUser = new org.springframework.security.core.userdetails.User(
+                    "testuser",
+                    "password",
+                    Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+
+            User blaUser = new org.springframework.security.core.userdetails.User(
+                    "blauser",
+                    "password",
+                    Arrays.asList(new SimpleGrantedAuthority("ROLE_BLA")));
+
+            return new InMemoryUserDetailsManager(basicUser, blaUser);
+        }
     }
 }

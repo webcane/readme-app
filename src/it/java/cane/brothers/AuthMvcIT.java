@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = AuthMvcIT.TestConfig.class)
+        classes = {TestConfig.class, AuthMvcIT.TestConfig.class})
 public class AuthMvcIT {
 
     @Autowired
@@ -89,9 +88,6 @@ public class AuthMvcIT {
 
     @TestConfiguration
     public static class TestConfig {
-
-        @MockBean
-        private ClientRegistrationRepository clientRegistrationRepository;
 
         @Bean
         @Primary
