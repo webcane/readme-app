@@ -28,3 +28,25 @@ Below you can find endpoints exposed by this microservice.
 
 ## Running on local machine
 
+1. Build with maven
+ `mvn package`
+ 
+2. run locally
+ `mvn spring-boot:run`
+ 
+3. test locally
+ `http://localhost:3000`
+ 
+## Containerization
+
+1. Build a docker image using Dokerfile:
+ `docker build -t readme-app-docker .`
+2. Run docker image locally
+ `docker run --rm -p 3000:3000 readme-app-docker`
+3. check if docker running
+ `docker ps`
+4. stop the docker image
+ `docker stop <container id>` 
+ 
+## Kubernetes
+
