@@ -6,6 +6,7 @@ pool:
 
 variables:
   imageName: 'readme-app'
+  DOCKER_BUILDKIT: 1
 
 steps:
 - task: Docker@2
