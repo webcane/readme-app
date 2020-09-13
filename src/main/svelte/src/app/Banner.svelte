@@ -1,7 +1,6 @@
 <script>
-  import { Container } from 'sveltestrap';
 
-  export let show = '';
+    export let show = '';
 </script>
 
 <div class="banner" class:d-none="{show !== ''}">

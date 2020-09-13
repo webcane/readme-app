@@ -1,15 +1,5 @@
 <script>
-    import {
-        Container,
-        Nav,
-        Navbar,
-        NavbarBrand,
-        NavItem,
-        NavLink
-    } from 'sveltestrap';
-    import {onMount} from "svelte";
-    import {getContext} from "svelte";
-    import {createEventDispatcher} from 'svelte';
+    import {createEventDispatcher, getContext, onMount} from "svelte";
 
     const dispatch = createEventDispatcher();
     let baseUrl = getContext("baseUrl");

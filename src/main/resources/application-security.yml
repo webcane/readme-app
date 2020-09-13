@@ -9,5 +9,8 @@ spring:
       client:
         registration:
           github:
-            clientId:
-            clientSecret:
+            clientId: ${client.id}
+            clientSecret: ${client.secret}
+
+#server:
+#  forward-headers-strategy: FRAMEWORK

@@ -1,14 +1,12 @@
-<script>
-    import { Nav, Pagination, PaginationItem, PaginationLink } from "sveltestrap";
-</script>
+<script></script>
 
 <Pagination ariaLabel="page navigation">
   <PaginationItem disabled>
-    <PaginationLink first href="#" />
+    <PaginationLink first href="#"/>
   </PaginationItem>
 
   <PaginationItem disabled>
-    <PaginationLink previous href="#" />
+    <PaginationLink previous href="#"/>
   </PaginationItem>
 
   <PaginationItem active>
@@ -32,10 +30,10 @@
   </PaginationItem>
 
   <PaginationItem>
-    <PaginationLink next href="#" />
+    <PaginationLink next href="#"/>
   </PaginationItem>
 
   <PaginationItem>
-    <PaginationLink last href="#" />
+    <PaginationLink last href="#"/>
   </PaginationItem>
 </Pagination>

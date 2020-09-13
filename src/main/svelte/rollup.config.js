@@ -2,7 +2,7 @@ import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
+import {terser} from 'rollup-plugin-terser';
 import filesize from 'rollup-plugin-filesize';
 import css from 'rollup-plugin-css-only';
 import copy from 'rollup-plugin-copy';
@@ -10,12 +10,12 @@ import copy from 'rollup-plugin-copy';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/main/svelte/main.js',
+	input: 'src/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
 		name: 'readme',
-		file: 'src/main/resources/public/build/bundle.js'
+		file: 'src/build/bundle.js'
 	},
 	plugins: [
 		svelte({
@@ -24,22 +24,22 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
-				css.write('src/main/resources/public/build/bundle.css');
+				css.write('bundle.css', true);
 			}
 		}),
 
 		// copy bootstrap-social.css, font-awesome.css into extra.css
-		css({ output: "src/main/resources/public/build/extra.css" }),
+		css({output: "src/build/extra.css"}),
 
 		// copy font-awesome into fonts folder
-		copy({ 
-			targets: [{ 
+		copy({
+			targets: [{
 				src: ['./node_modules/font-awesome/fonts/fontawesome-webfont.eot',
-					  './node_modules/font-awesome/fonts/fontawesome-webfont.svg',
-					  './node_modules/font-awesome/fonts/fontawesome-webfont.ttf',
-					  './node_modules/font-awesome/fonts/fontawesome-webfont.woff',
-					  './node_modules/font-awesome/fonts/fontawesome-webfont.woff2'], 
-				dest: './src/main/resources/public/fonts' 
+					'./node_modules/font-awesome/fonts/fontawesome-webfont.svg',
+					'./node_modules/font-awesome/fonts/fontawesome-webfont.ttf',
+					'./node_modules/font-awesome/fonts/fontawesome-webfont.woff',
+					'./node_modules/font-awesome/fonts/fontawesome-webfont.woff2'],
+				dest: './src/assets/fonts'
 			}],
 			copyOnce: true
 		}),
@@ -62,7 +62,7 @@ export default {
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('src/main/resources/public'),
+		!production && livereload('src'),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify

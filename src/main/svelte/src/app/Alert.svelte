@@ -1,5 +1,4 @@
 <script>
-  import { Alert } from "sveltestrap";
   export let message;
   export let color;
 </script>

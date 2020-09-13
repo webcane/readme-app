@@ -1,7 +1,6 @@
 <script>
-  import { Container, Badge } from 'sveltestrap';
 
-  export let tags;
+    export let tags;
 </script>
 
 <!-- TODO tags

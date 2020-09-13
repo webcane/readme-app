@@ -1,12 +1,11 @@
 <script>
-  import { Container, Badge } from 'sveltestrap';
-  export let title;
-  export let preamble;
-  export let url;
+    export let title;
+    export let preamble;
+    export let url;
 </script>
 
 <!--  class="preview-link" -->
-    
+
 <h1>{title}</h1>
 {#if preamble}
     <p>{preamble}</p>
