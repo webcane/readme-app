@@ -1,7 +1,7 @@
 <script>
-    import Tag from './Tag.svelte';
-
     import {createEventDispatcher, getContext, onMount} from 'svelte';
+
+    import Tag from './Tag.svelte';
     import Alert from './Alert.svelte';
 
     const baseUrl = getContext('baseUrl');

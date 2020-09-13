@@ -1,5 +1,6 @@
 <script>
     import {onMount, setContext} from 'svelte'
+    import {Row, Col} from 'sveltestrap';
 
     import TagList from './TagList.svelte'
     import Navbar from './Navbar.svelte'

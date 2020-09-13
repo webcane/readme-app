@@ -7,4 +7,6 @@ const readmeApp = new ReadmeApp({
     }
 });
 
+window.readmeApp = readmeApp;
+
 export default readmeApp;
