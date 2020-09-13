@@ -1,5 +1,5 @@
 <script>
-
+    import {Container, Badge} from 'sveltestrap';
     export let tags;
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-
+    import {Container} from 'sveltestrap';
     export let show = '';
 </script>
 
