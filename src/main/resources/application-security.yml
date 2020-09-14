@@ -11,6 +11,11 @@ spring:
           github:
             clientId: ${client.id}
             clientSecret: ${client.secret}
+            redirectUri: "{baseUrl}/oauth2/callback/github"
+#            redirectUri: "{baseUrl}"
+#            scope:
+#            - user:email
+#            - read:user
 
 #server:
 #  forward-headers-strategy: FRAMEWORK

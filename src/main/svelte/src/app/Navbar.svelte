@@ -61,7 +61,7 @@
                 </NavItem>
             {:else}
                 <NavItem>
-                    <NavLink href="/oauth2/authorization/github" title="Login with GitHub">Sign in</NavLink>
+                    <NavLink href="/svc/oauth2/authorization/github" title="Login with GitHub">Sign in</NavLink>
                 </NavItem>
             {/if}
         </Nav>
