@@ -11,7 +11,8 @@ spring:
           github:
             clientId: ${client.id}
             clientSecret: ${client.secret}
-            redirectUri: "{baseUrl}/oauth2/callback/github"
+#            redirectUri: "{baseUrl}/login/oauth2/code/github"
+#            redirectUri: "{baseUrl}/oauth2/callback/github"
 #            redirectUri: "{baseUrl}"
 #            scope:
 #            - user:email
