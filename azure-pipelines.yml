@@ -36,3 +36,10 @@ steps:
       repository: $(imageName)
       command: build
       Dockerfile: Dockerfile
+
+  - task: PublishTestResults@2
+    #    condition: succeededOrFailed()
+    #    inputs:
+    #      testRunner: JUnit
+    #      testResultsFiles: '**/TEST-RESULTS.xml'
+    name: PublishTests
