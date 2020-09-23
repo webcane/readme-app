@@ -205,8 +205,11 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>npm.cmd</executable>
-                            <commandlineArgs>run build</commandlineArgs>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>webpack:build</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>
