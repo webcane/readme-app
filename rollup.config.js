@@ -24,7 +24,7 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
-				css.write('src/main/resources/public/build/bundle.css');
+				css.write('bundle.css',true);
 			}
 		}),
 
