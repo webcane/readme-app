@@ -1,4 +1,4 @@
-import ReadmeApp from './Readme.svelte';
+import ReadmeApp from './app/Readme.svelte';
 
 const readmeApp = new ReadmeApp({
 	target: document.querySelector('.readme'),

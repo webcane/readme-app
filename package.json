@@ -5,6 +5,7 @@
   "scripts": {
     "build": "webpack:build",
     "start": "serve",
+    "dev": "serve:dev",
     "rollup:build": "del-cli src/main/resources/public/build && rollup --config",
     "rollup:start": "del-cli src/main/resources/public/build && rollup --config --watch",
     "webpack:build": "del-cli src/main/resources/public/build && cross-env NODE_ENV=production webpack",
