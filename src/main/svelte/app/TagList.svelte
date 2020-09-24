@@ -3,15 +3,26 @@
   
   import { getContext } from 'svelte';
   const baseUrl = getContext('baseUrl');
+
+  // import {
+  //     state,
+  //     getTags
+  // } from './store';
+  // const baseUrl = getContext('baseUrl');
   
   import { Container, Badge } from 'sveltestrap';
   import Alert from './Alert.svelte';
 
   let tags = [];
+  // const { tags } = state;
   let tagsPromise;
 
   import { onMount } from "svelte";
-  onMount(() => { tagsPromise = loadTags(); });
+  onMount(() => {
+      // tagsPromise = getTags();
+      tagsPromise = loadTags();
+      //console.log(state);
+  });
 
   async function loadTags() {
     console.log('load Tags');
