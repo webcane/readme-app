@@ -1,5 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const bootstrapSocial = require('bootstrap-social');
+// const fontAwesome = require('font-awesome');
 const webpack = require('webpack');
 const path = require('path');
 
@@ -7,6 +9,14 @@ const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
 module.exports = {
+    entry: {
+        bundle: ['./src/main/svelte/main.js'],
+    },
+    output: {
+        path: __dirname + '/src/main/resources/public/build',
+        filename: '[name].js',
+        chunkFilename: '[name].[id].js'
+    },
     mode,
     devtool: prod ? false : 'source-map',
     devServer: {
@@ -22,21 +32,13 @@ module.exports = {
             }
         }
     },
-    entry: {
-        bundle: ['./src/main/svelte/main.js'],
-    },
     resolve: {
         alias: {
             'svelte': path.resolve('node_modules', 'svelte'),
             'svelte-tags-input':path.resolve('node_modules', 'svelte-tags-input'),
         },
-        extensions: ['.mjs', '.js', '.svelte'],
+        extensions: ['.mjs', '.js', '.svelte', '.json'],
         mainFields: ['svelte', 'browser', 'module', 'main'],
-    },
-    output: {
-        path: __dirname + '/src/main/resources/public/build',
-        filename: '[name].js',
-        chunkFilename: '[name].[id].js'
     },
     module: {
         rules: [
@@ -70,9 +72,10 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
-        new HtmlWebpackPlugin({
-            title: 'ReadmeApp',
-            template: 'src/main/resources/public/index.html',
-        }),
+        // minify index.html
+        // new HtmlWebpackPlugin({
+        //     title: 'ReadmeApp',
+        //     template: 'src/main/resources/public/index.html',
+        // }),
     ]
 };

@@ -7,29 +7,38 @@ import filesize from 'rollup-plugin-filesize';
 import css from 'rollup-plugin-css-only';
 import copy from 'rollup-plugin-copy';
 
-const production = !process.env.ROLLUP_WATCH;
+//const production = !process.env.ROLLUP_WATCH;
+const mode = process.env.NODE_ENV || 'development';
+const production = mode === 'production';
 
 export default {
 	input: 'src/main/svelte/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
-		name: 'readme',
+		name: 'readmeApp',
 		file: 'src/main/resources/public/build/bundle.js'
 	},
 	plugins: [
+		// copy bootstrap-social.css, font-awesome.css into extra.css
+		// css({
+		// 	//output: "./src/main/resources/public/build/extra.css"
+		// 	output: function (styles, styleNodes) {
+		// 		// Filter out any source map imports
+		// 		let reg = new RegExp(/^(\/*).*(.map) ?(\*\/)$/gm);
+		// 		writeFileSync("./src/main/resources/public/build/extra.css", styles.replace(reg, ""))
+		// 	}
+		// }),
+
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
-				css.write('bundle.css',true);
-			}
+				css.write('bundle.css', !production);
+			},
 		}),
-
-		// copy bootstrap-social.css, font-awesome.css into extra.css
-		css({ output: "src/main/resources/public/build/extra.css" }),
 
 		// copy font-awesome into fonts folder
 		copy({ 
