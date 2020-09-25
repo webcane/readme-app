@@ -8,16 +8,19 @@
     import {Col, Container, Row} from "sveltestrap"
 
     import Articles from './Articles.svelte';
-    import Editor from './editor/Editor.svelte'
+    import Editor from './Editor.svelte'
     import Logout from './Logout.svelte'
     import NotFound from './NotFound.svelte';
 
+    // import 'node_modules/font-awesome/css/font-awesome.css';
+
+    // TODO rework
     export let baseUrl;
     setContext('baseUrl', baseUrl);
 
     let tags;
 
-    function setTags({detail}) {
+    function setTags({ detail }) {
         tags = detail.tagSet;
     }
     

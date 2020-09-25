@@ -33,7 +33,7 @@
         //tags = json;
         return json;
     } else {
-    	log.console(json);
+        console.log(json);
         throw new Error(json);
     }
   }

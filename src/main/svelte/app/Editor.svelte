@@ -1,20 +1,25 @@
 <script>
 	import Tags from "svelte-tags-input";
-	let inputTags = "";
+	import { createEventDispatcher } from 'svelte';
+	import { getContext } from "svelte";
+	import { onMount } from "svelte";
+	//import { goto, stores } from '@sapper/app';
+	//import ListErrors from '../_components/ListErrors.svelte';
+	//import * as api from 'api.js';
 
-	function handleTags(event) {
-	  	var tmp_tags = event.detail.tags;
-	  	article.tags = tmp_tags.toString().split(',').map(function(t) {
-			var tag = new Object();
-			tag.value = t.trim();
-			return tag;
-		});
-	}
+	const dispatch = createEventDispatcher();
+	let inputTags = "";
 
 	let availableTags = [];
 	let tagsPromise = Promise.resolve([]);
 
-	import { onMount } from "svelte";
+	export let article;
+	// export let slug;
+	let inProgress = false;
+	let errors;
+
+	const baseUrl = getContext('baseUrl');
+
 	onMount(() => { 
 		tagsPromise = loadTags(); 
 		console.log('promise' + JSON.stringify(tagsPromise));
@@ -24,36 +29,30 @@
 		});
 	});
 
+	function handleTags(event) {
+		const tmp_tags = event.detail.tags;
+		article.tags = tmp_tags.toString().split(',').map(function(t) {
+			let tag = new Object();
+			tag.value = t.trim();
+			return tag;
+		});
+	}
+
 	async function loadTags() {
 		console.log('preload Tags');
-		const res = await fetch(getContext("baseUrl") + "/tags");
+		const res = await fetch(baseUrl + "/tags");
 		const json = await res.json();
 
 		if (res.ok) {
 			return json;
 		} else {
-			log.console(json);
+			console.log(json);
 			throw new Error(json);
 		}
 	}
 
-	
-  	import { createEventDispatcher } from 'svelte';
-  	const dispatch = createEventDispatcher();
-
-	import { getContext } from "svelte";
-	
-	//import { goto, stores } from '@sapper/app';
-	//import ListErrors from '../_components/ListErrors.svelte';
-	//import * as api from 'api.js';
-	export let article;
-	// export let slug;
-	let inProgress = false;
-	let errors;
-
 	async function publish() {
 		inProgress = true;
-		const baseUrl = getContext("baseUrl");
 		let url = baseUrl + "/articles";
 
 		console.log("article to publish: " + JSON.stringify(article));
