@@ -38,25 +38,18 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .httpBasic()
                 .and()
-                .formLogin()
-                .permitAll();
-//                .authorizeRequests(a -> a
-//                        .antMatchers("/", "/error").permitAll()
-//                        .antMatchers("/login").permitAll()
-//                        .antMatchers("/public/**", "/favicon/**", "/build/**", "/fonts/**").permitAll()
-//                        .antMatchers("/management/**", "/actuator/**").permitAll()
-//                        .antMatchers("/tags", "/articles", "/user").hasAnyRole("USER")
-//                        .anyRequest().authenticated())
+                // TODO
 //                .authorizeRequests()
-//                .antMatchers("/", "/error", "/public/**", "/favicon/**",
+//                    .antMatchers("/tags", "/articles", "/user").hasRole("USER")
+//                    .antMatchers("/", "/error", "/public/**", "/favicon/**",
 //                            "/build/**", "/fonts/**", "/management/**", "/actuator/**").permitAll()
+//                    .anyRequest().authenticated()
 //                    .and()
-//                .authorizeRequests()
-//                .antMatchers("/tags", "/articles", "/user").hasAnyRole("USER")
-//                    .and()
-//                .formLogin()
-//                .permitAll();
-//                .anyRequest().authenticated();
-        //.logout(l -> l.logoutSuccessUrl("/").deleteCookies("JSESSIONID"));
+                .formLogin()
+                .loginProcessingUrl("/oauth2/authorization/github")
+                .permitAll()
+                .and()
+                .logout()
+                .deleteCookies("JSESSIONID");
     }
 }
