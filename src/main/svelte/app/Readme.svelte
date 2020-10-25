@@ -8,7 +8,7 @@
     import {Col, Container, Row} from "sveltestrap"
 
     import Articles from './Articles.svelte';
-    import Editor from './editor/Editor.svelte'
+    import ArticleEditor from './ArticleEditor.svelte'
     import Logout from './Logout.svelte'
     import NotFound from './NotFound.svelte';
 
@@ -45,7 +45,7 @@
         <Row>
         {#if selected === 'editor'}
             <Col md="12">
-                <Editor {article} on:edit='{setMenu|initArticle}'/>
+                <ArticleEditor {article} on:edit='{setMenu|initArticle}'/>
             </Col>
         {:else if selected === 'logout'}
             <Col md="12">
