@@ -10,12 +10,12 @@ import copy from 'rollup-plugin-copy';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/main/svelte/main.js',
+	input: 'src/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
 		name: 'readme',
-		file: 'src/main/resources/public/build/bundle.js'
+		file: 'public/build/bundle.js'
 	},
 	plugins: [
 		svelte({
@@ -29,7 +29,7 @@ export default {
 		}),
 
 		// copy bootstrap-social.css, font-awesome.css into extra.css
-		css({ output: "src/main/resources/public/build/extra.css" }),
+		css({ output: "public/build/extra.css" }),
 
 		// copy font-awesome into fonts folder
 		copy({ 
@@ -62,7 +62,7 @@ export default {
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('src/main/resources/public'),
+		!production && livereload('public'),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify

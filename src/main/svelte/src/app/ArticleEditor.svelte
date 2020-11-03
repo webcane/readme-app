@@ -14,16 +14,6 @@
 	}
 </script>
 
-<style>
-    .tags-input :global(.svelte-tags-input-tag) {
-        background:blue;
-    }
-
-    .tags-input :global(.svelte-tags-input-layout) {
-        background:yellow;
-    }
-</style>
-
 <form>
 	<fieldset>
 		<button class="btn btn-lg pull-xs-right btn-primary" type="button" disabled={inProgress} on:click={publish}>

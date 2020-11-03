@@ -27,8 +27,8 @@
             console.log('check User: ' + json.name);
         } else {
             authorized = false;
-            log.console(json);
-            throw new Error(json);
+            console.log(res);
+            throw new Error(res);
         }
     }
 
@@ -46,6 +46,21 @@
         }
         inProgress = false;
     }
+
+    async function login(event) {
+        // href="/oauth2/authorization/github"
+        const response = await fetch(baseUrl + "/login", {
+            method: 'GET'
+        });
+        const text = await response.text();
+        if (response.ok) {
+            authorized = true;
+            dispatch('menu', '');
+        } else {
+            throw new Error(text);
+        }
+
+    }
 </script>
 
 <Navbar light expand="sm">
@@ -59,12 +74,12 @@
                 </NavItem>
                 <NavItem>
                     <!-- /logout -->
-                    <NavLink href="#" on:click={logout} disabled='{inProgress}'>Logout</NavLink>
+                    <NavLink on:click={logout} disabled='{inProgress}'>Logout</NavLink>
                 </NavItem>
             {:else}
                 <NavItem>
-                    <NavLink href="/oauth2/authorization/github" title="Login with GitHub">Sign in</NavLink>
-                     <!-- <NavLink href="/login" title="basic Login">Sign in</NavLink> -->
+<!--                    <NavLink on:click={login} title="Login with GitHub">Sign in</NavLink>-->
+                      <link href="/login" title="basic Login">Sign in</link>
                 </NavItem>
             {/if}
         </Nav>
