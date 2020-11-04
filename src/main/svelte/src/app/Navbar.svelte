@@ -79,7 +79,7 @@
             {:else}
                 <NavItem>
 <!--                    <NavLink on:click={login} title="Login with GitHub">Sign in</NavLink>-->
-                      <link href="/login" title="basic Login">Sign in</link>
+                      <NavItem href="/login" title="basic Login">Sign in</NavItem>
                 </NavItem>
             {/if}
         </Nav>

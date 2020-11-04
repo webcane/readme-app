@@ -17,6 +17,9 @@
 
     let tags;
 
+    let emptyArticle = { url: '', title: '', preambule: '', tags: [] };
+    let article;
+
     function setTags({detail}) {
         tags = detail.tagSet;
     }
@@ -30,9 +33,6 @@
         article = emptyArticle;
     }
 
-    let emptyArticle = { url: '', title: '', preambule: '', tags: [] };
-    let article;
-    
     onMount(() => { 
 		initArticle();
 	});
