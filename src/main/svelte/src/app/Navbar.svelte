@@ -19,47 +19,34 @@
     onMount(checkUser);
 
     async function checkUser() {
-        const res = await fetch(baseUrl + "/user");
-        const json = await res.json();
+        console.log('check User');
+        const opts = { method: 'GET', headers: {} };
+        // opts.headers['Authorization'] = `Basic dXNlcjp1c2Vy`;
+        const res = await fetch(baseUrl + "/user", opts);
 
-        if (res.ok) {
+        if (res.ok && !res.redirected) {
             authorized = true;
-            console.log('check User: ' + json.name);
+            const json = await res.json();
+            console.log('User: ' + json.name);
         } else {
             authorized = false;
             console.log(res);
-            throw new Error(res);
         }
     }
 
     async function logout(event) {
         inProgress = true;
-        const response = await fetch(baseUrl + "/logout", {
-            method: 'POST'
-        });
+        const opts = { method: 'POST', headers: {} };
+        // opts.headers['Authorization'] = `Basic dXNlcjp1c2Vy`;
+        const response = await fetch(baseUrl + "/logout", opts);
         const text = await response.text();
         if (response.ok) {
             authorized = false;
-            dispatch('menu', 'logout');
+            dispatch('nav', 'logout');
         } else {
             throw new Error(text);
         }
         inProgress = false;
-    }
-
-    async function login(event) {
-        // href="/oauth2/authorization/github"
-        const response = await fetch(baseUrl + "/login", {
-            method: 'GET'
-        });
-        const text = await response.text();
-        if (response.ok) {
-            authorized = true;
-            dispatch('menu', '');
-        } else {
-            throw new Error(text);
-        }
-
     }
 </script>
 
@@ -70,16 +57,15 @@
             {#if authorized}
                 <NavItem>
                     <!-- /editor -->
-                    <NavLink href="#" on:click={() => dispatch('menu', 'editor')}>New</NavLink>
+                    <NavLink href="#" on:click={() => dispatch('nav', 'editor')}>New</NavLink>
                 </NavItem>
                 <NavItem>
                     <!-- /logout -->
-                    <NavLink on:click={logout} disabled='{inProgress}'>Logout</NavLink>
+                    <NavLink href="#" on:click={logout} disabled='{inProgress}'>Logout</NavLink>
                 </NavItem>
             {:else}
                 <NavItem>
-<!--                    <NavLink on:click={login} title="Login with GitHub">Sign in</NavLink>-->
-                      <NavItem href="/login" title="basic Login">Sign in</NavItem>
+                      <NavLink href="/login" title="basic Login">Sign in</NavLink>
                 </NavItem>
             {/if}
         </Nav>

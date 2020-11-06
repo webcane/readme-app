@@ -38,7 +38,7 @@
 	});
 </script>
 
-<Navbar on:menu='{setMenu}'/>
+<Navbar on:nav='{setMenu}'/>
 <div class="home-page">
     <Banner show={selected}/>
     <div class="container page">

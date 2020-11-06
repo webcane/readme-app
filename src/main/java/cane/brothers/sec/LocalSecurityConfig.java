@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,7 +27,6 @@ import java.util.Arrays;
  * Created by cane
  */
 @Profile("dev")
-//@Order(10)
 @EnableWebSecurity
 public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -42,21 +44,28 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // super.configure(http); // DO NOT UNCOMMENT IT
-        http.authorizeRequests()
-                .antMatchers("/", "/error", "/public/**", "/favicon/**",
-                        "/build/**", "/fonts/**", "/management/**", "/actuator/**")
+        http.httpBasic()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .authorizeRequests()
+                .antMatchers("/favicon/**", "/fonts/**", "/management/**", "/actuator/**")
                     .permitAll()
                 .antMatchers("/tags", "/articles", "/user")
                     .hasAnyRole("USER")
-                .anyRequest().authenticated()
+                .antMatchers("/", "/error")
+                    .permitAll()
+                .anyRequest()
+                    .authenticated()
                 .and()
                 .formLogin()
                     .loginProcessingUrl("/login")
-                    .permitAll()
+                    .successHandler(new SimpleUrlAuthenticationSuccessHandler("http://localhost:3000"))
                 .and()
                 .logout()
                     .deleteCookies("JSESSIONID")
-                    .permitAll()
+                    .logoutSuccessUrl("http://localhost:3000")
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
                 .and()
                 .csrf()
                     .disable()
@@ -66,7 +75,7 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
