@@ -32,7 +32,7 @@ const common = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.join(__dirname, '../src/main/resources/static'),
+                    from: path.join(__dirname, 'src/static'),
                     to: PATHS.output
                 },
             ],
