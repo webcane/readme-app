@@ -1,0 +1,21 @@
+<nav class="navbar navbar-light bg-light navbar-expand-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/">readme app</a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul ngbNav [(activeId)]="activeId" class="ml-auto">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>New</a>
+        </li>
+
+        <li [ngbNavItem]="2">
+          <a ngbNavLink (click)="logout()">Logout</a>
+        </li>
+
+        <li [ngbNavItem]="3">
+          <a ngbNavLink title="basic Login">Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
