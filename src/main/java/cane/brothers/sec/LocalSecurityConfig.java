@@ -44,9 +44,10 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // super.configure(http); // DO NOT UNCOMMENT IT
-        http.httpBasic()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
+        http
+                // .httpBasic()
+//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                .and()
                 .authorizeRequests()
                 .antMatchers("/favicon/**", "/fonts/**", "/management/**", "/actuator/**")
                     .permitAll()
@@ -59,7 +60,7 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                     .loginProcessingUrl("/login")
-                    .successHandler(new SimpleUrlAuthenticationSuccessHandler("http://localhost:3000"))
+                    .defaultSuccessUrl("http://localhost:3000", true)
                 .and()
                 .logout()
                     .deleteCookies("JSESSIONID")
@@ -77,6 +78,7 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

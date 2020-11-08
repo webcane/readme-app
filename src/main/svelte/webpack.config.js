@@ -4,8 +4,6 @@ const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const mode = process.env.NODE_ENV || 'production';
-
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
     source: path.join(__dirname, 'src'),
