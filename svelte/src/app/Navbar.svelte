@@ -21,7 +21,6 @@
     async function checkUser() {
         console.log('check User');
         const opts = { method: 'GET', headers: {} };
-        // opts.headers['Authorization'] = `Basic dXNlcjp1c2Vy`;
         const res = await fetch(baseUrl + "/user", opts);
 
         if (res.ok && !res.redirected) {
@@ -37,12 +36,25 @@
     async function logout(event) {
         inProgress = true;
         const opts = { method: 'POST', headers: {} };
-        // opts.headers['Authorization'] = `Basic dXNlcjp1c2Vy`;
         const response = await fetch(baseUrl + "/logout", opts);
         const text = await response.text();
         if (response.ok) {
-            authorized = false;
+            authorized = true;
             dispatch('nav', 'logout');
+        } else {
+            throw new Error(text);
+        }
+        inProgress = false;
+    }
+
+    async function login(event) {
+        inProgress = true;
+        const opts = { method: 'GET', headers: {} };
+        const response = await fetch(baseUrl + "/login", opts);
+        const text = await response.text();
+        if (response.ok) {
+            authorized = false;
+            dispatch('nav', '');
         } else {
             throw new Error(text);
         }
@@ -66,6 +78,7 @@
             {:else}
                 <NavItem>
                       <NavLink href="/login" title="basic Login">Sign in</NavLink>
+                      <!-- <NavLink href="#" on:click={login} title="basic Login">Sign in</NavLink> -->
                 </NavItem>
             {/if}
         </Nav>

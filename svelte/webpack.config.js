@@ -7,15 +7,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
     source: path.join(__dirname, 'src'),
-    output: path.join(__dirname, '../../../target/classes/static')
+    output: path.join(__dirname, 'target/classes/static')
 };
 
 const common = {
     context: PATHS.source,
     entry: {
         'bundle': './main.js'
-    }, // [    PATHS.source  ]
-        //{ bundle: ['./src/main.js'] },
+    },
     output: {
         path: PATHS.output,
         filename: '[name].js'
@@ -33,7 +32,7 @@ const common = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.join(__dirname, '../resources/static'),
+                    from: path.join(__dirname, '../src/main/resources/static'),
                     to: PATHS.output
                 },
             ],
