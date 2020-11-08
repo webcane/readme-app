@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
     source: path.join(__dirname, 'src'),
-    output: path.join(__dirname, 'target/classes/static')
+    output: path.join(__dirname, '../target/classes/static')
 };
 
 const common = {
