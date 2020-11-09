@@ -21,6 +21,7 @@ import { JwtInterceptor, ErrorInterceptor } from './security';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     NgbModule
   ],
   providers: [
