@@ -7,7 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class BannerComponent implements OnInit {
 
-  @Input('show') show: boolean;
+  @Input('hide') hide: boolean;
 
   constructor() { }
 

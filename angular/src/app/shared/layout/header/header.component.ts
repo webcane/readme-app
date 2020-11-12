@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthenticationService, User} from "@app/security";
+import {AuthenticationService, User} from '@app/security';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class HeaderComponent implements OnInit {
+
   user: User;
   activeId = 1;
 
@@ -20,5 +21,4 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
   }
-
 }
