@@ -9,6 +9,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {HomeModule} from '@app/home/home.module';
 import {HeaderComponent} from '@app/shared/layout/header/header.component';
+import {EditorModule} from '@app/editor/editor.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {HeaderComponent} from '@app/shared/layout/header/header.component';
     ReactiveFormsModule,
     HttpClientModule,
     HomeModule,
+    EditorModule,
     NgbModule
   ],
   providers: [],
