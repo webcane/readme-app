@@ -1,0 +1,29 @@
+.table td, .table th {
+  padding: 0;
+}
+
+.alert {
+  padding: 1rem 0rem;
+  margin-bottom: 4rem;
+}
+
+.alert-link {
+  font-weight: 500;
+}
+
+hr {
+  margin: 0;
+}
+
+.input-group-text {
+  background-color: transparent;
+}
+
+/*.input-group-prepend {*/
+/*  width : 30px;*/
+/*}*/
+
+/*.input-group-prepend label {*/
+/*  width: 100%;*/
+/*  overflow: hidden;*/
+/*}*/

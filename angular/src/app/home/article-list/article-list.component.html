@@ -1,1 +1,71 @@
-<p class="border border-primary rounded">article-list works!</p>
+<!--<p class="border border-primary rounded">article-list works!</p>-->
+
+<form>
+  <div class="form-row col-12">
+      <div class="form-group">
+        <input type="text"
+               class="form-control is-loading is-loading-sm"
+               id="inlineFormInputGroup"
+               name="searchTerm"
+               placeholder="search term"
+               [(ngModel)]="service.searchTerm">
+
+        <div class="spinner-border spinner-border-sm text-light" aria-hidden="true"
+             role="status"
+             *ngIf="service.loading$ | async">
+<!--          <span class="sr-only">Loading...</span>-->
+        </div>
+<!--        <div class="input-group-append">-->
+<!--          <div class="input-group-text w-100">-->
+<!--            -->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+<!--    <div class="form-group col-md-1">-->
+<!--      <div aria-hidden="true" class="spinner-border text-light" role="status" *ngIf="service.loading$ | async">-->
+<!--        <span class="sr-only">Loading...</span>-->
+<!--      </div>-->
+<!--      &lt;!&ndash;    <span class="ml-2" *ngIf="service.loading$ | async">Loading...</span>&ndash;&gt;-->
+<!--    </div>-->
+<!--    <div class="form-group form-right col-md-11">-->
+<!--      <input class="form-control" type="text" id="searchInput" name="searchTerm"-->
+<!--             placeholder="search term"-->
+<!--             [(ngModel)]="service.searchTerm"/>-->
+<!--    </div>-->
+  </div>
+
+  <table class="table">
+    <tbody>
+    <tr *ngFor="let article of articles$ | async">
+      <td scope="row">
+        <div class="alert alert-light" role="alert">
+          <h4 class="alert-heading">
+            <ngb-highlight [result]="article.title" [term]="service.searchTerm"></ngb-highlight>
+          </h4>
+          <p *ngIf="article.preamble">
+            <ngb-highlight [result]="article.preamble" [term]="service.searchTerm"></ngb-highlight>
+          </p>
+          <hr>
+          <div class="float-right">
+            <a href="{{article.url}}" target="_blank"
+               class="alert-link">Read more...</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="10">10 items per page</option>
+      <option [ngValue]="50">50 items per page</option>
+    </select>
+  </div>
+
+</form>
