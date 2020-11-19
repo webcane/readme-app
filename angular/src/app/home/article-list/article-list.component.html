@@ -1,8 +1,8 @@
 <!--<p class="border border-primary rounded">article-list works!</p>-->
 
 <form>
-  <div class="form-row col-12">
-      <div class="form-group">
+  <div class="form-row">
+      <div class="form-group col-12">
         <input type="text"
                class="form-control is-loading is-loading-sm"
                id="inlineFormInputGroup"
@@ -10,28 +10,11 @@
                placeholder="search term"
                [(ngModel)]="service.searchTerm">
 
-        <div class="spinner-border spinner-border-sm text-light" aria-hidden="true"
-             role="status"
-             *ngIf="service.loading$ | async">
-<!--          <span class="sr-only">Loading...</span>-->
-        </div>
-<!--        <div class="input-group-append">-->
-<!--          <div class="input-group-text w-100">-->
-<!--            -->
-<!--          </div>-->
-<!--        </div>-->
+        <span class="spinner-border spinner-border-sm text-light"
+              *ngIf="service.loading$ | async">
+          <span class="sr-only">Loading...</span>
+        </span>
       </div>
-<!--    <div class="form-group col-md-1">-->
-<!--      <div aria-hidden="true" class="spinner-border text-light" role="status" *ngIf="service.loading$ | async">-->
-<!--        <span class="sr-only">Loading...</span>-->
-<!--      </div>-->
-<!--      &lt;!&ndash;    <span class="ml-2" *ngIf="service.loading$ | async">Loading...</span>&ndash;&gt;-->
-<!--    </div>-->
-<!--    <div class="form-group form-right col-md-11">-->
-<!--      <input class="form-control" type="text" id="searchInput" name="searchTerm"-->
-<!--             placeholder="search term"-->
-<!--             [(ngModel)]="service.searchTerm"/>-->
-<!--    </div>-->
   </div>
 
   <table class="table">
