@@ -1,1 +1,19 @@
-<div class="border border-success rounded">tags</div>
+<div class="sidebar">
+  <p>Popular Tags</p>
+
+  <div class="tag-list">
+    <a *ngFor="let tag of tags$ | async"
+       (click)="selectTag({tag: tag})"
+       class="tag-default tag-pill">
+      {{ tag.value }}
+    </a>
+  </div>
+
+  <div [hidden]="!(loading$ | async)">
+    Loading tags...
+  </div>
+
+  <div [hidden]="(loading$ | async) || (tags$ | async).length > 0">
+    No tags are here... yet.
+  </div>
+</div>
