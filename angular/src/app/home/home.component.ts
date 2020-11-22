@@ -15,4 +15,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  selectTags(tags) {
+    console.log(tags);
+  }
 }

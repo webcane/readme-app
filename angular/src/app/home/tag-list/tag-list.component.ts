@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TagsService} from '@app/shared/service/tags.service';
 import {Observable} from 'rxjs';
 import {Tag} from '@app/shared/model/tag.model';
@@ -13,6 +13,10 @@ export class TagListComponent implements OnInit {
   tags$: Observable<Tag[]>;
   loading$: Observable<boolean>;
 
+  // public selectedTags;
+  @Output("selectedTags")
+  selectedTags: EventEmitter<any> = new EventEmitter();
+
   tagSet = new Set();
 
   constructor(public tagsService: TagsService) {
@@ -24,13 +28,14 @@ export class TagListComponent implements OnInit {
   }
 
   // TODO
-  selectTag(filter: Object = {}) {
-    if(this.tagSet.has(filter)) {
-      this.tagSet.delete(filter);
+  selectTag(tag: Tag) {
+    console.log("filter: " + JSON.stringify(tag));
+    if(this.tagSet.has(tag)) {
+      this.tagSet.delete(tag);
     } else {
-      this.tagSet.add(filter);
+      this.tagSet.add(tag);
     }
-    // dispatch("select", {tagSet});
+    this.selectedTags.emit(this.tagSet);
   }
 
   // setListTo(type: string = '', filters: Object = {}) {

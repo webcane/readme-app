@@ -7,8 +7,9 @@
       <div class="col col-md-9">
         <app-article-list></app-article-list>
       </div>
+
       <div class="col col-md-3">
-        <app-tag-list></app-tag-list>
+        <app-tag-list (selectedTags)="selectTags($event)"></app-tag-list>
       </div>
     </div>
   </div>
