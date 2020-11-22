@@ -14,9 +14,9 @@ export class ArticleListComponent implements OnInit {
   articles$: Observable<Article[]>;
   total$: Observable<number>;
 
-  constructor(public service: ArticleService) {
-    this.articles$ = service.articles$;
-    this.total$ = service.total$;
+  constructor(public articleService: ArticleService) {
+    this.articles$ = articleService.articles$;
+    this.total$ = articleService.total$;
   }
 
   ngOnInit(): void {

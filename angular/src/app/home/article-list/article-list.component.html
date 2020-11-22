@@ -1,5 +1,3 @@
-<!--<p class="border border-primary rounded">article-list works!</p>-->
-
 <form>
   <div class="form-row">
       <div class="form-group col-12">
@@ -8,10 +6,10 @@
                id="inlineFormInputGroup"
                name="searchTerm"
                placeholder="search term"
-               [(ngModel)]="service.searchTerm">
+               [(ngModel)]="articleService.searchTerm">
 
         <span class="spinner-border spinner-border-sm text-light"
-              *ngIf="service.loading$ | async">
+              *ngIf="articleService.loading$ | async">
           <span class="sr-only">Loading...</span>
         </span>
       </div>
@@ -23,10 +21,10 @@
       <td scope="row">
         <div class="alert alert-light" role="alert">
           <h4 class="alert-heading">
-            <ngb-highlight [result]="article.title" [term]="service.searchTerm"></ngb-highlight>
+            <ngb-highlight [result]="article.title" [term]="articleService.searchTerm"></ngb-highlight>
           </h4>
           <p *ngIf="article.preamble">
-            <ngb-highlight [result]="article.preamble" [term]="service.searchTerm"></ngb-highlight>
+            <ngb-highlight [result]="article.preamble" [term]="articleService.searchTerm"></ngb-highlight>
           </p>
           <hr>
           <div class="float-right">
@@ -41,11 +39,12 @@
 
   <div class="d-flex justify-content-between p-2">
     <ngb-pagination
-      [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+      [collectionSize]="(total$ | async)!" [(page)]="articleService.page" [pageSize]="articleService.pageSize">
     </ngb-pagination>
 
-    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-      <option [ngValue]="2">2 items per page</option>
+    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="articleService.pageSize">
+      <option [ngValue]="1">1 item per page</option>
+      <option [ngValue]="4">4 items per page</option>
       <option [ngValue]="10">10 items per page</option>
       <option [ngValue]="50">50 items per page</option>
     </select>
