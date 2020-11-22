@@ -42,7 +42,7 @@
       [collectionSize]="(total$ | async)!" [(page)]="articleService.page" [pageSize]="articleService.pageSize">
     </ngb-pagination>
 
-    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="articleService.pageSize">
+    <select class="custom-select w-auto" name="pageSize" [(ngModel)]="articleService.pageSize">
       <option [ngValue]="1">1 item per page</option>
       <option [ngValue]="4">4 items per page</option>
       <option [ngValue]="10">10 items per page</option>
