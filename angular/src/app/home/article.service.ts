@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Article} from '@app/shared/model/article.model';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
-import {debounceTime, delay, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, delay, filter, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
 import {ARTICLES} from '@app/home/articles';
+import {ApiService} from '@app/shared/service/api.service';
 
 interface SearchResult {
   articles: Article[];
@@ -42,7 +43,7 @@ export class ArticleService {
     searchTerm: '',
   };
 
-  constructor() {
+  constructor(private apiService: ApiService) {
     this._search$.pipe(
       tap(() => this._loading$.next(true)),
       debounceTime(200),
@@ -50,6 +51,7 @@ export class ArticleService {
       delay(200),
       tap(() => this._loading$.next(false))
     ).subscribe(result => {
+      console.log(result);
       this._articles$.next(result.articles);
       this._total$.next(result.total);
     });
@@ -101,16 +103,19 @@ export class ArticleService {
   private _search(): Observable<SearchResult> {
     const {pageSize, page, searchTerm} = this._state;
 
-    // 1. sort
-    let articles = ARTICLES;
-
-    // 2. filter
-    // , this.pipe
-    articles = articles.filter(country => matches(country, searchTerm));
-    const total = articles.length;
-
-    // 3. paginate
-    articles = articles.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-    return of({articles, total});
+    let total = 0;
+    return this.apiService.get('/articles')
+    .pipe(
+      tap(next => ++total),
+      // filtering
+      filter(article => matches(article as Article, searchTerm)),
+      // pagination
+      skip((page - 1) * pageSize),
+      take((page - 1) * pageSize + pageSize),
+      toArray(),
+      map((a) => {
+          return {articles: a, total: total};
+        })
+    );
   }
 }
