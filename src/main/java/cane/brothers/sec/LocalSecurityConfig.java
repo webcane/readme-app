@@ -50,34 +50,34 @@ public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
                 .authorizeRequests()
                 .antMatchers("/favicon/**", "/fonts/**", "/management/**", "/actuator/**")
-                    .permitAll()
+                .permitAll()
                 .antMatchers("/tags", "/articles", "/user")
-                    .hasAnyRole("USER")
+                .hasAnyRole("USER")
                 .antMatchers("/", "/error")
-                    .permitAll()
+                .permitAll()
                 .anyRequest()
-                    .authenticated()
+                .authenticated()
                 .and()
                 .formLogin()
-                    .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("http://localhost:3000", true)
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("http://localhost:4200", true)
                 .and()
                 .logout()
-                    .deleteCookies("JSESSIONID")
-                    .logoutSuccessUrl("http://localhost:3000")
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("http://localhost:4200")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
                 .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .cors();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
         configuration.setAllowedHeaders(Arrays.asList("authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
