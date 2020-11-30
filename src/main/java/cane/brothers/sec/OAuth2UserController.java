@@ -1,9 +1,10 @@
 package cane.brothers.sec;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 /**
- * Created by cane
+ * @author mniedre
  */
 @Slf4j
-@Profile("dev")
+@Profile("oauth2")
 @RestController
-public class LocalUserController {
+public class OAuth2UserController {
 
     @GetMapping
-    @RequestMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Principal user(@AuthenticationPrincipal Principal principal) {
-        return principal;
+    @RequestMapping("/user")
+    public Principal user(@AuthenticationPrincipal OAuth2User principal) {
+        return () -> principal.getAttribute("login");
     }
 }

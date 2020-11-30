@@ -26,9 +26,9 @@ import java.util.Arrays;
 /**
  * Created by cane
  */
-@Profile("dev")
+@Profile("basic")
 @EnableWebSecurity
-public class LocalSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
