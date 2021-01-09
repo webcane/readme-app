@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Article} from '@app/shared/model/article.model';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
-import {debounceTime, delay, filter, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
-import {ARTICLES} from '@app/home/articles';
+import {BehaviorSubject, from, Observable, of, Subject} from 'rxjs';
+import {catchError, debounceTime, delay, filter, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
 import {ApiService} from '@app/shared/service/api.service';
+import {HttpClient} from '@angular/common/http';
 
 interface SearchResult {
   articles: Article[];
@@ -20,9 +20,12 @@ interface State {
 
 // , pipe: PipeTransform
 function matches(article: Article, term: string) {
-  return article.url.toLowerCase().includes(term.toLowerCase())
-  || article.title.toLowerCase().includes(term.toLowerCase())
-  || article.preamble?.toLowerCase().includes(term.toLowerCase());
+  if (article != null && term != null) {
+    return article.url.toLowerCase().includes(term.toLowerCase())
+      || article.title.toLowerCase().includes(term.toLowerCase())
+      || article.preamble?.toLowerCase().includes(term.toLowerCase());
+  }
+  return false;
   // || pipe.transform(country.area).includes(term)
   // || pipe.transform(country.population).includes(term);
 }
@@ -37,13 +40,16 @@ export class ArticleService {
   private _articles$ = new BehaviorSubject<Article[]>([]);
   private _total$ = new BehaviorSubject<number>(0);
 
+  private _allArticles$ = new BehaviorSubject<Article>(null);
+
   private _state: State = {
     page: 1,
     pageSize: 4,
     searchTerm: '',
   };
 
-  constructor(private apiService: ApiService) {
+  constructor(private http: HttpClient,
+              private apiService: ApiService) {
     this._search$.pipe(
       tap(() => this._loading$.next(true)),
       debounceTime(200),
@@ -100,22 +106,62 @@ export class ArticleService {
     this._search$.next();
   }
 
+  private getArticles(): Observable<Article[]> {
+    return this.apiService.get<Article[]>('/articles')
+      .pipe(
+        tap(_ => this.log('fetched articles')),
+        catchError(this.handleError<Article[]>('getArticles', []))
+      );
+  }
+
   private _search(): Observable<SearchResult> {
     const {pageSize, page, searchTerm} = this._state;
-
     let total = 0;
-    return this.apiService.get('/articles')
-    .pipe(
-      tap(next => ++total),
-      // filtering
-      filter(article => matches(article as Article, searchTerm)),
-      // pagination
-      skip((page - 1) * pageSize),
-      take((page - 1) * pageSize + pageSize),
-      toArray(),
-      map((a) => {
-          return {articles: a, total: total};
+
+    this.getArticles()
+      .subscribe(items => {
+        total = items.length;
+        if (total > 0) {
+          from(items).subscribe(
+            t => {
+              this._allArticles$.next(t);
+            }
+          );
+        }
+      });
+
+    return this._allArticles$
+      .pipe(
+        // filtering
+        filter(article => matches(article, searchTerm)),
+        // pagination
+        skip((page - 1) * pageSize),
+        take((page - 1) * pageSize + pageSize),
+        toArray(),
+        map((a) => {
+          return {articles: a, total: total} as SearchResult;
         })
-    );
+      );
+
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      if (error != null) {
+        // TODO: send the error to remote logging infrastructure
+        console.error(error); // log to console instead
+
+        // TODO: better job of transforming error for user consumption
+        this.log('${operation} failed: ${error.message}');
+      }
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
+
+  private log(message: string): void {
+    // this.messageService.add(`HeroService: ${message}`);
+    console.log(message);
   }
 }

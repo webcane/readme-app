@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthenticationService, User} from '@app/security';
+import {Component, Input, OnInit} from '@angular/core';
+import {environment} from '../../../../environments/environment';
+import {AuthService} from '@app/shared/security/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,17 +9,21 @@ import {AuthenticationService, User} from '@app/security';
 })
 export class HeaderComponent implements OnInit {
 
-  user: User;
+  @Input()
+  public isAuthenticated: boolean;
+
   activeId = 1;
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.user.subscribe(x => this.user = x);
+  authProvider = environment.authProvider;
+  GITHUB_AUTH_URL = environment.githubAuthUrl;
+
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.authService.logout();
   }
 }

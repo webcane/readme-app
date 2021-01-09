@@ -1,23 +1,20 @@
-import { Component } from '@angular/core';
-import {AuthenticationService, Role, User} from "@app/security";
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '@app/shared/security/auth.service';
 
 @Component({
   selector: 'app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  user: User;
+export class AppComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.user.subscribe(x => this.user = x);
+  public isAuthenticated: boolean;
+
+  constructor(public authService: AuthService) {
   }
 
-  get isAdmin() {
-    return this.user && this.user.role === Role.Admin;
+  ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
   }
 
-  logout() {
-    this.authenticationService.logout();
-  }
 }

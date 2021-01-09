@@ -31,8 +31,8 @@ public class ArticleController {
     @GetMapping
     @ApiOperation(value = "Get all articles", response = ArticleView.class, responseContainer = "List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "There are some articles found by tag name"),
-            @ApiResponse(code = 400, message = "There is no result")})
+            @ApiResponse(code = 200, message = "There are all articles found"),
+            @ApiResponse(code = 404, message = "There is no result")})
     public ResponseEntity<List<ArticleView>> findAllArticles() {
         List<ArticleView> result = svc.findAll();
         if (result.isEmpty()) {
@@ -41,12 +41,25 @@ public class ArticleController {
         return ResponseEntity.ok(result);
     }
 
+//    @GetMapping
+//    @ApiOperation(value = "Get all articles", response = ArticleView.class, responseContainer = "List")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "There are all articles found"),
+//            @ApiResponse(code = 404, message = "There is no result")})
+//    public ResponseEntity<ArticleResponse> findAllArticles() {
+//        List<ArticleView> articles = svc.findAll();
+//        if (articles.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return ResponseEntity.ok(new ArticleResponse(articles.size(), articles));
+//    }
+
     @GetMapping(value = "/findBy")
     @ApiOperation(value = "Filter articles by tag name", response = ArticleView.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "There are some articles found by tag name"),
-            @ApiResponse(code = 400, message = "There is no result"),
-            @ApiResponse(code = 404, message = "Bad request, For example missing tag name")})
+            @ApiResponse(code = 400, message = "Bad request, For example missing tag name"),
+            @ApiResponse(code = 404, message = "There is no result")})
     public ResponseEntity<List<ArticleView>> findArticlesByTagNames(@ApiParam("Tag name") @RequestParam Collection<String> tags) {
         if (CollectionUtils.isEmpty(tags)) {
             log.warn("empty tag request param");

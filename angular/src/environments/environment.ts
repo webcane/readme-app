@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+  authProvider: 'github',
+  apiUrl: 'http://localhost:8080',
+  oauth2RedirectUri: 'http://localhost:4200/oauth2/redirect',
+  githubAuthUrl: 'http://localhost:8080/oauth2/authorize/github?redirect_uri=http://localhost:4200/oauth2/redirect'
 };
 
 /*
@@ -14,4 +17,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import 'zone.js/dist/zone-error';  // Included with Angular CLI.

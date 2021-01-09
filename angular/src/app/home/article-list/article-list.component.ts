@@ -6,11 +6,12 @@ import {ArticleService} from '@app/home/article.service';
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.css'],
+  styleUrls: ['./article-list.component.scss'],
   providers: [ArticleService]
 })
 export class ArticleListComponent implements OnInit {
 
+  searchTerm: string;
   articles$: Observable<Article[]>;
   total$: Observable<number>;
 

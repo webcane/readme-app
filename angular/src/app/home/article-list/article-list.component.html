@@ -5,7 +5,7 @@
                class="form-control is-loading is-loading-sm"
                name="searchTerm"
                placeholder="search term"
-               [(ngModel)]="articleService.searchTerm">
+               [(ngModel)]="searchTerm">
 
         <span class="spinner-border spinner-border-sm text-light"
               *ngIf="articleService.loading$ | async">
@@ -20,10 +20,10 @@
       <td scope="row">
         <div class="alert alert-light" role="alert">
           <h4 class="alert-heading">
-            <ngb-highlight [result]="article.title" [term]="articleService.searchTerm"></ngb-highlight>
+            <ngb-highlight [result]="article.title" [term]="searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
           </h4>
           <p *ngIf="article.preamble">
-            <ngb-highlight [result]="article.preamble" [term]="articleService.searchTerm"></ngb-highlight>
+            <ngb-highlight [result]="article.preamble" [term]="searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
           </p>
           <hr>
           <div class="float-right">
