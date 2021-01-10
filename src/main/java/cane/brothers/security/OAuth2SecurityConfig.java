@@ -33,11 +33,7 @@ import java.util.Arrays;
  */
 @Profile("oauth2")
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -115,12 +111,15 @@ public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .oauth2Login(o -> o
                         .authorizationEndpoint(a -> a
-                                .baseUri("/oauth2/authorize")
+                                // default /oauth2/authorization from OAuth2AuthorizationRequestRedirectFilter
+//                                .baseUri("/oauth2/authorization")
                                 .authorizationRequestRepository(cookieAuthorizationRequestRepository()))
-                        .redirectionEndpoint(r -> r
-                                .baseUri("/oauth2/callback/*"))
+//                        .redirectionEndpoint(r -> r
+//                                // default /login/oauth2/code/* from OAuth2LoginAuthenticationFilter
+//                                .baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(u -> u
                                 .userService(customOAuth2UserService))
+                        // default SavedRequestAwareAuthenticationSuccessHandler
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 );

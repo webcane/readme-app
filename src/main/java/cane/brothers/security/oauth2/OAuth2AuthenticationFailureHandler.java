@@ -19,9 +19,17 @@ import java.io.IOException;
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    @Autowired
-    HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
+    /**
+     * Constructor
+     *
+     * @param httpCookieOAuth2AuthorizationRequestRepository
+     */
+    @Autowired
+    public OAuth2AuthenticationFailureHandler(HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+    }
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
@@ -29,12 +37,21 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                 .map(Cookie::getValue)
                 .orElse(("/"));
 
+        setDefaultFailureUrl(targetUrl);
+
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
 
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        if(isUseForward()) {
+            logger.debug("Forwarding to " + targetUrl);
+            request.getRequestDispatcher(targetUrl)
+                    .forward(request, response);
+        } else {
+            logger.debug("Redirecting to " + targetUrl);
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        }
     }
 }
