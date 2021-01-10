@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Article} from '@app/shared/model/article.model';
 import {BehaviorSubject, from, Observable, of, ReplaySubject, Subject} from 'rxjs';
-import {catchError, debounceTime, delay, filter, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
+import {catchError, debounceTime, delay, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
 import {ApiService} from '@app/shared/service/api.service';
 import {HttpClient} from '@angular/common/http';
-import {Select} from '@ngxs/store';
-import {TagsState} from '@app/shared/state/tags.state';
 import {Tag} from '@app/shared/model/tag.model';
 
 interface SearchResult {
@@ -17,8 +15,6 @@ interface State {
   page: number;
   pageSize: number;
   searchTerm: string;
-  // sortColumn: SortColumn;
-  // sortDirection: SortDirection;
   tags: Tag[]
 }
 
