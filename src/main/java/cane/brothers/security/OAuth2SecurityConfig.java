@@ -103,7 +103,6 @@ public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/public/**", "/favicon/**", "/build/**", "/fonts/**").permitAll()
                         .antMatchers("/management/**", "/actuator/**").permitAll()
                         .antMatchers("/tags", "/articles", "/user").hasAnyRole("USER")
-                        //  .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
@@ -111,16 +110,12 @@ public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .oauth2Login(o -> o
                         .authorizationEndpoint(a -> a
-                                // default /oauth2/authorization from OAuth2AuthorizationRequestRedirectFilter
-//                                .baseUri("/oauth2/authorization")
                                 .authorizationRequestRepository(cookieAuthorizationRequestRepository()))
-//                        .redirectionEndpoint(r -> r
-//                                // default /login/oauth2/code/* from OAuth2LoginAuthenticationFilter
-//                                .baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(u -> u
                                 .userService(customOAuth2UserService))
                         // default SavedRequestAwareAuthenticationSuccessHandler
                         .successHandler(oAuth2AuthenticationSuccessHandler)
+                        // default SimpleUrlAuthenticationFailureHandler
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 );
 
