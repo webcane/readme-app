@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Article} from '@app/shared/model/article.model';
 import {ArticleService} from '@app/home/article.service';
+import {Tag} from '@app/shared/model/tag.model';
+import {TagsState} from '@app/shared/state/tags.state';
+import {Select} from '@ngxs/store';
 
 @Component({
   selector: 'app-article-list',
@@ -10,6 +13,9 @@ import {ArticleService} from '@app/home/article.service';
   providers: [ArticleService]
 })
 export class ArticleListComponent implements OnInit {
+
+  @Select(TagsState.selectedTags)
+  selectedTags$: Observable<Tag[]>;
 
   searchTerm: string;
   articles$: Observable<Article[]>;
@@ -21,6 +27,9 @@ export class ArticleListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selectedTags$.subscribe(tags => {
+      this.articleService.tags = tags;
+    });
   }
 
 }

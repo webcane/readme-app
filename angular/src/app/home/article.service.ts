@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Article} from '@app/shared/model/article.model';
-import {BehaviorSubject, from, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, from, Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {catchError, debounceTime, delay, filter, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
 import {ApiService} from '@app/shared/service/api.service';
 import {HttpClient} from '@angular/common/http';
+import {Select} from '@ngxs/store';
+import {TagsState} from '@app/shared/state/tags.state';
+import {Tag} from '@app/shared/model/tag.model';
 
 interface SearchResult {
   articles: Article[];
@@ -16,6 +19,7 @@ interface State {
   searchTerm: string;
   // sortColumn: SortColumn;
   // sortDirection: SortDirection;
+  tags: Tag[]
 }
 
 // , pipe: PipeTransform
@@ -40,12 +44,13 @@ export class ArticleService {
   private _articles$ = new BehaviorSubject<Article[]>([]);
   private _total$ = new BehaviorSubject<number>(0);
 
-  private _allArticles$ = new BehaviorSubject<Article>(null);
+  private _allArticles$ = new ReplaySubject<Article>(null);
 
   private _state: State = {
     page: 1,
     pageSize: 4,
     searchTerm: '',
+    tags: []
   };
 
   constructor(private http: HttpClient,
@@ -89,6 +94,10 @@ export class ArticleService {
     return this._state.searchTerm;
   }
 
+  get tags() {
+    return this._state.tags;
+  }
+
   set page(page: number) {
     this._set({page});
   }
@@ -101,39 +110,63 @@ export class ArticleService {
     this._set({searchTerm});
   }
 
+  set tags(tags: Tag[]) {
+    this._set({tags});
+  }
+
   private _set(patch: Partial<State>) {
     Object.assign(this._state, patch);
     this._search$.next();
   }
 
-  private getArticles(): Observable<Article[]> {
-    return this.apiService.get<Article[]>('/articles')
+  private getArticles(tags: Tag[]): Observable<Article[]> {
+    let tagsLine = this.getTagLine(tags);
+    let url = this.getUrl(tagsLine);
+
+    return this.apiService.get<Article[]>(url)
       .pipe(
         tap(_ => this.log('fetched articles')),
         catchError(this.handleError<Article[]>('getArticles', []))
       );
   }
 
+  private getTagLine(tags: Tag[]): string {
+    if (tags) {
+      let tagNames = tags.map(function (item) {
+        return item['value'];
+      });
+      let tagLine = Array.from(tagNames).toString();
+      console.log("tagLine: " + JSON.stringify(tagLine));
+      return tagLine;
+    }
+    return null;
+  }
+
+  private getUrl(tagName: string): string {
+    let url = "/articles";
+    if (tagName) {
+      url = url + "/findBy?tags=" + tagName;
+    }
+    return url;
+  }
+
   private _search(): Observable<SearchResult> {
-    const {pageSize, page, searchTerm} = this._state;
+    const {pageSize, page, tags} = this._state;
     let total = 0;
 
-    this.getArticles()
+    this.getArticles(tags)
       .subscribe(items => {
         total = items.length;
         if (total > 0) {
-          from(items).subscribe(
-            t => {
-              this._allArticles$.next(t);
-            }
-          );
+          from(items)
+            .subscribe(t => this._allArticles$.next(t));
         }
       });
 
     return this._allArticles$
       .pipe(
         // filtering
-        filter(article => matches(article, searchTerm)),
+        // filter(article => matches(article, searchTerm)),
         // pagination
         skip((page - 1) * pageSize),
         take((page - 1) * pageSize + pageSize),

@@ -2,6 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TagsService} from '@app/shared/service/tags.service';
 import {Observable} from 'rxjs';
 import {Tag} from '@app/shared/model/tag.model';
+import {Store} from '@ngxs/store';
+import {SelectTagAction} from '@app/shared/state/tags.state';
 
 @Component({
   selector: 'app-tag-list',
@@ -13,13 +15,8 @@ export class TagListComponent implements OnInit {
   tags$: Observable<Tag[]>;
   loading$: Observable<boolean>;
 
-  // public selectedTags;
-  @Output("selectedTags")
-  selectedTags: EventEmitter<any> = new EventEmitter();
-
-  tagSet = new Set();
-
-  constructor(public tagsService: TagsService) {
+  constructor(public tagsService: TagsService,
+              private store: Store) {
     this.tags$ = tagsService.tags$;
     this.loading$ = tagsService.loading$;
   }
@@ -27,15 +24,9 @@ export class TagListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // TODO
   selectTag(tag: Tag) {
-    console.log("filter: " + JSON.stringify(tag));
-    if(this.tagSet.has(tag)) {
-      this.tagSet.delete(tag);
-    } else {
-      this.tagSet.add(tag);
-    }
-    this.selectedTags.emit(this.tagSet);
+    console.log("select tag: " + JSON.stringify(tag));
+    this.store.dispatch(new SelectTagAction(tag));
   }
 
   // setListTo(type: string = '', filters: Object = {}) {

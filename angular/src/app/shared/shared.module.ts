@@ -4,12 +4,17 @@ import {TokenService} from '@app/shared/security/token.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokenInterceptor} from '@app/shared/security/token.interceptor';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxsModule} from '@ngxs/store';
+import {environment} from '@environments/environment';
+import {TagsState} from '@app/shared/state/tags.state';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxsModule.forRoot([TagsState],
+      { developmentMode: !environment.production })
   ],
   providers: [
     TokenService,
