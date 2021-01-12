@@ -41,19 +41,6 @@ public class ArticleController {
         return ResponseEntity.ok(result);
     }
 
-//    @GetMapping
-//    @ApiOperation(value = "Get all articles", response = ArticleView.class, responseContainer = "List")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "There are all articles found"),
-//            @ApiResponse(code = 404, message = "There is no result")})
-//    public ResponseEntity<ArticleResponse> findAllArticles() {
-//        List<ArticleView> articles = svc.findAll();
-//        if (articles.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return ResponseEntity.ok(new ArticleResponse(articles.size(), articles));
-//    }
-
     @GetMapping(value = "/findBy")
     @ApiOperation(value = "Filter articles by tag name", response = ArticleView.class, responseContainer = "List")
     @ApiResponses(value = {
