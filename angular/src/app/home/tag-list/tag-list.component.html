@@ -2,11 +2,7 @@
   <p>Popular Tags</p>
 
   <div class="tag-list">
-    <a *ngFor="let tag of tags$ | async"
-       (click)="selectTag(tag)"
-       class="tag-default tag-pill">
-      {{ tag.value }}
-    </a>
+    <app-tag *ngFor="let tag of tags$ | async" [tag]="tag"></app-tag>
   </div>
 
   <div [hidden]="!(loading$ | async)">

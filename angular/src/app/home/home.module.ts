@@ -7,13 +7,15 @@ import {ArticleListComponent} from './article-list/article-list.component';
 import {TagListComponent} from './tag-list/tag-list.component';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { TagComponent } from './tag/tag.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     BannerComponent,
     ArticleListComponent,
-    TagListComponent
+    TagListComponent,
+    TagComponent
   ],
   imports: [
     CommonModule,
