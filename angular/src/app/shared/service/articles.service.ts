@@ -11,8 +11,8 @@ import { catchError, debounceTime, delay, map, skip, switchMap, take, tap, toArr
 })
 export class ArticlesService {
 
-  public articles$ = new BehaviorSubject<Article[]>([]);
-  public total$ = new BehaviorSubject<number>(0);
+  private articles = new BehaviorSubject<Article[]>([]);
+  private total = new BehaviorSubject<number>(0);
 
   constructor(private apiService: ApiService) {
   }
@@ -21,12 +21,20 @@ export class ArticlesService {
     this.search(tags);
   }
 
+  public articles$(): Observable<Article[]> {
+    return this.articles.asObservable();
+  }
+
+  public total$(): Observable<number> {
+    return this.total.asObservable();
+  }
+
   private search(tags: Tag[]): void {
     this.getArticles(tags)
       .subscribe(items => {
         console.log(JSON.stringify(items));
-        this.articles$.next(items);
-        this.total$.next(items.length);
+        this.articles.next(items);
+        this.total.next(items.length);
       });
   }
 
