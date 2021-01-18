@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TagsService} from '@app/shared/service/tags.service';
-import {Observable} from 'rxjs';
-import {Tag} from '@app/shared/model/tag.model';
+import {LoadingService} from '@app/shared/loading/loading.service';
 
 @Component({
   selector: 'app-tag-list',
@@ -10,26 +9,11 @@ import {Tag} from '@app/shared/model/tag.model';
 })
 export class TagListComponent implements OnInit {
 
-  tags$: Observable<Tag[]>;
-  loading$: Observable<boolean>;
-
-  constructor(public tagsService: TagsService) {
-    this.tags$ = tagsService.tags$;
-    this.loading$ = tagsService.loading$;
+  constructor(public tagsService: TagsService,
+              public loadingService: LoadingService) {
   }
 
   ngOnInit(): void {
+    this.tagsService.searchTags();
   }
-
-  // setListTo(type: string = '', filters: Object = {}) {
-  //   // If feed is requested but user is not authenticated, redirect to login
-  //   if (type === 'feed' && !this.isAuthenticated) {
-  //     this.router.navigateByUrl('/login');
-  //     return;
-  //   }
-  //
-  //   // Otherwise, set the list object
-  //   this.listConfig = {type: type, filters: filters};
-  // }
-
 }

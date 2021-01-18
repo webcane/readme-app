@@ -1,62 +1,44 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Tag} from '@app/shared/model/tag.model';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
-import {debounceTime, delay, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 import {Article} from '@app/shared/model/article.model';
-import {ARTICLES} from '@app/home/articles';
-import {TAGS} from '@app/shared/service/tags';
-
-interface SearchResult {
-  tags: Tag[];
-  total: number;
-}
+import {ApiService} from '@app/shared/service/api.service';
+import Utils from '@app/shared/service/utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TagsService {
 
-  private _loading$ = new BehaviorSubject<boolean>(true);
-  private _search$ = new Subject<SearchResult>();
-  private _total$ = new BehaviorSubject<number>(0);
-  private _tags$ = new BehaviorSubject<Tag[]>([]);
+  public tags$ = new BehaviorSubject<Tag[]>([]);
+  public total$ = new BehaviorSubject<number>(0);
 
-  constructor() {
-    this._search$.pipe(
-      tap(() => {
-        this._loading$.next(true);
-        console.log(true);
-      }),
-      switchMap(() => this._search()),
-      tap(() => {
-        this._loading$.next(false);
-        console.log(false);
-      })
-    ).subscribe(result => {
-      this._tags$.next(result.tags);
-      this._total$.next(result.total);
-    });
-
-    this._search$.next();
+  constructor(private apiService: ApiService) {
   }
 
-  get loading$() {
-    return this._loading$.asObservable();
+  public searchTags(): void {
+    this.search();
   }
 
-  get total$() {
-    return this._total$.asObservable();
+  private search(): void {
+    this.getTags()
+      .subscribe(items => {
+        console.log(JSON.stringify(items));
+        this.tags$.next(items);
+        this.total$.next(items.length);
+      });
   }
 
-  get tags$() {
-    return this._tags$.asObservable();
+  private getTags(): Observable<Tag[]> {
+    const url = '/tags';
+
+    return this.apiService.get<Tag[]>(url)
+      .pipe(
+        tap(next => Utils.log('fetched tags'),
+          error => Utils.log('there are no tags')),
+        catchError(Utils.handleError<Tag[]>('getTags', []))
+      );
   }
 
-  private _search(): Observable<SearchResult> {
-    let tags = TAGS;
-    const total = tags.length;
-
-    // 3. paginate
-    return of({tags, total});
-  }
 }
