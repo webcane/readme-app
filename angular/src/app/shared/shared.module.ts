@@ -7,6 +7,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgxsModule} from '@ngxs/store';
 import {environment} from '@environments/environment';
 import {TagsState} from '@app/shared/state/tags.state';
+import { LoadingInterceptor } from './loading/loading.interceptor';
 
 @NgModule({
   declarations: [],
@@ -18,7 +19,8 @@ import {TagsState} from '@app/shared/state/tags.state';
   ],
   providers: [
     TokenService,
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
 })
 export class SharedModule {

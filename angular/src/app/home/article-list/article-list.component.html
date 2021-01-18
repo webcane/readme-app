@@ -5,10 +5,10 @@
                class="form-control is-loading is-loading-sm"
                name="searchTerm"
                placeholder="search term"
-               [(ngModel)]="searchTerm">
+               [(ngModel)]="state.searchTerm">
 
         <span class="spinner-border spinner-border-sm text-light"
-              *ngIf="articleService.loading$ | async">
+              *ngIf="loadingService.loading$ | async">
           <span class="sr-only">Loading...</span>
         </span>
       </div>
@@ -16,14 +16,14 @@
 
   <table class="table">
     <tbody>
-    <tr *ngFor="let article of articles$ | async">
-      <td scope="row">
+    <tr *ngFor="let article of articleService.articles$ | async">
+      <td scope="row" *ngIf="article">
         <div class="alert alert-light" role="alert">
           <h4 class="alert-heading">
-            <ngb-highlight [result]="article.title" [term]="searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
+            <ngb-highlight [result]="article.title" [term]="state.searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
           </h4>
           <p *ngIf="article.preamble">
-            <ngb-highlight [result]="article.preamble" [term]="searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
+            <ngb-highlight [result]="article.preamble" [term]="state.searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
           </p>
           <hr>
           <div class="float-right">
@@ -36,12 +36,15 @@
     </tbody>
   </table>
 
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between"
+  *ngIf="(articleService.total$ | async) > 0">
     <ngb-pagination
-      [collectionSize]="(total$ | async)!" [(page)]="articleService.page" [pageSize]="articleService.pageSize">
+      [collectionSize]="(articleService.total$ | async)!" 
+      [(page)]="state.page" 
+      [pageSize]="state.pageSize">
     </ngb-pagination>
 
-    <select class="custom-select w-auto" name="pageSize" [(ngModel)]="articleService.pageSize">
+    <select class="custom-select w-auto" name="pageSize" [(ngModel)]="state.pageSize">
       <option [ngValue]="1">1 item per page</option>
       <option [ngValue]="4">4 items per page</option>
       <option [ngValue]="10">10 items per page</option>
