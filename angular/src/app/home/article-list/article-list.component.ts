@@ -1,17 +1,17 @@
-import { LoadingService } from '@app/shared/loading/loading.service';
+import {LoadingService} from '@app/shared/loading/loading.service';
 import {Component, OnInit} from '@angular/core';
-import {from, Observable} from 'rxjs';
-import {Article} from '@app/shared/model/article.model';
+import {Observable} from 'rxjs';
 import {Tag} from '@app/shared/model/tag.model';
 import {TagsState} from '@app/shared/state/tags.state';
 import {Select} from '@ngxs/store';
-import { ArticlesService } from '@app/shared/service/articles.service';
+import {ArticlesService} from '@app/shared/service/articles.service';
 
 interface State {
   page: number;
   pageSize: number;
   searchTerm: string;
 }
+
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
