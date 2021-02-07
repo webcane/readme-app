@@ -1,0 +1,15 @@
+<div class="sidebar">
+  <p>Popular Tags</p>
+
+  <div class="tag-list">
+    <app-tag *ngFor="let tag of tagsService.tags$ | async" [tag]="tag"></app-tag>
+  </div>
+
+  <div [hidden]="!(loadingService.loading$ | async)">
+    Loading tags...
+  </div>
+
+  <div [hidden]="(loadingService.loading$ | async) || (tagsService.tags$ | async).length > 0">
+    No tags are here... yet.
+  </div>
+</div>

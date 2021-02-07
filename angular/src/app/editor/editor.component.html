@@ -1,0 +1,40 @@
+<div class="home-page">
+  <div class="container page" role="main">
+    <div class="row">
+      <div class="col col-md-12">
+        <form [formGroup]="articleForm" (ngSubmit)="publish()">
+
+          <div class="form-group">
+            <label for="urlInput">Article URL</label>
+            <input type="text" id="urlInput" class="form-control form-control-lg" placeholder="Article URL"
+                   formControlName="url"/>
+          </div>
+
+          <div class="form-group">
+            <label for="titleInput">Article title</label>
+            <input type="text" id="titleInput" class="form-control" placeholder="Article title"
+                   formControlName="title"/>
+          </div>
+
+          <div class="form-group">
+            <label for="preambuleInput">Preambule</label>
+            <textarea rows="8" id="preambuleInput" class="form-control" placeholder="What's this article about?"
+                      formControlName="preambule">
+            </textarea>
+          </div>
+
+          <!-- TODO tags -->
+          <!--            <fieldset class="form-group tags-input">-->
+          <!--              <Tags on:tags={handleTags} autoComplete={availableTags} onlyUnique={true} bind:tags={inputTags} />-->
+          <!--            </fieldset>-->
+
+          <button type="submit" class="btn btn-lg pull-xs-right btn-primary"
+                  [disabled]="articleForm.invalid">
+            Publish Article
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

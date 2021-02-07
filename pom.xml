@@ -25,6 +25,9 @@
         <spring.version>5.3.3.RELEASE</spring.version>
         <commons-lang3.version>3.0</commons-lang3.version>
         <skip.integration.tests>false</skip.integration.tests>
+        <node.version>v12.18.3</node.version>
+        <npm.version>6.14.8</npm.version>
+        <frontend-maven-plugin.version>1.10.3</frontend-maven-plugin.version>
     </properties>
 
     <parent>
@@ -46,11 +49,6 @@
         </dependency>
 
         <!--        <dependency>-->
-        <!--            <groupId>org.springframework.security.oauth</groupId>-->
-        <!--            <artifactId>spring-security-oauth2</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
         <!--            <groupId>org.springframework.security</groupId>-->
         <!--            <artifactId>spring-security-jwt</artifactId>-->
         <!--        </dependency>-->
@@ -58,6 +56,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
         </dependency>
 
         <dependency>
@@ -75,6 +79,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- actuator -->
@@ -179,40 +189,6 @@
                     <!--                        </path>-->
                     <!--                    </annotationProcessorPaths>-->
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/resources/public/build</directory>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <id>npm run build</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>npm</executable>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>webpack:build</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
