@@ -1,0 +1,7 @@
+.idea
+.vscode
+angular
+ci
+images
+target/*/**
+.gitignore
