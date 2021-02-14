@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  default:
+    name: readme-app-net
+services:
+  app:
+    image: 'webcane/readme-app-spring:latest'
+    container_name: spring
+    build:
+      context: .
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+  ui:
+    image: 'webcane/readme-app-angular:latest'
+    container_name: angular
+    build:
+      context: ./angular
+    expose:
+      - "80"
+    ports:
+      - "4200:80"
+    restart: always
+    
+    
