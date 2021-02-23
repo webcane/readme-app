@@ -11,7 +11,7 @@ Below you can find endpoints exposed by this microservice.
 ### Online API documentation
 
 * [API](http://localhost:8080/swagger)
-* [UI](http://localhost:8080/swagger-ui.html)
+* [UI](http://localhost:8080/swagger-ui)
 
 ### Management endpoints
 
