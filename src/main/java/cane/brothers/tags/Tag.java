@@ -2,6 +2,7 @@ package cane.brothers.tags;
 
 import cane.brothers.article.Article;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @Table(name = "TAG")
+@Schema(name = "Tag", description = "Data object for a tag", oneOf = Tag.class)
 public class Tag implements Serializable, Persistable<Long> {
 
     private static final long serialVersionUID = 1;

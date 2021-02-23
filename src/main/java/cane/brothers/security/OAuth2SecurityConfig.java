@@ -1,7 +1,5 @@
 package cane.brothers.security;
 
-import cane.brothers.security.CustomUserDetailsService;
-import cane.brothers.security.TokenAuthenticationFilter;
 import cane.brothers.security.oauth2.CustomOAuth2UserService;
 import cane.brothers.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import cane.brothers.security.oauth2.OAuth2AuthenticationFailureHandler;
@@ -9,6 +7,7 @@ import cane.brothers.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -31,6 +30,7 @@ import java.util.Arrays;
 /**
  * @author mniedre
  */
+@Order(1)
 @Profile("oauth2")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
