@@ -7,8 +7,8 @@ RUN mvn -f pom.xml package -Dmaven.clean.skip=true -Dmaven.test.skip=true
 
 # stage 2
 FROM openjdk:8-jdk-alpine
-COPY ./target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY ./target/readme-app.jar readme-app.jar
+ENTRYPOINT ["java","-jar","/readme-app.jar"]
 EXPOSE 8080
 
 # FROM openjdk:8-jdk-alpine
