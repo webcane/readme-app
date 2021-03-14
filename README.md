@@ -104,9 +104,20 @@ Docker Compose is a tool that was developed to help define and share multi-conta
 `docker-compose up`
 
 ![multi containers](images/multi-containers.png)
+
+### docker hub
+Push images to the container registry:
+```
+docker push webcane/readme-app-spring:latest
+docker push webcane/readme-app-angular:latest
+```
  
 ## Kubernetes
 
 ### docker composer to helm chart
 `kompose convert -c -o k8s`
+
+### helm
+install readme-app application to the kubernetes cluster
+`helm install readme-app ./k8s` 
 
