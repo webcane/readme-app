@@ -1,0 +1,29 @@
+<nav class="navbar navbar-light bg-light navbar-expand-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/">readme app</a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul ngbNav [(activeId)]="activeId" class="ml-auto">
+        <ng-template [ngIf]="isAuthenticated">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink routerLink="editor">New</a>
+          </li>
+
+          <li [ngbNavItem]="2">
+            <a ngbNavLink (click)="logout()">Logout</a>
+          </li>
+        </ng-template>
+
+        <ng-template [ngIf]="!isAuthenticated">
+          <li [ngbNavItem]="3" [class]="authProvider">
+            <a [attr.href]="GITHUB_AUTH_URL">Login</a>
+          </li>
+
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" routerLink="signup">Signup</a>-->
+<!--          </li>-->
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav>

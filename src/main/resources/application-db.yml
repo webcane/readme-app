@@ -1,17 +1,15 @@
 spring:
+  # Database
   datasource:
-    url: jdbc:h2:mem:radb;DB_CLOSE_DELAY=-1
-
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/radb
+    username: postgres
+    password: postgres
   jpa:
     show-sql: true
     generate-ddl: true
-    hibernate:
-      ddl-auto: create-drop
-      dialect: org.hibernate.dialect.H2Dialect
-
     open-in-view: false
-
-  h2:
-    console:
-      #      path: /h2-console
-      enabled: true
+    hibernate:
+      ddl-auto: update # When you launch the application for the first time - switch "update" at "create" ("create-drop")
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

@@ -1,6 +1,15 @@
 package cane.brothers.article;
 
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.Explode;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/articles")
-@Api(value = "Endpoint for managing articles")
+@Tag(name = "article-controller", description = "The articles API")
 public class ArticleController {
 
     private final ArticleService svc;
@@ -28,11 +37,15 @@ public class ArticleController {
         this.svc = service;
     }
 
-    @GetMapping
-    @ApiOperation(value = "Get all articles", response = ArticleView.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "There are some articles found by tag name"),
-            @ApiResponse(code = 400, message = "There is no result")})
+    @GetMapping(produces = {"application/json"})
+    @Operation(summary = "get all articles", tags = {"article", "articles"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "There are all articles found",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
+                    @ApiResponse(responseCode = "404", description = "Not found"),
+                    @ApiResponse(responseCode = "401", description = "Authentication Failure",
+                            content = @Content(schema = @Schema(hidden = true)))})
     public ResponseEntity<List<ArticleView>> findAllArticles() {
         List<ArticleView> result = svc.findAll();
         if (result.isEmpty()) {
@@ -41,13 +54,24 @@ public class ArticleController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/findBy")
-    @ApiOperation(value = "Filter articles by tag name", response = ArticleView.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "There are some articles found by tag name"),
-            @ApiResponse(code = 400, message = "There is no result"),
-            @ApiResponse(code = 404, message = "Bad request, For example missing tag name")})
-    public ResponseEntity<List<ArticleView>> findArticlesByTagNames(@ApiParam("Tag name") @RequestParam Collection<String> tags) {
+    @GetMapping(value = "/findBy", produces = {"application/json"})
+    @Operation(summary = "filter articles by tag name", tags = {"article", "articles"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "There are some articles found by tag name",
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
+                    @ApiResponse(responseCode = "400", description = "Bad request, For example missing tag name"),
+                    @ApiResponse(responseCode = "401", description = "Authentication Failure",
+                            content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "404", description = "Not found")})
+    public ResponseEntity<List<ArticleView>> findArticlesByTagNames(
+            @Parameter(explode = Explode.TRUE,
+                    name = "tags",
+                    description = "Collection of tag names",
+                    in = ParameterIn.QUERY,
+                    required = true,
+                    style = ParameterStyle.FORM)
+            @Valid
+            @RequestParam Collection<String> tags) {
         if (CollectionUtils.isEmpty(tags)) {
             log.warn("empty tag request param");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -60,18 +84,24 @@ public class ArticleController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {"application/json", "application/x-www-form-urlencoded"})
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "post new article", httpMethod = "POST")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New article were stored in the DB"),
-            @ApiResponse(code = 400, message = "Bad request, For example second attempt to post the same article")})
-    public ResponseEntity<Void> postArticle(@ApiParam("Article") @Valid @RequestBody ArticleForm request) {
+    @Operation(summary = "post new article", tags = {"article"},
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "New article were stored in the DB"),
+                    @ApiResponse(responseCode = "400", description = "Bad request, For example second attempt to post the same article"),
+                    @ApiResponse(responseCode = "401", description = "Authentication Failure",
+                            content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "409", description = "Article already exists")},
+            parameters = {
+                    @Parameter(name = "Article", required = true)
+            }
+    )
+    public ResponseEntity<Void> postArticle(@Valid @RequestBody ArticleForm request) {
         try {
             this.svc.addArticle(request);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             log.warn("Unable to add article {}. {}", request, ex.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

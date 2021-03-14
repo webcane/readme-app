@@ -1,0 +1,11 @@
+@import '~bootstrap/scss/bootstrap';
+@import '~@tkrotoff/bootstrap-input-spinner/src/bootstrap-input-spinner';
+
+.pagination {
+  margin: 0;
+}
+
+.article-highlight {
+  font-weight: 700;
+  color: $primary;
+}

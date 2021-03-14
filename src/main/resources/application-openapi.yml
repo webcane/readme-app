@@ -1,0 +1,12 @@
+springdoc:
+  # https://springdoc.org/#swagger-ui-properties
+  swagger-ui:
+    syntaxHighlight:
+      theme: obsidian
+    path: /swagger-ui
+  #   path: /swagger-ui.html
+
+  # https://springdoc.org/#springdoc-openapi-core-properties
+  api-docs:
+    path: /swagger
+#   path: /v3/api-docs
