@@ -2,7 +2,6 @@ version: '3'
 
 networks:
   default:
-    name: readme-app-net
     driver: bridge
 
 volumes:
@@ -66,4 +65,3 @@ services:
     restart: always
     depends_on:
       - app
-    
