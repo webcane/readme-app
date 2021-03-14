@@ -1,0 +1,15 @@
+tag: latest
+
+app:
+  replicaCount: 1
+  image: webcane/readme-app-spring
+  port: 8080
+
+ui:
+  replicaCount: 1
+  image: webcane/readme-app-angular
+  port: 80
+
+db:
+  image: postgres:13.1-alpine
+  port: 5432

@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: readme-app
+  annotations:
+    dev.okteto.com/generate-host: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          #          - path: /api
+          #            backend:
+          #              serviceName: app
+          #              servicePort: {{ .Values.app.port }}
+          - path: /
+            backend:
+              serviceName: ui
+              servicePort: {{ .Values.ui.port }}

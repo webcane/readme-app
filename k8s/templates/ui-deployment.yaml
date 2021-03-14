@@ -1,33 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -c -o k8s
-    kompose.version: 1.22.0 (HEAD)
-  creationTimestamp: null
+  name: ui
   labels:
     io.kompose.service: ui
-  name: ui
 spec:
-  replicas: 1
+  replicas: {{ .Values.ui.replicaCount }}
   selector:
     matchLabels:
       io.kompose.service: ui
-  strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -c -o k8s
-        kompose.version: 1.22.0 (HEAD)
-      creationTimestamp: null
       labels:
         io.kompose.service: ui
     spec:
       containers:
-        - image: webcane/readme-app-angular:latest
-          name: angular
+        - name: angular
+          image: {{ .Values.ui.image }}:{{ .Values.tag }}
           ports:
-            - containerPort: 80
-          resources: {}
+              - containerPort: {{ .Values.ui.port }}
       restartPolicy: Always
-status: {}
