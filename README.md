@@ -107,3 +107,6 @@ Docker Compose is a tool that was developed to help define and share multi-conta
  
 ## Kubernetes
 
+### docker composer to helm chart
+`kompose convert -c -o k8s`
+

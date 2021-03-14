@@ -1,0 +1,12 @@
+apiVersion: v2
+name: readme-app
+description: A Helm Chart for k8s from Kompose
+version: 0.0.1
+type: application
+keywords:
+  - k8s
+sources: https://github.com/webcane/readme-app/k8s
+home: https://github.com/webcane/charts
+maintainers:
+  - email: webcane@yandex.com
+    name: webcane
