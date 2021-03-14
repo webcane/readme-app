@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: {{ .Values.app.name }}
   labels:
-    io.kompose.service: app
+    io.kompose.service: {{ .Values.app.name }}
 spec:
   type: ClusterIP
   ports:
-    - name: app
+    - name: "app"
       port: {{ .Values.app.port }}
       targetPort: {{ .Values.app.port }}
   selector:
-    io.kompose.service: app
+    io.kompose.service: {{ .Values.app.name }}

@@ -8,10 +8,10 @@ spec:
   rules:
     - http:
         paths:
-          #          - path: /api
-          #            backend:
-          #              serviceName: app
-          #              servicePort: {{ .Values.app.port }}
+          - path: /api
+            backend:
+              serviceName: app
+              servicePort: {{ .Values.app.port }}
           - path: /
             backend:
               serviceName: ui

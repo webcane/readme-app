@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: {{ .Values.app.name }}
   labels:
-    io.kompose.service: app
+    io.kompose.service: {{ .Values.app.name }}
 spec:
   replicas: {{ .Values.app.replicaCount }}
   selector:
     matchLabels:
-      io.kompose.service: app
+      io.kompose.service: {{ .Values.app.name }}
   template:
     metadata:
       labels:
-        io.kompose.service: app
+        io.kompose.service: {{ .Values.app.name }}
     spec:
       containers:
         - name: spring

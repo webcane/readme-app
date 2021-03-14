@@ -1,31 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -c -o k8s
-    kompose.version: 1.22.0 (HEAD)
-  creationTimestamp: null
+  name: {{ .Values.db.name }}
   labels:
-    io.kompose.service: db
-  name: db
+    io.kompose.service: {{ .Values.db.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.db.replicaCount }}
   selector:
     matchLabels:
-      io.kompose.service: db
+      io.kompose.service: {{ .Values.db.name }}
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -c -o k8s
-        kompose.version: 1.22.0 (HEAD)
-      creationTimestamp: null
       labels:
-        io.kompose.service: db
+        io.kompose.service: {{ .Values.db.name }}
     spec:
       containers:
-        - env:
+        - name: postgres
+          image: {{ .Values.db.image }}
+          ports:
+            - containerPort: {{ .Values.db.port }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-data
+          env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_DB
@@ -34,7 +33,6 @@ spec:
               value: postgres
             - name: POSTGRES_USER
               value: postgres
-          image: postgres:13.1-alpine
           livenessProbe:
             exec:
               command:
@@ -42,16 +40,8 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
             timeoutSeconds: 5
-          name: postgres
-          ports:
-            - containerPort: 5432
-          resources: {}
-          volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: db-data
       restartPolicy: Always
       volumes:
         - name: db-data
           persistentVolumeClaim:
             claimName: db-data
-status: {}

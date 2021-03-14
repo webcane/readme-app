@@ -1,15 +1,19 @@
 tag: latest
 
 app:
+  name: ra-app
   replicaCount: 1
   image: webcane/readme-app-spring
   port: 8080
 
 ui:
+  name: ra-ui
   replicaCount: 1
   image: webcane/readme-app-angular
   port: 80
 
 db:
+  name: ra-db
+  replicaCount: 1
   image: postgres:13.1-alpine
   port: 5432

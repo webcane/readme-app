@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ .Values.ui.name }}
   labels:
-    io.kompose.service: ui
-  name: ui
+    io.kompose.service: {{ .Values.ui.name }}
 spec:
   ports:
     - name: "ui"
       port: 4200
-      targetPort: {{ .Values.app.port }}
+      targetPort: {{ .Values.ui.port }}
   selector:
-    io.kompose.service: ui
+    io.kompose.service: {{ .Values.ui.name }}

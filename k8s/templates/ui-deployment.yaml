@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ui
+  name: {{ .Values.ui.name }}
   labels:
-    io.kompose.service: ui
+    io.kompose.service: {{ .Values.ui.name }}
 spec:
   replicas: {{ .Values.ui.replicaCount }}
   selector:
     matchLabels:
-      io.kompose.service: ui
+      io.kompose.service: {{ .Values.ui.name }}
   template:
     metadata:
       labels:
-        io.kompose.service: ui
+        io.kompose.service: {{ .Values.ui.name }}
     spec:
       containers:
         - name: angular
