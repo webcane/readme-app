@@ -1,0 +1,182 @@
+
+Login:
+
+ FE1: http://localhost:8080/oauth2/authorization/github?redirect_uri=http://localhost:4200/oauth2/redirect
+ BE2: https://github.com/login/oauth/authorize?response_type=code&client_id=0672f053e54345b9fdbd&scope=user:email%20read:user
+	        &state=-cWv3_YX-8ulMGD6-123RLgjBrc6KF8kfJ78CEqCmow%3D&redirect_uri=http://localhost:8080/login/oauth2/code/github
+ BE3: http://localhost:8080/login/oauth2/code/github?code=cb88a60cdcbe9958caf5&state=-cWv3_YX-8ulMGD6-MKTRLgjBrc6KF8kfJ78CEqCmow%3D
+	Cookie:
+		oauth2_auth_request=abc
+		redirect_uri=http://localhost:4200/oauth2/redirect
+
+ FE4: http://localhost:4200/oauth2/redirect?token=eyJhbGciOiJIUzUxMiJ9
+			.eyJzdWIiOiIxIiwiaWF0IjoxNjEwMjY5OTg1LCJleHAiOjE2MTExMzM5ODV9
+			.RNJ4hx3gFyJ-Nnx8ZFYL3xugnhdixdkrqBWCr-6C7C1Dnfz3LJGOwl3gu1Gt4GsiRTs_MJbTfHtQMgF4CX123Q
+	Cookie:
+		oauth2_auth_request=abc
+		redirect_uri=http://localhost:4200/oauth2/redirect
+
+extract JWT token
+store in local storage
+usa on each request to BE
+ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9
+ .eyJzdWIiOiIxIiwiaWF0IjoxNjEwMjY5OTg1LCJleHAiOjE2MTExMzM5ODV9
+ .RNJ4hx3gFyJ-Nnx8ZFYL3xugnhdixdkrqBWCr-6C7C1Dnfz3LJGOwl3gu1Gt4GsiRTs_MJbTfHtQMgF4CX123Q
+
+
+
+
+
+
+http://localhost:8080/oauth2/authorize/github?redirect_uri=http://localhost:8080/oauth2/callback/github
+http://localhost:8080/oauth2/authorize/github?redirect_uri=http://localhost:8080/oauth2/redirect
+
+http://localhost:8080/oauth2/authorize/{provider}?redirect_uri=<redirect_uri_after_login>
+http://localhost:8080/oauth2/callback/{provider}
+
+JWTAuthenticationFilter
+================================
+package cane.brothers.security.jwt;
+
+import com.nimbusds.jwt.JWT;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.EXPIRATION_TIME;
+import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.HEADER_STRING;
+import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.SECRET;
+import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.TOKEN_PREFIX;
+
+
+/**
+ * @author mniedre
+ */
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final long EXPIRATION_TIME = 864_000_000; // 10 days
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String HEADER_STRING = "Authorization";
+    public static final String SIGN_UP_URL = "/users/sign-up";
+
+    private AuthenticationManager authenticationManager;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest req,
+                                                HttpServletResponse res) throws AuthenticationException {
+        try {
+            ApplicationUser creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), ApplicationUser.class);
+
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            creds.getUsername(),
+                            creds.getPassword(),
+                            new ArrayList<>())
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest req,
+                                            HttpServletResponse res,
+                                            FilterChain chain,
+                                            Authentication auth) throws IOException, ServletException {
+
+        String token = JWT.create()
+                .withSubject(((User) auth.getPrincipal()).getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .sign(HMAC512(SECRET.getBytes()));
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+    }
+}
+
+
+
+
+
+JWTAuthorizationFilter
+=======================
+package cane.brothers.security.jwt;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+
+/**
+ * @author mniedre
+ */
+public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
+    public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final long EXPIRATION_TIME = 864_000_000; // 10 days
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String HEADER_STRING = "Authorization";
+    public static final String SIGN_UP_URL = "/users/sign-up";
+
+
+    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+        super(authManager);
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req,
+                                    HttpServletResponse res,
+                                    FilterChain chain) throws IOException, ServletException {
+        String header = req.getHeader(HEADER_STRING);
+
+        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+            chain.doFilter(req, res);
+            return;
+        }
+
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        chain.doFilter(req, res);
+    }
+
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+        String token = request.getHeader(HEADER_STRING);
+        if (token != null) {
+            // parse the token.
+            String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""))
+                    .getSubject();
+
+            if (user != null) {
+                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+            }
+            return null;
+        }
+        return null;
+    }
+}
