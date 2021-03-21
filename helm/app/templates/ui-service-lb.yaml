@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: readme-app-ui-loadbalancer
+  labels:
+    io.kompose.service: readme-app-ui
+spec:
+  type: LoadBalancer
+  ports:
+    - name: readme-app-port
+      port: 80
+      targetPort: 80
+  selector:
+    io.kompose.service: readme-app-ui
