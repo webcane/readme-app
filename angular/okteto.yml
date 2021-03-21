@@ -1,0 +1,7 @@
+name: ui
+image: webcane/readme-app-angular:latest
+command: npm start
+sync:
+  - .:/src
+persistentVolume:
+  enabled: false
