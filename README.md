@@ -97,7 +97,7 @@ Containers, by default, run in isolation and don’t know anything about other p
 ### Use Docker Compose 
 Docker Compose is a tool that was developed to help define and share multi-container applications. 
 
-1. build containers forfirst time
+1. build containers for first time
 `docker-compose build`
 
 1. start back-end and front-end together
@@ -114,10 +114,15 @@ docker push webcane/readme-app-angular:latest
  
 ## Kubernetes
 
-### docker composer to helm chart
-`kompose convert -c -o k8s`
-
 ### helm
+Run tests to ensure that the chart is well-formed
+```
+helm lint ./helm/readme-app/
+```
+
+
 install readme-app application to the kubernetes cluster
-`helm install readme-app ./k8s` 
+```
+helm install readme-app ./helm/readme-app 
+```
 
