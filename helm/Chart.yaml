@@ -1,0 +1,23 @@
+apiVersion: v2
+name: readme-app
+description: A Helm Chart for Readme-app microservice
+type: application
+icon: https://github.com/webcane/readme-app/raw/master/images/icons8-java-50.png
+version: 0.0.1
+appVersion: 1.0.0
+keywords:
+  - k8s
+  - java
+  - web
+  - springboot
+  - postgres
+  - postgresql
+maintainers:
+  - name: cane
+    email: webcane@yandex.com
+dependencies:
+  - name: postgresql
+    version: 13.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+
