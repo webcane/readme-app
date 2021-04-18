@@ -114,6 +114,17 @@ docker push webcane/readme-app-angular:latest
  
 ## Kubernetes
 
+### bitnami
+
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+downloads the postgresql dependency
+```
+ helm dependency update
+```
+
 ### helm
 Run tests to ensure that the chart is well-formed
 ```

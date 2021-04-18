@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.ui.name }}
+  labels:
+    {{- include "ui.selectorLabels" . | nindent 4 }}
+      {{- include "readme-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ui.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: angular
+          image: {{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}
+          imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ui.service.targetPort }}

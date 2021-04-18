@@ -7,17 +7,17 @@ version: 0.0.1
 appVersion: 1.0.0
 keywords:
   - k8s
-  - java
   - web
+  - java
+  - angualar
   - springboot
-  - postgres
   - postgresql
 maintainers:
   - name: cane
     email: webcane@yandex.com
+
 dependencies:
   - name: postgresql
-    version: 13.1
+    version: 10.3.17
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
-
