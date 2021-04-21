@@ -24,18 +24,15 @@ spec:
               containerPort: {{ .Values.app.service.targetPort }}
               protocol: TCP
           env:
-          - name: TEST_KEY
-            valueFrom:
-              configMapKeyRef:
-                name: readme-app-configmap
-                key: test.key
-          {{- if .Values.postgresql.enabled }}
-          - name: SPRING_DATASOURCE_PASSWORD
-            value: {{ .Values.postgresql.postgresqlUsername }}
-          - name: SPRING_DATASOURCE_URL
-            value: "jdbc:postgresql://{{ .Release.Name }}-postgresql:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
-          - name: SPRING_DATASOURCE_USERNAME
-            value: {{ .Values.postgresql.postgresqlUsername }}
-          - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-            value: update
-          {{- end -}}
+          volumeMounts:
+            - name: configmap-volume
+              # Note: 'app.jar' currently resides within the root folder.
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: {{ template "readme-app.fullname" . }}-configmap
+            items:
+              - key: application-db.yml
+                path: application-db.yml

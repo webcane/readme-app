@@ -62,21 +62,6 @@ app.kubernetes.io/name: {{ include "ui.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "app.serviceAccountName" -}}
-{{- if .Values.app.serviceAccount.create }}
-{{- default (include "readme-app.fullname" .) .Values.app.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.app.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{- define "ui.serviceAccountName" -}}
-{{- if .Values.ui.serviceAccount.create }}
-{{- default (include "readme-app.fullname" .) .Values.ui.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.ui.serviceAccount.name }}
-{{- end }}
-{{- end }}
+{{- define "postgresql.hostname" -}}
+{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

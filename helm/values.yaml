@@ -78,6 +78,6 @@ configuration:
       generateddl: true
       open-in-view: false
       hibernate:
-        ddl-auto: update #create #validate
+        ddlAuto: update #create #validate
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQLDialect
