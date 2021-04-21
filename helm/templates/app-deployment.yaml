@@ -24,11 +24,13 @@ spec:
               containerPort: {{ .Values.app.service.targetPort }}
               protocol: TCP
           env:
+            {{- if .Values.postgresql.enabled }}
             - name: SPRING_DATASOURCE_PASSWORD
-              value: postgres
+              value: {{ .Values.postgresql.postgresqlUsername }}
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://db:5432/readmeapp_db
+              value: "jdbc:postgresql://{{ .Release.Name }}-postgresql:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
             - name: SPRING_DATASOURCE_USERNAME
-              value: postgres
+              value: {{ .Values.postgresql.postgresqlUsername }}
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-              value: create
+              value: update
+            {{- end -}}
