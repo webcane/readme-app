@@ -13,6 +13,7 @@ app:
     type: ClusterIP
     port: 8080
     targetPort: 8080
+  nameOverride: ""
 
 ui:
   name: readme-app-ui
@@ -25,6 +26,7 @@ ui:
     type: ClusterIP
     port: 4200
     targetPort: 80
+  nameOverride: ""
 
 ## Postgres chart configuration
 ## https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
@@ -62,3 +64,20 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+  #Spring related config to helm chart
+configuration:
+  spring:
+    datasource: 
+      username: postgres
+      password: postgres
+      platform: postgresql
+      driver-class-name: org.postgresql.Driver
+    jpa:
+      showsql: true
+      generateddl: true
+      open-in-view: false
+      hibernate:
+        ddl-auto: update #create #validate
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
