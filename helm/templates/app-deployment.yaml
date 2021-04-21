@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.app.name }}
   labels:
     {{- include "app.selectorLabels" . | nindent 4 }}
-      {{- include "readme-app.labels" . | nindent 4 }}
+    {{- include "readme-app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.app.replicaCount }}
   selector:
@@ -24,13 +24,18 @@ spec:
               containerPort: {{ .Values.app.service.targetPort }}
               protocol: TCP
           env:
-            {{- if .Values.postgresql.enabled }}
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: {{ .Values.postgresql.postgresqlUsername }}
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://{{ .Release.Name }}-postgresql:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
-            - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.postgresql.postgresqlUsername }}
-            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-              value: update
-            {{- end -}}
+          - name: TEST_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: readme-app-configmap
+                key: test.key
+          {{- if .Values.postgresql.enabled }}
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: {{ .Values.postgresql.postgresqlUsername }}
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:postgresql://{{ .Release.Name }}-postgresql:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
+          - name: SPRING_DATASOURCE_USERNAME
+            value: {{ .Values.postgresql.postgresqlUsername }}
+          - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+            value: update
+          {{- end -}}
