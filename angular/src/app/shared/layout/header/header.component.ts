@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {environment} from '../../../../environments/environment';
 import {AuthService} from '@app/shared/security/auth.service';
+import { EnvConfigLoaderService } from '@app/shared/config/env-config-loader.service';
 
 @Component({
   selector: 'app-header',
@@ -9,18 +9,24 @@ import {AuthService} from '@app/shared/security/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  // TODO use state instead of
   @Input()
   public isAuthenticated: boolean;
 
   activeId = 1;
 
-  authProvider = environment.authProvider;
-  GITHUB_AUTH_URL = environment.githubAuthUrl;
+  public authProvider: string;
+  public GITHUB_AUTH_URL: string;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, 
+    private configService: EnvConfigLoaderService) {
   }
 
   ngOnInit(): void {
+    this.configService.config$.subscribe(config => {
+      this.GITHUB_AUTH_URL = config.githubAuthUrl;
+      this.authProvider = config.authProvider;
+    });
   }
 
   logout() {

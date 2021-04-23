@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "readme-app.fullname" . }}-ui-configmap
+  labels:
+    {{- include "readme-app.labels" . | nindent 4 }}
+data:
+  envConfig.json: |-
+{{ toJson .Values.env | indent 4 }}

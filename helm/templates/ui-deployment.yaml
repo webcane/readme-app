@@ -21,3 +21,11 @@ spec:
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.ui.service.targetPort }}
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: /usr/share/nginx/html/assets/config
+              readOnly: true
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: {{ template "readme-app.fullname" . }}-ui-configmap

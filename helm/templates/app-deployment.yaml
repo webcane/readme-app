@@ -32,7 +32,7 @@ spec:
       volumes:
         - name: configmap-volume
           configMap:
-            name: {{ template "readme-app.fullname" . }}-configmap
+            name: {{ template "readme-app.fullname" . }}-app-configmap
             items:
               - key: application-db.yml
                 path: application-db.yml

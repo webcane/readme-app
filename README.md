@@ -64,7 +64,7 @@ Below you can find endpoints exposed by this microservice.
 #### front-end
 
 1. Build docker image
-`docker build -t webcane/readme-app-angular .`
+`docker build -t webcane/readme-app-angular ./angular`
 
 2. Run docker image locally
 `docker run --name readme-app-angular -p 4200:80 webcane/readme-app-angular`
@@ -128,12 +128,12 @@ downloads the postgresql dependency
 ### helm
 Run tests to ensure that the chart is well-formed
 ```
-helm lint ./helm/readme-app/
+helm lint ./helm
 ```
 
 
 install readme-app application to the kubernetes cluster
 ```
-helm install readme-app ./helm/readme-app 
+helm install readme-app ./helm
 ```
 
