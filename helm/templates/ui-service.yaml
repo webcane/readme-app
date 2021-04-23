@@ -4,8 +4,9 @@ metadata:
   name: {{ .Values.ui.name }}
   labels:
     {{- include "ui.selectorLabels" . | nindent 4 }}
-      {{- include "readme-app.labels" . | nindent 4 }}
+    {{- include "readme-app.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.ui.service.type }}
   ports:
     - name: "ui"
       port: {{ .Values.ui.service.port }}
