@@ -6,4 +6,4 @@ metadata:
     {{- include "readme-app.labels" . | nindent 4 }}
 data:
   envConfig.json: |-
-{{ toJson .Values.env | indent 4 }}
+{{ toJson .Values.ui.configuration | indent 4 }}

@@ -6,14 +6,5 @@ metadata:
     {{- include "readme-app.labels" . | nindent 4 }}
 data:
   application-db.yml: |-
-    spring:
-      datasource:
-        url: "jdbc:postgresql://{{ template "postgresql.hostname" . }}:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
-        username: {{ .Values.configuration.spring.datasource.username }}
-        password: {{ .Values.configuration.spring.datasource.password }}
-        platform: {{ .Values.configuration.spring.datasource.platform }}
-      jpa:
-        show-sql: {{ .Values.configuration.spring.jpa.showsql }}
-        generate-ddl: {{ .Values.configuration.spring.jpa.generateddl }}
-        hibernate:
-          ddl-auto: {{ .Values.configuration.spring.jpa.hibernate.ddlAuto }}
+    spring.datasource.url: "jdbc:postgresql://{{ template "postgresql.hostname" . }}:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
+{{ toYaml .Values.app.configuration | indent 4 }}
