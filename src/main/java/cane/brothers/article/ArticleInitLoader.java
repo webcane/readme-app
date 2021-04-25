@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Profile("dev")
+@Profile("init")
 public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private static List<Article> allArticlets = new ArrayList<>();

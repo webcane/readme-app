@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Profile("dev")
+@Profile("init")
 public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
