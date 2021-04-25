@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npm run build --prod
+RUN npm run build:prod
 
 # stage 2
 FROM nginx:alpine
