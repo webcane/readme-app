@@ -23,10 +23,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.configService.config$.subscribe(config => {
-      this.GITHUB_AUTH_URL = config.githubAuthUrl;
-      this.authProvider = config.authProvider;
-    });
+    this.GITHUB_AUTH_URL = this.configService.getConfig('githubAuthUrl');
+    this.authProvider = this.configService.getConfig('authProvider');
   }
 
   logout() {

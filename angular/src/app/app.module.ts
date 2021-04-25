@@ -13,7 +13,7 @@ import {SharedModule} from '@app/shared/shared.module';
 import { EnvConfigLoaderService } from '@app/shared/config/env-config-loader.service';
 
 export function initializeApp(configService: EnvConfigLoaderService) {
-  return () => configService.load().toPromise();
+  return () => configService.load();
 }
 
 @NgModule({
@@ -30,12 +30,15 @@ export function initializeApp(configService: EnvConfigLoaderService) {
     EditorModule,
     NgbModule
   ],
-  providers: [{
-    provide: APP_INITIALIZER,
-    useFactory: initializeApp,
-    deps: [EnvConfigLoaderService],
-    multi: true
-  }],
+  providers: [
+    EnvConfigLoaderService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [EnvConfigLoaderService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

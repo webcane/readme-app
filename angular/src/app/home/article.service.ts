@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Article } from '@app/shared/model/article.model';
 import { Tag } from '@app/shared/model/tag.model';
@@ -49,8 +48,7 @@ export class ArticleService {
     tags: []
   };
 
-  constructor(private http: HttpClient,
-              private apiService: ApiService) {
+  constructor(private apiService: ApiService) {
     this.subSearch$.pipe(
       tap(() => this.subLoading$.next(true)),
       debounceTime(200),
