@@ -1,6 +1,8 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $svcName := .Values.ui.name -}}
-  {{- $svcPort := .Values.ui.service.targetPort -}}
+  {{- $uiSvcName := .Values.ui.name -}}
+  {{- $uiSvcPort := .Values.ui.service.targetPort -}}
+  {{- $appSvcName := .Values.app.name -}}
+  {{- $appSvcPort := .Values.app.service.targetPort -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -32,9 +34,16 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $svcName }}
+                name: {{ $uiSvcName }}
                 port:
-                  number: {{ $svcPort }}
+                  number: {{ $uiSvcPort }}
+          # - path: {{ .path }}api
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: {{ $appSvcName }}
+          #       port:
+          #         number: {{ $appSvcPort }}
           {{- end }}
   {{- end }}
   {{- end }}
