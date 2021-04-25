@@ -55,5 +55,9 @@ services:
     ports:
       - "4200:80"
     restart: always
+    volumes:
+      - type: bind
+        source: ./angular/src/assets/config/envConfig.json
+        target: /assets/config/envConfig.json
     depends_on:
       - app

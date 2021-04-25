@@ -13,7 +13,7 @@ import {SharedModule} from '@app/shared/shared.module';
 import { EnvConfigLoaderService } from '@app/shared/config/env-config-loader.service';
 
 export function initializeApp(configService: EnvConfigLoaderService) {
-  return () => configService.load();
+  return () => configService.load().toPromise();
 }
 
 @NgModule({
