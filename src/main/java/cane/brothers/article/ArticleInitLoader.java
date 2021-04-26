@@ -19,20 +19,34 @@ import java.util.List;
 @Profile("init")
 public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static List<Article> allArticlets = new ArrayList<>();
+    private static List<Article> allArticles = new ArrayList<>();
 
     private ArticleRepository repo;
 
     @Autowired
     public ArticleInitLoader(ArticleRepository repo) {
         this.repo = repo;
+    }
 
-        allArticlets.add(getArticle("https://habr.com/ru/post/491540/", "Сети для начинающего IT-специалиста. Обязательная база",
-                "Часто ли вы задумываетесь – почему что-то сделано так или иначе? Почему у вас микросервисы или монолит, двухзвенка или трехзвенка?", "oop"));
-        allArticlets.add(getArticle("https://habr.com/ru/post/263025/", "Про модель, логику, ООП, разработку и остальное",
-                "Примерно 80% из нас, кто заканчивает университет с какой-либо IT-специальностью, в итоге не становится программистом. Многие устраиваются в техническую поддержку, системными администраторами, мастерами по наладке компьютерных устройств, консультантами-продавцами цифровой техники, менеджерами в it-сферу и так далее."));
-        allArticlets.add(getArticle("https://habr.com/ru/post/453458/", "Настоящее реактивное программирование в Svelte 3.0", "", "svelte"));
-        allArticlets.add(getArticle("https://blog.sensu.io/how-kubernetes-works", "How Kubernetes works", "", "kubernetes"));
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        List<Article> existedArticles = this.repo.findAll();
+        log.info("Number of articles: " + existedArticles.size());
+
+        if (existedArticles.isEmpty()) {
+            allArticles.add(getArticle("https://habr.com/ru/post/491540/", "Сети для начинающего IT-специалиста. Обязательная база",
+                    "Часто ли вы задумываетесь – почему что-то сделано так или иначе? Почему у вас микросервисы или монолит, двухзвенка или трехзвенка?", "oop"));
+            allArticles.add(getArticle("https://habr.com/ru/post/263025/", "Про модель, логику, ООП, разработку и остальное",
+                    "Примерно 80% из нас, кто заканчивает университет с какой-либо IT-специальностью, в итоге не становится программистом. Многие устраиваются в техническую поддержку, системными администраторами, мастерами по наладке компьютерных устройств, консультантами-продавцами цифровой техники, менеджерами в it-сферу и так далее."));
+            allArticles.add(getArticle("https://habr.com/ru/post/453458/", "Настоящее реактивное программирование в Svelte 3.0", "", "svelte"));
+            allArticles.add(getArticle("https://blog.sensu.io/how-kubernetes-works", "How Kubernetes works", "", "kubernetes"));
+
+            log.info("Populate articles");
+            for (Article a : allArticles) {
+                Article a2 = repo.save(a);
+                log.info("{} added ", a2);
+            }
+        }
     }
 
     private static Article getArticle(String url, String title, String preamble, String... tags) {
@@ -46,14 +60,6 @@ public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEv
             for (String tag : tags) {
                 a.addTag(new Tag(tag));
             }
-        }
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        for (Article a : allArticlets) {
-            Article a2 = repo.save(a);
-            log.info("{} added ", a2);
         }
     }
 }

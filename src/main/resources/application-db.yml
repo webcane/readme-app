@@ -2,7 +2,7 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/radb
+    url: jdbc:postgresql://localhost:5432/readmeapp_db
     username: postgres
     password: postgres
   jpa:
@@ -10,6 +10,6 @@ spring:
     generate-ddl: true
     open-in-view: false
     hibernate:
-      ddl-auto: update # When you launch the application for the first time - switch "update" at "create" ("create-drop")
+      ddl-auto: create # When you launch the application for the first time - switch "update" at "create" ("create-drop")
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect

@@ -18,14 +18,25 @@ import java.util.List;
 @Profile("init")
 public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
     private TagRepository repo;
+
+    @Autowired
+    public TagInitLoader(TagRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        List<String> tags = Arrays.asList("java", "docker", "microservice", "helm", "azure");
-        for (String tag : tags) {
-            addTag(tag);
+        List<Tag> existedTags = this.repo.findAll();
+        log.info("Number of tags: " + existedTags.size());
+
+        if (existedTags.isEmpty()) {
+            log.info("Populate tags");
+
+            List<String> tags = Arrays.asList("java", "docker", "microservice", "helm", "azure");
+            for (String tag : tags) {
+                addTag(tag);
+            }
         }
     }
 

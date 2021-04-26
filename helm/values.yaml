@@ -50,11 +50,11 @@ app:
         platform: postgresql
         driver-class-name: org.postgresql.Driver
       jpa:
-        showsql: true
-        generateddl: true
+        show-sql: true
+        generate-ddl: true
         open-in-view: false
         hibernate:
-          ddlAuto: create #update #validate
+          ddl-auto: create #update #validate
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect
       security:
