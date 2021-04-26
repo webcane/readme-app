@@ -92,18 +92,29 @@ Containers, by default, run in isolation and don’t know anything about other p
  
 #### front-end
 1. Run docker image
-`docker run --network readme-app-net --network-alias ui --name readme-app-angular -p 4200:80 webcane/readme-app-angular`
+```
+docker run --network readme-app-net --network-alias ui --name readme-app-angular -p 4200:80 webcane/readme-app-angular
+```
 
 ### Use Docker Compose 
 Docker Compose is a tool that was developed to help define and share multi-container applications. 
 
 1. build containers for first time
-`docker-compose build`
+```
+docker-compose build
+```
 
-1. start back-end and front-end together
-`docker-compose up`
+2. start back-end and front-end together
+```
+docker-compose up
+```
 
 ![multi containers](images/multi-containers.png)
+
+3. do clean-up at the end
+```
+docker-compose down -v
+```
 
 ### docker hub
 Push images to the container registry:
