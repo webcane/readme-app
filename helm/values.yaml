@@ -16,8 +16,35 @@ app:
   nameOverride: ""
   #Spring related configuration
   configuration:
+    app:
+      auth:
+        tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+        tokenExpirationMsec: 864000000
+      oauth2:
+        # After successfully authenticating with the OAuth2 Provider,
+        # we'll be generating an auth token for the user and sending the token to the
+        # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
+        # We're not using cookies because they won't work well in mobile clients.
+        authorizedRedirectUris:
+          - http://kubernetes.docker.internal/oauth2/redirect
+    server:
+      port: 8080
+      servlet:
+        context-path: /api
+      error:
+        whitelabel:
+          enabled: false
+    logging:
+      level:
+        org.springframework: INFO
+        cane.brothers: INFO
     spring:
-      datasource: 
+      profiles:
+        active: management,oauth2,openapi,init
+      devtools:
+        restart:
+          enabled: false
+      datasource:
         username: postgres
         password: postgres
         platform: postgresql
@@ -27,9 +54,29 @@ app:
         generateddl: true
         open-in-view: false
         hibernate:
-          ddlAuto: update #create #validate
+          ddlAuto: create #update #validate
         database: postgresql
         database-platform: org.hibernate.dialect.PostgreSQLDialect
+      security:
+        oauth2:
+          client:
+            registration:
+              github:
+                clientId: 0672f053e54345b9fdbd
+                clientSecret: 5ad5c27fd08fd85635b4ab8960e1db8588e90084
+                redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
+                scope:
+                  - user:email
+                  - read:user
+    management:
+      endpoint:
+        httptrace:
+          enabled: false
+      endpoints:
+        web:
+          base-path: /management
+          exposure:
+            include: '*' #, env, httptrace, routes, beans
 
 ui:
   name: readme-app-ui
@@ -46,9 +93,9 @@ ui:
   #Angular related configuration
   configuration:
     authProvider: github
-    apiUrl: http://kubernetes.docker.internal:8080
-    oauth2RedirectUri: http://kubernetes.docker.internal:80/oauth2/redirect
-    githubAuthUrl: http://kubernetes.docker.internal:8080/oauth2/authorization/github?redirect_uri=http://kubernetes.docker.internal:80/oauth2/redirect
+    apiUrl: http://kubernetes.docker.internal/api
+    oauth2RedirectUri: http://kubernetes.docker.internal/oauth2/redirect
+    githubAuthUrl: http://kubernetes.docker.internal/api/oauth2/authorization/github?redirect_uri=http://kubernetes.docker.internal/oauth2/redirect
 
 
 ## Postgres chart configuration
@@ -76,15 +123,15 @@ postgresql:
 
 ingress:
   enabled: true
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # nginx.ingress.kubernetes.io/use-regex: "true"
-    # nginx.ingress.kubernetes.io/add-base-url: "true"
-    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+  annotations:
+  # nginx.ingress.kubernetes.io/rewrite-target: /$2
+  # nginx.ingress.kubernetes.io/use-regex: "true"
+  # nginx.ingress.kubernetes.io/add-base-url: "true"
   hosts:
     - host: kubernetes.docker.internal
-      paths: 
-        - path: /
+  paths:
+    - ui: /
+    - api: /api
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

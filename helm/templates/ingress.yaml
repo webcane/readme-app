@@ -29,21 +29,19 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
+          - path: "/"
             pathType: Prefix
             backend:
               service:
                 name: {{ $uiSvcName }}
                 port:
                   number: {{ $uiSvcPort }}
-          # - path: {{ .path }}api
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: {{ $appSvcName }}
-          #       port:
-          #         number: {{ $appSvcPort }}
-          {{- end }}
-  {{- end }}
+          - path: "/api"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $appSvcName }}
+                port:
+                  number: {{ $appSvcPort }}
+    {{- end }}
   {{- end }}
