@@ -5,6 +5,6 @@ metadata:
   labels:
     {{- include "readme-app.labels" . | nindent 4 }}
 data:
-  application-db.yml: |-
+  application.yml: |-
     spring.datasource.url: "jdbc:postgresql://{{ template "postgresql.hostname" . }}:{{- .Values.postgresql.service.port -}}/{{- .Values.postgresql.postgresqlDatabase -}}"
 {{ toYaml .Values.app.configuration | indent 4 }}
