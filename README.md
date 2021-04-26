@@ -30,52 +30,78 @@ Below you can find endpoints exposed by this microservice.
 ### back-end
 
 1. Build with maven
- `mvn package -DskipTests`
+```
+ mvn package -DskipTests
+```
  
 2. run locally
- `mvn spring-boot:run`
+```
+ mvn spring-boot:run
+```
  
 3. test locally
- `http://localhost:8080`
+```
+ http://localhost:8080
+```
  
 ### front-end
 1. switch to angular directory
-`cd /angular`
+```
+cd /angular
+```
 
 2. download all dependencies
-`npm install`
+```
+npm install
+```
 
 3. run locally
-`npm run start`
+```
+npm run start
+```
 
 4. test locally
-`http://localhost:4200`
+```
+http://localhost:4200
+```
 
 ## Containerization
 ### single container app
 #### back-end
 
 1. Build a docker image using Dokerfile:
- `docker build -t webcane/readme-app-spring .`
+ ```
+ docker build -t webcane/readme-app-spring .
+```
  
 2. Run docker image locally
- `docker run --name readme-app-spring -p 8080:8080 webcane/readme-app-spring` 
+ ```
+ docker run --name readme-app-spring -p 8080:8080 webcane/readme-app-spring
+``` 
 
 #### front-end
 
 1. Build docker image
-`docker build -t webcane/readme-app-angular ./angular`
+```
+docker build -t webcane/readme-app-angular ./angular
+```
 
 2. Run docker image locally
-`docker run --name readme-app-angular -p 4200:80 webcane/readme-app-angular`
+```
+docker run --name readme-app-angular -p 4200:80 webcane/readme-app-angular
+```
 
 #### docker 
  
 1. check if docker running
- `docker ps`
+```
+ docker ps
+```
  
 2. stop the docker image
- `docker stop <container id>`
+```
+ docker stop <container id>
+```
 
 ![two containers](images/two-containers.png)
 
@@ -84,11 +110,15 @@ Containers, by default, run in isolation and don’t know anything about other p
 
 #### container networking
 1. create docker network
-`docker network create readme-app-net`
+```
+docker network create readme-app-net
+```
 
 #### back-end
 1. Run docker image
- `docker run --network readme-app-net --network-alias app --name readme-app-spring -p 8080:8080 webcane/readme-app-spring`
+```
+ docker run --network readme-app-net --network-alias app --name readme-app-spring -p 8080:8080 webcane/readme-app-spring
+```
  
 #### front-end
 1. Run docker image
