@@ -40,7 +40,7 @@ app:
         cane.brothers: INFO
     spring:
       profiles:
-        active: management,oauth2,openapi,init
+        active: management,oauth2,openapi
       devtools:
         restart:
           enabled: false
@@ -62,8 +62,8 @@ app:
           client:
             registration:
               github:
-                clientId: 0672f053e54345b9fdbd
-                clientSecret: 5ad5c27fd08fd85635b4ab8960e1db8588e90084
+                clientId: b4d290692c6fbed4673a
+                clientSecret: 37bb4ac22ac02b671f9118c87c02bd574eb05abb
                 redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
                 scope:
                   - user:email
@@ -129,9 +129,6 @@ ingress:
   # nginx.ingress.kubernetes.io/add-base-url: "true"
   hosts:
     - host: kubernetes.docker.internal
-  paths:
-    - ui: /
-    - api: /api
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
