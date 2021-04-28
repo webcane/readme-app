@@ -16,6 +16,7 @@ app:
   nameOverride: ""
   #Spring related configuration
   configuration:
+    # debug: true
     app:
       auth:
         tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
@@ -36,8 +37,9 @@ app:
           enabled: false
     logging:
       level:
+        org.hibernate.sql: INFO
         org.springframework: INFO
-        cane.brothers: INFO
+        cane.brothers: DEBUG
     spring:
       profiles:
         active: management,oauth2,openapi
@@ -47,23 +49,21 @@ app:
       datasource:
         username: postgres
         password: postgres
-        platform: postgresql
-        driver-class-name: org.postgresql.Driver
+#        initialization-mode: always
+#        driver-class-name: org.postgresql.Driver
       jpa:
         show-sql: true
         generate-ddl: true
-        open-in-view: false
+#        open-in-view: false
         hibernate:
-          ddl-auto: create #update #validate
-        database: postgresql
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
+          ddl-auto: create-drop #update #validate
       security:
         oauth2:
           client:
             registration:
               github:
-                clientId: b4d290692c6fbed4673a
-                clientSecret: 37bb4ac22ac02b671f9118c87c02bd574eb05abb
+                clientId: 0672f053e54345b9fdbd
+                clientSecret: 5ad5c27fd08fd85635b4ab8960e1db8588e90084
                 redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
                 scope:
                   - user:email
@@ -110,10 +110,10 @@ postgresql:
   postgresqlUsername: postgres
   postgresqlPassword: postgres
   postgresqlDatabase: readmeapp_db
-  postgresqlConfiguration:
+#  postgresqlConfiguration:
   ## Disable Postgres Persistence
-  persistence:
-    enabled: false
+#  persistence:
+#    enabled: false
 #  initdbScripts:
 #db:
 #  name: readme-app-db
