@@ -8,13 +8,10 @@ import {AuthService} from '@app/shared/security/auth.service';
 })
 export class AppComponent implements OnInit {
 
-  public isAuthenticated: boolean;
-
-  constructor(public authService: AuthService) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
   }
 
 }

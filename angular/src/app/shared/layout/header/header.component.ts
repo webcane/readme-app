@@ -9,16 +9,12 @@ import { EnvConfigLoaderService } from '@app/shared/config/env-config-loader.ser
 })
 export class HeaderComponent implements OnInit {
 
-  // TODO use state instead of
-  @Input()
-  public isAuthenticated: boolean;
-
   activeId = 1;
 
   public authProvider: string;
   public GITHUB_AUTH_URL: string;
 
-  constructor(private authService: AuthService, 
+  constructor(public authService: AuthService, 
     private configService: EnvConfigLoaderService) {
   }
 

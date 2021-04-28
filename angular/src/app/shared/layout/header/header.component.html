@@ -4,7 +4,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul ngbNav [(activeId)]="activeId" class="ml-auto">
-        <ng-template [ngIf]="isAuthenticated">
+        <ng-container *ngIf="authService.isAuthenticated(); else loginTemplate">
           <li [ngbNavItem]="1">
             <a ngbNavLink routerLink="editor">New</a>
           </li>
@@ -12,9 +12,9 @@
           <li [ngbNavItem]="2">
             <a ngbNavLink (click)="logout()">Logout</a>
           </li>
-        </ng-template>
+        </ng-container>
 
-        <ng-template [ngIf]="!isAuthenticated">
+        <ng-template #loginTemplate>
           <li [ngbNavItem]="3" [class]="authProvider">
             <a [attr.href]="GITHUB_AUTH_URL">Login</a>
           </li>
