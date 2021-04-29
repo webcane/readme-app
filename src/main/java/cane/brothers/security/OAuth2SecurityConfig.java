@@ -135,7 +135,7 @@ public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
         // configuration.applyPermitDefaultValues();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
-        configuration.setAllowedHeaders(Arrays.asList("authorization"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Authorization"));
         // configuration.setMaxAge();
         // this line is important it sends only specified domain instead of *
         configuration.setAllowCredentials(true);
