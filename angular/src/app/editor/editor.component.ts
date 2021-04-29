@@ -28,11 +28,13 @@ export class EditorComponent implements OnInit {
 
   publish(): void {
     console.log("publish article " + JSON.stringify(this.articleForm.getRawValue()));
-    
+
     this.articleService
       .create(this.articleForm.getRawValue() as Article)
       .subscribe((): void => {
         this.articleForm.reset();
+      }, error => {
+        console.log("TODO show popup");
       });
   }
 }
