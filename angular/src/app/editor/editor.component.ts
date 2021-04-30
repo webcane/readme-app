@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Article } from '@app/shared/model/article.model';
 import { Tag } from '@app/shared/model/tag.model';
 import { ArticlesService } from '@app/shared/service/articles.service';
@@ -25,8 +25,13 @@ export class EditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const url_reg: string = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
     this.articleForm = this.fb.group({
-      url: '',
+      url: new FormControl('', [
+        Validators.required,
+        Validators.pattern(url_reg)
+      ]),
       title: '',
       preambule: '',
       tags: []
@@ -51,4 +56,7 @@ export class EditorComponent implements OnInit {
         console.log("TODO show popup");
       });
   }
+
+    // Getter for easy access
+    get url() { return this.articleForm.get('url') };
 }
