@@ -20,7 +20,8 @@ export class EditorComponent implements OnInit {
     this.articleForm = this.fb.group({
       url: '',
       title: '',
-      preambule: ''
+      preambule: '',
+      tags: []
     });
 
     // this.articleForm.patchValue(res);

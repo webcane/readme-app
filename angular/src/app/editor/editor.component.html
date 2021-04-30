@@ -23,10 +23,13 @@
             </textarea>
           </div>
 
-          <!-- TODO tags -->
-          <!--            <fieldset class="form-group tags-input">-->
-          <!--              <Tags on:tags={handleTags} autoComplete={availableTags} onlyUnique={true} bind:tags={inputTags} />-->
-          <!--            </fieldset>-->
+          <fieldset class="form-group tags-input">
+            <tag-input name="tagsInput"
+                [theme]="'bootstrap'" 
+                [formControlName]="'tags'" 
+                [identifyBy]="'value'"
+                [displayBy]="'value'"></tag-input>
+          </fieldset>
 
           <button type="submit" class="btn btn-lg pull-xs-right btn-primary"
                   [disabled]="articleForm.invalid">
