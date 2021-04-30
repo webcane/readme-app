@@ -26,9 +26,18 @@
           <fieldset class="form-group tags-input">
             <tag-input name="tagsInput"
                 [theme]="'bootstrap'" 
-                [formControlName]="'tags'" 
-                [identifyBy]="'value'"
-                [displayBy]="'value'"></tag-input>
+                [formControlName]="'tags'"                 
+                [addOnBlur]="true"
+                [clearOnBlur]="true">
+                <tag-input-dropdown 
+                  [displayBy]="'value'"  
+                  [showDropdownIfEmpty]="true"
+                  [autocompleteObservable]="existedTags">
+                    <ng-template let-item="item">
+                      {{ item.value }}
+                    </ng-template>
+                </tag-input-dropdown>
+              </tag-input>
           </fieldset>
 
           <button type="submit" class="btn btn-lg pull-xs-right btn-primary"

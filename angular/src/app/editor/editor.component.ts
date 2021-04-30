@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import { Article } from '@app/shared/model/article.model';
+import { Tag } from '@app/shared/model/tag.model';
 import { ArticlesService } from '@app/shared/service/articles.service';
+import { TagsService } from '@app/shared/service/tags.service';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-editor',
@@ -12,8 +16,12 @@ export class EditorComponent implements OnInit {
 
   public articleForm: FormGroup;
 
+  // public existedTags: string;
+  public existedTags: (text: string) => Observable<any[]>;
+
   constructor(private fb: FormBuilder,
-    public articleService: ArticlesService) {
+    public articleService: ArticlesService,
+    public tagsService: TagsService) {
   }
 
   ngOnInit(): void {
@@ -23,6 +31,11 @@ export class EditorComponent implements OnInit {
       preambule: '',
       tags: []
     });
+
+    this.tagsService.searchTags();
+    this.existedTags = (text: string): Observable<any[]> => {
+      return this.tagsService.tags$.asObservable();
+    };
 
     // this.articleForm.patchValue(res);
   }
