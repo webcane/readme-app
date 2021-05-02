@@ -8,14 +8,18 @@ import {NgxsModule} from '@ngxs/store';
 import {environment} from '@environments/environment';
 import {TagsState} from '@app/shared/state/tags.state';
 import { LoadingInterceptor } from './loading/loading.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     HttpClientModule,
-    NgxsModule.forRoot([TagsState],
-      { developmentMode: !environment.production })
+    NgxsModule.forRoot([TagsState], { developmentMode: !environment.production }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     TokenService,

@@ -4,6 +4,7 @@ import { Article } from '@app/shared/model/article.model';
 import { ArticlesService } from '@app/shared/service/articles.service';
 import { TagsService } from '@app/shared/service/tags.service';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 export const urlValidator: ValidatorFn =
    (control: AbstractControl): ValidationErrors | null => {
@@ -33,7 +34,8 @@ export class EditorComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     public articleService: ArticlesService,
-    public tagsService: TagsService) {
+    public tagsService: TagsService,
+    private toastrService: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class EditorComponent implements OnInit {
       .subscribe((): void => {
         this.articleForm.reset();
       }, error => {
-        console.log("TODO show popup");
+        this.toastrService.error(error, 'article saving');
       });
   }
 
