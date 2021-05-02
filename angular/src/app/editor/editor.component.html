@@ -8,9 +8,17 @@
             <label for="urlInput">Article URL</label>
             <input type="text" id="urlInput" class="form-control form-control-lg" placeholder="Article URL"
                    formControlName="url"/>
-              <div style="color:red" *ngIf="url.value && url.invalid">
-                not a valid URL
+            <div *ngIf="url.invalid && (url.dirty || url.touched)" class="form-control-sm text-danger">
+              <div *ngIf="url.errors.required">
+                URL is required.
               </div>
+              <div *ngIf="url.errors.minlength">
+                Name must be at least 11 characters long.
+              </div>
+              <div *ngIf="url.errors.invalidUrl">
+                Not a valid URL.
+              </div>
+            </div>
           </div>
 
           <div class="form-group">

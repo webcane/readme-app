@@ -1,11 +1,23 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import { Article } from '@app/shared/model/article.model';
-import { Tag } from '@app/shared/model/tag.model';
 import { ArticlesService } from '@app/shared/service/articles.service';
 import { TagsService } from '@app/shared/service/tags.service';
 import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+
+export const urlValidator: ValidatorFn =
+   (control: AbstractControl): ValidationErrors | null => {
+    let validUrl = true;
+
+    try {
+      new URL(control.value)
+      // encodeURI(control.value);
+    } catch {
+      validUrl = false;
+    }
+
+    return validUrl ? null : { invalidUrl: true };
+};
 
 @Component({
   selector: 'app-editor',
@@ -25,12 +37,12 @@ export class EditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const url_reg: string = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-
     this.articleForm = this.fb.group({
       url: new FormControl('', [
         Validators.required,
-        Validators.pattern(url_reg)
+        Validators.minLength(11),
+        Validators.maxLength(250),
+        urlValidator
       ]),
       title: '',
       preambule: '',
@@ -57,6 +69,7 @@ export class EditorComponent implements OnInit {
       });
   }
 
-    // Getter for easy access
-    get url() { return this.articleForm.get('url') };
+  // Getter for easy access
+  get url() { return this.articleForm.get('url') };
+
 }
