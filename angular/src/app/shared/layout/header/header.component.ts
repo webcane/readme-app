@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AuthService} from '@app/shared/security/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { EnvConfigLoaderService } from '@app/shared/config/env-config-loader.service';
+import { AuthService } from '@app/shared/security/auth.service';
 
 @Component({
   selector: 'app-header',
