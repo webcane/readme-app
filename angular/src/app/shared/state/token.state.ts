@@ -7,12 +7,12 @@ export interface TokenModel {
 }
 
 export class TokenSetAction {
-  static readonly type = '[authToken] set token';
+  static readonly type = '[token] set token';
   constructor(public token: string) {}
 }
 
 export class TokenCancelAction {
-  static readonly type = '[authToken] cancel token';
+  static readonly type = '[token] cancel token';
 }
 @State<TokenModel>({
   name: 'token',
