@@ -16,12 +16,37 @@
 
   <table class="table">
     <tbody>
-    <tr *ngFor="let article of articleService.articles$ | async">
+    <tr *ngFor="let article of articleService.articles$ | async; index as i">
       <td scope="row" *ngIf="article">
         <div class="alert alert-light" role="alert">
-          <h4 class="alert-heading">
-            <ngb-highlight [result]="article.title" [term]="state.searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
-          </h4>
+          <nav class="navbar navbar-expand-sm navbar-light bg-light rounded">
+            <h4 class="navbar-brand alert-heading">
+              <ngb-highlight [result]="article.title" [term]="state.searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
+            </h4>
+            <button class="navbar-toggler" type="button"
+                    data-toggle="collapse"
+                    data-target="#articleNavbar{{i}}"
+                    aria-controls="articleNavbar{{i}}"
+                    [attr.aria-expanded]="!isMenuCollapsed"
+                    aria-label="Toggle navigation"
+                    (click)="toggleCollapsed()">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="articleNavbar{{i}}"
+                 [ngClass]="{'collapse': isMenuCollapsed}">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Edit</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Delete</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+
           <p *ngIf="article.preamble">
             <ngb-highlight [result]="article.preamble" [term]="state.searchTerm" [highlightClass]="'article-highlight'"></ngb-highlight>
           </p>
@@ -39,8 +64,8 @@
   <div class="d-flex justify-content-between"
   *ngIf="(articleService.total$ | async) > 0">
     <ngb-pagination
-      [collectionSize]="(articleService.total$ | async)!" 
-      [(page)]="state.page" 
+      [collectionSize]="(articleService.total$ | async)!"
+      [(page)]="state.page"
       [pageSize]="state.pageSize">
     </ngb-pagination>
 

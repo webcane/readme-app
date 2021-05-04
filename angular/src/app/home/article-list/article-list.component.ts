@@ -23,6 +23,8 @@ export class ArticleListComponent implements OnInit {
   @Select(TagsState.selectedTags)
   selectedTags$: Observable<Tag[]>;
 
+  public isMenuCollapsed = true;
+
   public state: State = {
     page: 1,
     pageSize: 4,
@@ -39,4 +41,8 @@ export class ArticleListComponent implements OnInit {
     });
   }
 
+  toggleCollapsed(): void {
+    console.log("toggle collapsed");
+    this.isMenuCollapsed = !this.isMenuCollapsed;
+  }
 }
