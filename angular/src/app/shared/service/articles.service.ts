@@ -17,6 +17,16 @@ export class ArticlesService {
   constructor(private apiService: ApiService) {
   }
 
+  public create(article: Article): Observable<any> {
+    let url = '/articles';
+    return this.apiService.post<Article>(url, article)
+    .pipe(
+      tap(next => Utils.log('the article were published successfully'),
+        error => Utils.log('There is problem during article publishing')
+      )
+    );
+  }
+
   public searchArticles(tags: Tag[]): void {
     this.search(tags);
   }

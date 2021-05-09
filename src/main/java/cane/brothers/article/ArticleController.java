@@ -97,13 +97,13 @@ public class ArticleController {
                     @Parameter(name = "Article", required = true)
             }
     )
-    public ResponseEntity<Void> postArticle(@Valid @RequestBody ArticleForm request) {
+    public ResponseEntity<?> postArticle(@Valid @RequestBody ArticleForm request) {
         try {
             this.svc.addArticle(request);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
             log.warn("Unable to add article {}. {}", request, ex.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to publish the article", HttpStatus.BAD_REQUEST);
         }
     }
 }

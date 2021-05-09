@@ -1,5 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { Article } from '@app/shared/model/article.model';
+import { ArticlesService } from '@app/shared/service/articles.service';
+import { TagsService } from '@app/shared/service/tags.service';
+import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+
+export const urlValidator: ValidatorFn =
+   (control: AbstractControl): ValidationErrors | null => {
+    let validUrl = true;
+
+    try {
+      new URL(control.value)
+      // encodeURI(control.value);
+    } catch {
+      validUrl = false;
+    }
+
+    return validUrl ? null : { invalidUrl: true };
+};
 
 @Component({
   selector: 'app-editor',
@@ -10,25 +29,49 @@ export class EditorComponent implements OnInit {
 
   public articleForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  // public existedTags: string;
+  public existedTags: (text: string) => Observable<any[]>;
+
+  constructor(private fb: FormBuilder,
+    public articleService: ArticlesService,
+    public tagsService: TagsService,
+    private toastrService: ToastrService) {
   }
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
-      url: '',
+      url: new FormControl('', [
+        Validators.required,
+        Validators.minLength(11),
+        Validators.maxLength(250),
+        urlValidator
+      ]),
       title: '',
-      preambule: ''
+      preambule: '',
+      tags: []
     });
+
+    this.tagsService.searchTags();
+    this.existedTags = (text: string): Observable<any[]> => {
+      return this.tagsService.tags$.asObservable();
+    };
 
     // this.articleForm.patchValue(res);
   }
 
   publish(): void {
-    console.log("publish article");
+    console.log("publish article " + JSON.stringify(this.articleForm.getRawValue()));
 
-    // this.myDataService.submitUpdate(this.articleForm.getRawValue())
-    //   .subscribe((): void => {
-    //     alert('Saved!');
-    //   });
+    this.articleService
+      .create(this.articleForm.getRawValue() as Article)
+      .subscribe((): void => {
+        this.articleForm.reset();
+      }, error => {
+        this.toastrService.error(error, 'article saving');
+      });
   }
+
+  // Getter for easy access
+  get url() { return this.articleForm.get('url') };
+
 }

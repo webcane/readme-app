@@ -8,6 +8,17 @@
             <label for="urlInput">Article URL</label>
             <input type="text" id="urlInput" class="form-control form-control-lg" placeholder="Article URL"
                    formControlName="url"/>
+            <div *ngIf="url.invalid && (url.dirty || url.touched)" class="form-control-sm text-danger">
+              <div *ngIf="url.errors.required">
+                URL is required.
+              </div>
+              <div *ngIf="url.errors.minlength">
+                Name must be at least 11 characters long.
+              </div>
+              <div *ngIf="url.errors.invalidUrl">
+                Not a valid URL.
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -23,10 +34,23 @@
             </textarea>
           </div>
 
-          <!-- TODO tags -->
-          <!--            <fieldset class="form-group tags-input">-->
-          <!--              <Tags on:tags={handleTags} autoComplete={availableTags} onlyUnique={true} bind:tags={inputTags} />-->
-          <!--            </fieldset>-->
+          <fieldset class="form-group tags-input">
+            <tag-input name="tagsInput"
+                [theme]="'bootstrap'" 
+                [formControlName]="'tags'"                 
+                [addOnBlur]="true"
+                [clearOnBlur]="true"
+                [maxItems]="7">
+                <tag-input-dropdown 
+                  [displayBy]="'value'"  
+                  [showDropdownIfEmpty]="true"
+                  [autocompleteObservable]="existedTags">
+                    <ng-template let-item="item">
+                      {{ item.value }}
+                    </ng-template>
+                </tag-input-dropdown>
+              </tag-input>
+          </fieldset>
 
           <button type="submit" class="btn btn-lg pull-xs-right btn-primary"
                   [disabled]="articleForm.invalid">

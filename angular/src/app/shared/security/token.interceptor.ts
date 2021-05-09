@@ -1,26 +1,30 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {TokenService} from '@app/shared/security/token.service';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { TokenState } from '@app/shared/state/token.state';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private tokenService: TokenService) {
+  private token: string;
+  
+  constructor(private store: Store) {
+    this.store.select(TokenState.token)
+      .subscribe(token => this.token = token);
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (isConfigUrl(request)) {
-      console.info("skip for config");
+      console.info("skip not api requests");
     }
-    else {
-      // add auth header with jwt if user is logged in and request is to api url
-      const token = this.tokenService.getToken();
 
-      if (token) {
+    // add auth header with jwt if user is logged in and request is to api url
+    else {
+      if (this.token) {
         const cloned = request.clone({
           setHeaders: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${this.token}`
           }
         });
 

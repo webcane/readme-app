@@ -1,4 +1,5 @@
-import {Observable, of} from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 export default class Utils {
 
@@ -21,4 +22,10 @@ export default class Utils {
     // this.messageService.add(`HeroService: ${message}`);
     console.log(message);
   }
+
+  static reloadUrl(router: Router, url: string = '/') {
+    router.routeReuseStrategy.shouldReuseRoute = () => false;
+    router.onSameUrlNavigation = 'reload';
+    router.navigate([url]);
+}
 }
