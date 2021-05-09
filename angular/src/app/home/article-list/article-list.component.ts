@@ -5,6 +5,7 @@ import {Tag} from '@app/shared/model/tag.model';
 import {TagsState} from '@app/shared/state/tags.state';
 import {Select} from '@ngxs/store';
 import {ArticlesService} from '@app/shared/service/articles.service';
+import {Article} from '@app/shared/model/article.model';
 
 interface State {
   page: number;
@@ -44,5 +45,13 @@ export class ArticleListComponent implements OnInit {
   toggleCollapsed(): void {
     console.log("toggle collapsed");
     this.isMenuCollapsed = !this.isMenuCollapsed;
+  }
+
+  editArticle(article: Article): void {
+    console.log("edit " + JSON.stringify(article));
+  }
+
+  deleteArticle(article: Article): void {
+    console.log("delete " + JSON.stringify(article));
   }
 }
