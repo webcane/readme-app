@@ -15,12 +15,18 @@ public class DummyArticle implements ArticleView {
 
     private static int counter;
     private boolean withTags;
+    private String tagValue;
     private int id = 0;
+
+    public DummyArticle(String tagValue) {
+        this.tagValue = tagValue;
+        this.withTags = true;
+        id = ++counter;
+    }
 
     public DummyArticle(boolean withTags) {
         this.withTags = withTags;
         id = ++counter;
-
     }
 
     public static List<ArticleView> get2Articles() {
@@ -32,6 +38,10 @@ public class DummyArticle implements ArticleView {
 
     public static ArticleView getArticle(boolean withTags) {
         return new DummyArticle(withTags);
+    }
+
+    public static ArticleView getArticle(String tagValue) {
+        return new DummyArticle(tagValue);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class DummyArticle implements ArticleView {
     public Set<TagView> getTags() {
         Set<TagView> tags = new HashSet<>();
         if (withTags) {
-            tags.add(new DummyTag());
+            tags.add(tagValue != null ? new DummyTag(tagValue): new DummyTag());
         }
         return tags;
     }
