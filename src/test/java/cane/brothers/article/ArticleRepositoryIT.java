@@ -63,6 +63,16 @@ public class ArticleRepositoryIT {
     }
 
     @Test
+    public void test_findByNoTagName_pos() {
+        // when
+        Collection<String> tagsToSearch = new ArrayList<>();
+        List<ArticleView> artsByTags = repo.findAllByTags_ValueIn(ArticleView.class, tagsToSearch);
+
+        // then
+        assertThat(artsByTags).isEmpty();
+    }
+
+    @Test
     public void test_findByTagName_neg() {
         // when
         Collection<String> tagsToSearch = new ArrayList<>();
