@@ -11,6 +11,8 @@ public interface ArticleView {
 
     String getUrl();
 
+    String getSlug();
+
     String getTitle();
 
     String getPreamble();

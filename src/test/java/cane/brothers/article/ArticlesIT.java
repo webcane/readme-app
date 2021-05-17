@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -68,7 +69,7 @@ public class ArticlesIT extends Assertions {
         printStatus();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/articles")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(articleTagNewJson))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
@@ -85,8 +86,8 @@ public class ArticlesIT extends Assertions {
         artRepo.saveAndFlush(articleNoTag);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/articles")
-                .contentType("application/json")
-                .content(articleTagNewJson))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(articleNoTagJson))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
         assertThat(artRepo.findAll()).hasSize(1);
@@ -102,7 +103,7 @@ public class ArticlesIT extends Assertions {
         tagRepo.saveAndFlush(tag);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/articles")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(articleTagNewJson))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
@@ -121,12 +122,12 @@ public class ArticlesIT extends Assertions {
         @Bean
         @Primary
         public UserDetailsService userDetailsService() {
-            User basicUser = new org.springframework.security.core.userdetails.User(
+            User basicUser = new User(
                     "testuser",
                     "password",
                     Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 
-            User blaUser = new org.springframework.security.core.userdetails.User(
+            User blaUser = new User(
                     "blauser",
                     "password",
                     Arrays.asList(new SimpleGrantedAuthority("ROLE_BLA")));

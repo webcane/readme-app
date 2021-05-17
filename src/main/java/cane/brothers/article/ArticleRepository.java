@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by cane
@@ -26,4 +27,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     <T> List<T> findAll(Class<T> type);
 
     <T> List<T> findAllByTags_ValueIn(Class<T> type, Collection<String> value);
+
+    /**
+     * Find article by unique url
+     *
+     * @param aUrl the article url
+     * @return optional article
+     */
+    Optional<Article> findByUrl(String aUrl);
+
+    /**
+     * Find article by unique slug
+     *
+     * @param aSlug the article slug
+     * @return optional article
+     */
+    Optional<Article> findBySlug(String aSlug);
 }

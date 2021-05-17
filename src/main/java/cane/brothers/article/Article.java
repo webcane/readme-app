@@ -35,6 +35,9 @@ public class Article implements Serializable, Persistable<Long> {
     @Column(name = "URL", unique = true, nullable = false)
     private String url;
 
+    @Column(name = "SLUG", unique = true, nullable = false)
+    private String slug;
+
     @Column(name = "TITLE")
     private String title;
 
@@ -76,11 +79,13 @@ public class Article implements Serializable, Persistable<Long> {
      * Constructor
      *
      * @param url
+     * @param slug
      * @param title
      * @param preamble
      */
-    public Article(String url, String title, String preamble) {
+    public Article(String url, String slug, String title, String preamble) {
         this.url = url;
+        this.slug = slug;
         this.title = title;
         this.preamble = preamble;
     }

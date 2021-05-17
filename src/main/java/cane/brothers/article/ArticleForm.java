@@ -19,6 +19,10 @@ public class ArticleForm {
     @Size(max = 255)
     private String url;
 
+    @NotEmpty
+    @Size(min = 3, max = 255)
+    private String slug;
+    
     @Size(max = 255)
     private String title;
 

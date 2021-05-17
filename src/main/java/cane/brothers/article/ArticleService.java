@@ -1,5 +1,8 @@
 package cane.brothers.article;
 
+import cane.brothers.exception.ResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import cane.brothers.tags.Tag;
 import cane.brothers.tags.TagForm;
 import cane.brothers.tags.TagRepository;
@@ -8,13 +11,12 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by cane
  */
+@Slf4j
 @Service
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ArticleService {
@@ -38,16 +40,61 @@ public class ArticleService {
     }
 
     @Transactional
-    public boolean addArticle(ArticleForm request) {
-        Article a = new Article(request.getUrl(), request.getTitle(), request.getPreamble());
-        if (request.getTags() != null && request.getTags().size() > 0) {
-            for (TagForm tv : request.getTags()) {
-                Tag t = getTag(tv);
-                a.addTag(t);
+    public void addArticle(ArticleForm request) {
+        Article a = updateArticleInternal(request, new Article());
+        artRepo.save(a);
+    }
+
+    /**
+     * To update the article we will search it by slug or url.
+     * It means not allowed to change slug and url at the same time.
+     *
+     * @param request
+     * @return true if article were updated successfully
+     */
+    @Transactional
+    public void updateArticle(ArticleForm request) {
+        Article articleUpdated;
+        Optional<Article> articleOptional = artRepo.findBySlug(request.getSlug());
+
+        // first search by url
+        if(articleOptional.isPresent()) {
+            articleUpdated = updateArticleInternal(request, articleOptional.get());
+        }
+
+        else {
+            // then search by url
+            articleOptional = artRepo.findByUrl(request.getUrl());
+
+            if(articleOptional.isPresent()) {
+                articleUpdated = updateArticleInternal(request, articleOptional.get());
+            }
+
+            else {
+                throw new ResourceNotFoundException("Article", "url", request.getUrl());
             }
         }
-        a = artRepo.save(a);
-        return (a != null);
+
+        artRepo.save(articleUpdated);
+    }
+
+    private Article updateArticleInternal(ArticleForm request, Article articleOrig) {
+        articleOrig.setUrl(request.getUrl());
+        articleOrig.setSlug(request.getSlug());
+        articleOrig.setTitle(request.getTitle());
+        articleOrig.setPreamble(request.getPreamble());
+
+        articleOrig.getTags().clear();
+        Set<TagForm> reqTags = request.getTags();
+
+        if (CollectionUtils.isNotEmpty(reqTags)) {
+            for (TagForm tv : reqTags) {
+                Tag t = getTag(tv);
+                articleOrig.addTag(t);
+            }
+        }
+
+        return articleOrig;
     }
 
     private Tag getTag(TagForm tv) {

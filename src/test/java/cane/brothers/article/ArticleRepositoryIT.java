@@ -5,19 +5,19 @@ import cane.brothers.tags.TagView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * @author mniedre
  */
 @DataJpaTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ArticleRepositoryIT {
 
     private ArticleRepository repo;
@@ -32,9 +32,9 @@ public class ArticleRepositoryIT {
 
     @BeforeEach
     public void setUp() {
-        Article testArticle = new Article("http://www.example.com/test/", "test title", "test preamble");
+        Article testArticle = new Article("http://www.example.com/test/", "test-slug", "test title", "test preamble");
         testArticle.addTag(new Tag(tagName_pos));
-        testArticle = repo.save(testArticle);
+        repo.save(testArticle);
     }
 
     @Test
@@ -72,5 +72,41 @@ public class ArticleRepositoryIT {
         // then
         assertThat(artsByTags).isNotNull();
         assertThat(artsByTags).isEmpty();
+    }
+
+    @Test
+    public void test_findBySlug_pos() {
+        // when
+        Optional<Article> artBySlug = repo.findBySlug("test-slug");
+
+        // then
+        assertThat(artBySlug.isPresent()).isTrue();
+    }
+
+    @Test
+    public void test_findBySlug_neg() {
+        // when
+        Optional<Article> artBySlug = repo.findBySlug("unknown-slug");
+
+        // then
+        assertThat(artBySlug.isPresent()).isFalse();
+    }
+
+    @Test
+    public void test_findByUrl_pos() {
+        // when
+        Optional<Article> artByUrl = repo.findByUrl("http://www.example.com/test/");
+
+        // then
+        assertThat(artByUrl.isPresent()).isTrue();
+    }
+
+    @Test
+    public void test_findByUrl_neg() {
+        // when
+        Optional<Article> artByUrl = repo.findBySlug("http://www.example.com/unknown");
+
+        // then
+        assertThat(artByUrl.isPresent()).isFalse();
     }
 }

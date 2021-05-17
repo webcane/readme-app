@@ -92,12 +92,12 @@ public class AuthMvcIT {
         @Bean
         @Primary
         public UserDetailsService userDetailsService() {
-            User basicUser = new org.springframework.security.core.userdetails.User(
+            User basicUser = new User(
                     "testuser",
                     "password",
                     Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 
-            User blaUser = new org.springframework.security.core.userdetails.User(
+            User blaUser = new User(
                     "blauser",
                     "password",
                     Arrays.asList(new SimpleGrantedAuthority("ROLE_BLA")));

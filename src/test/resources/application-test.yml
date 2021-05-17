@@ -1,3 +1,45 @@
-articleNoTagJson: '{"url": "http://www.example.com/test/", "title": "test title"}'
-articleTagNewJson: '{"url": "http://www.example.com/test/", "title": "test title", "tags": [{"value": "test"}]}'
+articleNoTagJson: '{"url": "http://www.example.com/test/", "slug": "test-slug", "title": "test title"}'
+articleTagNewJson: '{"url": "http://www.example.com/test/", "slug": "test-slug", "title": "test title", "tags": [{"value": "test"}]}'
 tagJson: '{"value": "test"}'
+
+logging:
+  level:
+    web: DEBUG
+    org.springframework: INFO
+    org.springframework.sql: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    cane.brothers: DEBUG
+    cane.brothers.spring.FilterableHttpTraceFilter: TRACE
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:radb;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+
+#spring:
+#  # Database
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/radb
+#    username: postgres
+#    password: postgres
+#  jpa:
+#    show-sql: true
+#    generate-ddl: true
+#    open-in-view: false
+#    hibernate:
+#      ddl-auto: create # When you launch the application for the first time - switch "update" at "create" ("create-drop")
+#    database: postgresql
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect

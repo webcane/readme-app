@@ -40,6 +40,11 @@ public class DummyArticle implements ArticleView {
     }
 
     @Override
+    public String getSlug() {
+        return "dummy-slug-" + id;
+    }
+
+    @Override
     public String getTitle() {
         return "dummy title " + id;
     }
@@ -61,6 +66,7 @@ public class DummyArticle implements ArticleView {
     @Override
     public String toString() {
         return "(Url=".concat(getUrl())
+                .concat("; Slug=").concat(getSlug())
                 .concat("; Title=").concat(getTitle())
                 .concat("; Preamble=").concat(getPreamble())
                 .concat(")");

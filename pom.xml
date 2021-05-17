@@ -24,7 +24,8 @@
         <openApi.version>1.5.4</openApi.version>
         <spring.version>5.3.3.RELEASE</spring.version>
         <commons-lang3.version>3.0</commons-lang3.version>
-        <skip.integration.tests>false</skip.integration.tests>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <skip.integration.tests>true</skip.integration.tests>
         <!--        <node.version>v12.18.3</node.version>-->
         <!--        <npm.version>6.14.8</npm.version>-->
         <!--        <frontend-maven-plugin.version>1.10.3</frontend-maven-plugin.version>-->
@@ -107,6 +108,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- for tests only -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -118,6 +127,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons-collections.version}</version>
         </dependency>
 
 
@@ -186,54 +201,73 @@
                     <mainClass>cane.brothers.Application</mainClass>
                 </configuration>
                 <executions>
+                    <!-- Spring Boot Actuator displays build-related information if a META-INF/build-info.properties file is present.
+                    This configuration will generate a build-info.properties at the expected location -->
                     <execution>
                         <goals>
                             <goal>build-info</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.integration.tests}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.integration.tests}</skip>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
             <!--	Add integration-test/java directory to be visible by Maven	-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>build-helper-maven-plugin</artifactId>-->
-            <!--                <version>3.0.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>add-integration-test-sources</id>-->
-            <!--                        <phase>generate-test-sources</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>add-test-source</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <sources>-->
-            <!--                                <source>src/it/java</source>-->
-            <!--                            </sources>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>build-helper-maven-plugin</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>add-integration-test-sources</id>-->
+<!--                        <phase>generate-test-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>add-test-source</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <sources>-->
+<!--                                <source>src/it/java</source>-->
+<!--                            </sources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <!--	Include integration-tests in integration-test Maven phase	-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-            <!--                <version>3.0.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>failsafe-integration-tests</id>-->
-            <!--                        <phase>integration-test</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>integration-test</goal>-->
-            <!--                            <goal>verify</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <skipTests>${skip.integration.tests}</skipTests>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <configuration>
+                                <skip>${skip.integration.tests}</skip>
+                            </configuration>
+<!--                            <executions>-->
+<!--                                <execution>-->
+<!--                                    <id>failsafe-integration-tests</id>-->
+<!--                                    <phase>integration-test</phase>-->
+<!--                                    <goals>-->
+<!--                                        <goal>integration-test</goal>-->
+<!--                                        <goal>verify</goal>-->
+<!--                                    </goals>-->
+<!--                                </execution>-->
+<!--                            </executions>-->
+                        </plugin>
             <!--            <plugin>-->
             <!--                <groupId>org.jacoco</groupId>-->
             <!--                <artifactId>jacoco-maven-plugin</artifactId>-->

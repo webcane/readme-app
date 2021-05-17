@@ -23,7 +23,7 @@ public class ProfileTest {
             log.info("Currently active profile - {}", profileName);
         }
         Assertions.assertThat(env.getActiveProfiles())
-                .hasSize(1)
-                .contains("test");
+                .hasSize(2)
+                .contains("test", "oauth2");
     }
 }
