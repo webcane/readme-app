@@ -46,6 +46,11 @@ export class EditorComponent implements OnInit {
         Validators.maxLength(250),
         urlValidator
       ]),
+      slug: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(250)
+      ]),
       title: '',
       preambule: '',
       tags: []
@@ -73,5 +78,7 @@ export class EditorComponent implements OnInit {
 
   // Getter for easy access
   get url() { return this.articleForm.get('url') };
+
+  get slug() { return this.articleForm.get('slug') };
 
 }
