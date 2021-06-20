@@ -67,7 +67,7 @@ export class EditorComponent implements OnInit {
       .subscribe((): void => {
         this.articleForm.reset();
       }, error => {
-        this.toastrService.error(error, 'article saving');
+        this.toastrService.error(error, 'error during article saving');
       });
   }
 
