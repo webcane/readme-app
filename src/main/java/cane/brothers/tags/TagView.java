@@ -5,5 +5,5 @@ package cane.brothers.tags;
  */
 public interface TagView {
 
-    String getValue();
+  String getValue();
 }

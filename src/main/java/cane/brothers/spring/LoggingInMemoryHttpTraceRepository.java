@@ -15,10 +15,10 @@ import org.springframework.stereotype.Repository;
 @Profile("management")
 public class LoggingInMemoryHttpTraceRepository extends InMemoryHttpTraceRepository {
 
-    public void add(HttpTrace trace) {
-        super.add(trace);
-        log.trace("Trace:" + ToStringBuilder.reflectionToString(trace));
-        log.trace("Request:" + ToStringBuilder.reflectionToString(trace.getRequest()));
-        log.trace("Response:" + ToStringBuilder.reflectionToString(trace.getResponse()));
-    }
+  public void add(HttpTrace trace) {
+    super.add(trace);
+    log.trace("Trace:" + ToStringBuilder.reflectionToString(trace));
+    log.trace("Request:" + ToStringBuilder.reflectionToString(trace.getRequest()));
+    log.trace("Response:" + ToStringBuilder.reflectionToString(trace.getResponse()));
+  }
 }

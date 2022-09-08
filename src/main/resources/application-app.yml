@@ -1,7 +1,7 @@
 app:
   auth:
-# see env var    
-#    tokenSecret: 
+    # see env var
+    #    tokenSecret:
     tokenExpirationMsec: 864000000
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,

@@ -1,11 +1,10 @@
 package cane.brothers.article;
 
+import java.util.Collection;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by cane
@@ -13,17 +12,17 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    //List<ArticleView> findAllArticles();
+  //List<ArticleView> findAllArticles();
 
-    /**
-     * find all Articles like projections
-     *
-     * @param type class of projection
-     * @param <T>  type of the address projection
-     * @return projection's list
-     */
-    @Query("select a from Article a")
-    <T> List<T> findAll(Class<T> type);
+  /**
+   * find all Articles like projections
+   *
+   * @param type class of projection
+   * @param <T>  type of the address projection
+   * @return projection's list
+   */
+  @Query("select a from Article a")
+  <T> List<T> findAll(Class<T> type);
 
-    <T> List<T> findAllByTags_ValueIn(Class<T> type, Collection<String> value);
+  <T> List<T> findAllByTags_ValueIn(Class<T> type, Collection<String> value);
 }

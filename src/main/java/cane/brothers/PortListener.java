@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PortListener implements ApplicationListener<ServletWebServerInitializedEvent> {
 
-    @Override
-    public void onApplicationEvent(ServletWebServerInitializedEvent event) {
-        int thePort = event.getWebServer().getPort();
-        log.info("Your server is up and running on port {}", thePort);
-    }
+  @Override
+  public void onApplicationEvent(ServletWebServerInitializedEvent event) {
+    int thePort = event.getWebServer().getPort();
+    log.info("Your server is up and running on port {}", thePort);
+  }
 }

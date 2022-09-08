@@ -1,7 +1,6 @@
 package cane.brothers.article;
 
 import cane.brothers.tags.TagView;
-
 import java.util.Set;
 
 /**
@@ -9,11 +8,11 @@ import java.util.Set;
  */
 public interface ArticleView {
 
-    String getUrl();
+  String getUrl();
 
-    String getTitle();
+  String getTitle();
 
-    String getPreamble();
+  String getPreamble();
 
-    Set<TagView> getTags();
+  Set<TagView> getTags();
 }

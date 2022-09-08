@@ -16,30 +16,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    AppUserRepository userRepository;
+  @Autowired
+  AppUserRepository userRepository;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        AppUser user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("AppUser not found with email : " + email)
-                );
-
-        // TODO delegate
-        return UserPrincipal.create(user);
-        // return new AppUser(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
-    }
-
-    @Transactional
-    public UserDetails loadUserById(Long id) {
-        AppUser user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", id)
+  @Override
+  @Transactional
+  public UserDetails loadUserByUsername(String email)
+      throws UsernameNotFoundException {
+    AppUser user = userRepository.findByEmail(email)
+        .orElseThrow(() ->
+            new UsernameNotFoundException("AppUser not found with email : " + email)
         );
 
-        // TODO delegate
-        return UserPrincipal.create(user);
-    }
+    // TODO delegate
+    return UserPrincipal.create(user);
+    // return new AppUser(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
+  }
+
+  @Transactional
+  public UserDetails loadUserById(Long id) {
+    AppUser user = userRepository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("User", "id", id)
+    );
+
+    // TODO delegate
+    return UserPrincipal.create(user);
+  }
 }

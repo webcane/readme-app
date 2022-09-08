@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OAuth2UserController {
 
-    @Autowired
-    private AppUserRepository userRepository;
+  @Autowired
+  private AppUserRepository userRepository;
 
 //    @GetMapping
 //    @RequestMapping("/user")
@@ -31,10 +31,10 @@ public class OAuth2UserController {
 //    }
 
 
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('USER')")
-    public AppUser getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("AppUser", "id", userPrincipal.getId()));
-    }
+  @GetMapping("/user")
+  @PreAuthorize("hasRole('USER')")
+  public AppUser getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+    return userRepository.findById(userPrincipal.getId())
+        .orElseThrow(() -> new ResourceNotFoundException("AppUser", "id", userPrincipal.getId()));
+  }
 }
