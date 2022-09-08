@@ -13,7 +13,7 @@ export class SelectTagAction {
 }
 
 function addOrRemoveTag(selectedTag): any {
-  return produce(draft => {
+  return produce<TagsModel>(draft => {
     const index = draft.tags.findIndex(tag => tag.value === selectedTag.value);
     // console.log("index: " + index);
     if (index === -1) {
@@ -40,7 +40,7 @@ export class TagsState {
 
   @Action(SelectTagAction)
   selectTag(ctx: StateContext<TagsModel>, { selectedTag }: SelectTagAction): void {
-    const state = ctx.getState();
+    // const state = ctx.getState();
     // console.log("state: " + JSON.stringify(state));
     ctx.setState(addOrRemoveTag(selectedTag));
   }

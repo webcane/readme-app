@@ -6,7 +6,7 @@ RUN mvn -f pom.xml package -Dmaven.clean.skip=true -Dmaven.test.skip=true
 
 
 # stage 2
-FROM openjdk:8-jdk-alpine
+FROM eclipse-temurin:17-jdk-jammy
 COPY ./target/readme-app.jar readme-app.jar
 ENTRYPOINT ["java","-jar","/readme-app.jar"]
 EXPOSE 8080

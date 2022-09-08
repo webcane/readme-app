@@ -1,5 +1,7 @@
 # Readme App
 
+* [UI](http://localhost:4200)
+
 ## Introduction
 
 Web application which holds and manages articles to read out.
@@ -10,8 +12,8 @@ Below you can find endpoints exposed by this microservice.
 
 ### Online API documentation
 
-* [API](http://localhost:8080/swagger)
-* [UI](http://localhost:8080/swagger-ui)
+* [swagger json API](http://localhost:8080/swagger)
+* [swagger UI](http://localhost:8080/swagger-ui)
 
 ### Management endpoints
 
@@ -27,6 +29,16 @@ Below you can find endpoints exposed by this microservice.
 * [Trace](http://localhost:8080/management/trace)
 
 ## Running on local machine
+### environmental variables
+Set up following env variables. Easiest way is over .env file.
+```
+APP_AUTH_TOKEN_SECRET=
+GITHUB_CLIENT_ID= 
+GITHUB_CLIENT_SECRET=
+SPRING_DATASOURCE_USERNAME=
+SPRING_DATASOURCE_PASSWORD=
+```
+
 ### back-end
 
 1. Build with maven

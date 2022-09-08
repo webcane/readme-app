@@ -5,7 +5,8 @@ volumes:
 
 services:
   db:
-    image: postgres:13.1-alpine
+    image: postgres:14.3
+    hostname: readme-app-db
     container_name: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
@@ -16,8 +17,8 @@ services:
     #    env_file:
     #      - 'config/database.yml'
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=$SPRING_DATASOURCE_PASSWORD
+      - POSTGRES_USER=$SPRING_DATASOURCE_USERNAME
       - POSTGRES_DB=readmeapp_db
       - PGDATA=/var/lib/postgresql/data/pgdata
     healthcheck:
@@ -29,6 +30,7 @@ services:
 
   app:
     image: 'webcane/readme-app-spring:latest'
+    hostname: readme-app-api
     container_name: spring
     build:
       context: .
@@ -38,10 +40,11 @@ services:
       - "8080:8080"
     restart: always
     environment:
+      - APP_AUTH_TOKEN_SECRET=$APP_AUTH_TOKEN_SECRET
       - SPRING_PROFILES_ACTIVE=app,dev,management,oauth2,openapi
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/readmeapp_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME
+      - SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET
@@ -50,6 +53,7 @@ services:
 
   ui:
     image: 'webcane/readme-app-angular:latest'
+    hostname: readme-app-ui
     container_name: angular
     build:
       context: ./angular

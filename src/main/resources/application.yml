@@ -1,3 +1,4 @@
-spring:
-  profiles:
-    active: app,dev,db,management,oauth2,openapi #init
+ spring:
+  config:
+    activate:
+      on-profile: app,dev,db,management,oauth2,openapi #init

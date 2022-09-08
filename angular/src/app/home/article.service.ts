@@ -92,22 +92,22 @@ export class ArticleService {
     return this.state.tags;
   }
 
-    // tslint:disable-next-line:adjacent-overload-signatures
+    // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   set page(page: number) {
     this.setState({page});
   }
 
-    // tslint:disable-next-line:adjacent-overload-signatures
+    // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   set pageSize(pageSize: number) {
     this.setState({pageSize});
   }
 
-  // tslint:disable-next-line:adjacent-overload-signatures
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   set searchTerm(searchTerm: string) {
     this.setState({searchTerm});
   }
 
-    // tslint:disable-next-line:adjacent-overload-signatures
+    // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   set tags(tags: Tag[]) {
     this.setState({tags});
   }
@@ -118,18 +118,18 @@ export class ArticleService {
   }
 
   private getArticles(tags: Tag[]): Observable<Article[]> {
-    const tagsLine = this.getTagLine(tags);
-    const url = this.getUrl(tagsLine);
+    const tagsLine = ArticleService.getTagLine(tags);
+    const url = ArticleService.getUrl(tagsLine);
 
     return this.apiService.get<Article[]>(url)
       .pipe(
-        tap(next => this.log('fetched articles' + (tagsLine ? ' by tags: ' + tagsLine : '')),
-          error => this.log('there are no articles' + (tagsLine ? ' by tags: ' + tagsLine : ''))),
+        tap(next => ArticleService.log('fetched articles' + (tagsLine ? ' by tags: ' + tagsLine : '')),
+          error => ArticleService.log('there are no articles' + (tagsLine ? ' by tags: ' + tagsLine : ''))),
         catchError(this.handleError<Article[]>('getArticles', []))
       );
   }
 
-  private getTagLine(tags: Tag[]): string {
+  private static getTagLine(tags: Tag[]): string {
     if (tags) {
       const tagNames = tags.map(item => {
         return item.value;
@@ -141,7 +141,7 @@ export class ArticleService {
     return null;
   }
 
-  private getUrl(tagName: string): string {
+  private static getUrl(tagName: string): string {
     let url = '/articles';
     if (tagName) {
       url = url + '/findBy?tags=' + tagName;
@@ -186,14 +186,14 @@ export class ArticleService {
         console.error(error); // log to console instead
 
         // TODO: better job of transforming error for user consumption
-        this.log('${operation} failed: ${error.message}');
+        ArticleService.log('${operation} failed: ${error.message}');
       }
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
-  private log(message: string): void {
+  private static log(message: string): void {
     // this.messageService.add(`HeroService: ${message}`);
     console.log(message);
   }
