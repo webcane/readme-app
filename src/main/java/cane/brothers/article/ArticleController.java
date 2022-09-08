@@ -1,6 +1,5 @@
 package cane.brothers.article;
 
-import cane.brothers.OpenApiConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.Explode;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.Collection;
 import java.util.List;
 import javax.validation.Valid;
@@ -33,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/articles")
-@SecurityRequirement(name = OpenApiConfig.COOKIE_NAME)
 public class ArticleController {
 
   private final ArticleService svc;

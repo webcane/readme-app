@@ -94,6 +94,7 @@ public class OAuth2SecurityConfig {
             .antMatchers("/auth/**", "/oauth2/**", "/login").permitAll()
             .antMatchers("/public/**", "/favicon/**", "/build/**", "/fonts/**").permitAll()
             .antMatchers("/management/**", "/actuator/**").permitAll()
+            .antMatchers("/webjars/**", "/v3/api-docs/**", "/swagger/**", "/swagger-ui/**").permitAll()
             .antMatchers("/tags", "/articles", "/user").hasAnyRole("USER")
             .anyRequest().authenticated())
         .exceptionHandling(e -> e.authenticationEntryPoint(
