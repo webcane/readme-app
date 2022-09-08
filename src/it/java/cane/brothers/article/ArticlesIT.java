@@ -32,7 +32,7 @@ import java.util.Arrays;
  */
 @Slf4j
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TestConfig.class, AuthMvcIT.TestConfig.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TestConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ArticlesIT extends Assertions {
 
@@ -112,26 +112,5 @@ public class ArticlesIT extends Assertions {
     private void printStatus() {
         log.info("articles {}", artRepo.findAll());
         log.info("tags {}", tagRepo.findAll());
-    }
-
-
-    @TestConfiguration
-    public static class TestConfig {
-
-        @Bean
-        @Primary
-        public UserDetailsService userDetailsService() {
-            User basicUser = new org.springframework.security.core.userdetails.User(
-                    "testuser",
-                    "password",
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-
-            User blaUser = new org.springframework.security.core.userdetails.User(
-                    "blauser",
-                    "password",
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_BLA")));
-
-            return new InMemoryUserDetailsManager(basicUser, blaUser);
-        }
     }
 }

@@ -12,8 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author mniedre
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = TestConfig.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestConfig.class)
 public class AuthRestIT {
 
     @Autowired

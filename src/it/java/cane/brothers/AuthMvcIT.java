@@ -32,8 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author mniedre
  */
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = {TestConfig.class, AuthMvcIT.TestConfig.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TestConfig.class})
 public class AuthMvcIT {
 
     @Autowired
@@ -83,26 +82,5 @@ public class AuthMvcIT {
                 .accept(MediaType.ALL))
                 .andExpect(status().isForbidden())
                 .andDo(print());
-    }
-
-
-    @TestConfiguration
-    public static class TestConfig {
-
-        @Bean
-        @Primary
-        public UserDetailsService userDetailsService() {
-            User basicUser = new org.springframework.security.core.userdetails.User(
-                    "testuser",
-                    "password",
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-
-            User blaUser = new org.springframework.security.core.userdetails.User(
-                    "blauser",
-                    "password",
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_BLA")));
-
-            return new InMemoryUserDetailsManager(basicUser, blaUser);
-        }
     }
 }
