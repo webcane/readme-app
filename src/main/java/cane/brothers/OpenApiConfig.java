@@ -2,7 +2,6 @@ package cane.brothers;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -20,9 +19,12 @@ import org.springframework.core.annotation.Order;
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "readme", description = "Readme app springdoc open api",
     contact = @Contact(name = "support", email = "webcane@yandex.ru")),
-    security = {@SecurityRequirement(name = OpenApiConfig.COOKIE_NAME)})
-@SecurityScheme(name = OpenApiConfig.COOKIE_NAME, type = SecuritySchemeType.APIKEY, in = SecuritySchemeIn.COOKIE)
+    security = {@SecurityRequirement(name = OpenApiConfig.AUTH_SCHEME)})
+@SecurityScheme(name = OpenApiConfig.AUTH_SCHEME, type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "Bearer")
 public class OpenApiConfig {
 
-  public static final String COOKIE_NAME = "oauth2_auth_request";
+  public static final String AUTH_SCHEME = "bearerAuth";
+
+  private OpenApiConfig() {
+  }
 }
