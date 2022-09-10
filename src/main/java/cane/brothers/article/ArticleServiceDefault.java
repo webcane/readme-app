@@ -35,13 +35,9 @@ public class ArticleServiceDefault implements ArticleService {
   public ArticleEntity addArticle(ArticleForm request) {
     log.info("Add new article {}", request);
     ArticleEntity a = new ArticleEntity(request.getUrl(), request.getTitle(), request.getPreamble());
-    if (hasTags(request)) {
-      request.getTags().stream().forEach(tv -> a.addTag(tagSvc.getTag(tv)));
+    if (tagSvc.hasTags(request.getTags())) {
+      request.getTags().forEach(tv -> a.addTag(tagSvc.findTag(tv)));
     }
     return artRepo.save(a);
-  }
-
-  protected boolean hasTags(ArticleForm request) {
-    return request.getTags() != null && !request.getTags().isEmpty();
   }
 }
