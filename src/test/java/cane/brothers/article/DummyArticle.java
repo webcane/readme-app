@@ -30,6 +30,11 @@ public class DummyArticle implements ArticleView {
         return testArticles;
     }
 
+    public static List<ArticleView> emptyArticles() {
+        List<ArticleView> testArticles = new ArrayList<>();
+        return testArticles;
+    }
+
     public static ArticleView getArticle(boolean withTags) {
         return new DummyArticle(withTags);
     }

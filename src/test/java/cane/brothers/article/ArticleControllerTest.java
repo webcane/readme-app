@@ -45,6 +45,18 @@ public class ArticleControllerTest {
     }
 
     @Test
+    void test_whenNoArticlesExist_thenHttp200_andEmptyArticlesListReturned() throws Exception {
+        Mockito.doReturn(DummyArticle.emptyArticles()).when(svc).findAll();
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value()))
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+            .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
+    }
+
+    @Test
     void test_when2ArticlesExist_thenHttp200_and2ArticlesReturned() throws Exception {
         Mockito.doReturn(DummyArticle.get2Articles()).when(svc).findAll();
 
