@@ -1,6 +1,6 @@
 package cane.brothers.article;
 
-import cane.brothers.tags.Tag;
+import cane.brothers.tags.TagEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -53,13 +53,13 @@ public class ArticleEntity implements Serializable, Persistable<Long> {
   @JsonIgnoreProperties("articles")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  @ManyToMany(fetch = FetchType.EAGER, targetEntity = Tag.class,
+  @ManyToMany(fetch = FetchType.EAGER, targetEntity = TagEntity.class,
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(name = "ARTICLE_TAG",
       joinColumns = {@JoinColumn(name = "FK_ART_ID")},
       inverseJoinColumns = {@JoinColumn(name = "FK_TAG_ID")},
       uniqueConstraints = {@UniqueConstraint(columnNames = {"FK_ART_ID", "FK_TAG_ID"})})
-  private Set<Tag> tags = new HashSet<>();
+  private Set<TagEntity> tags = new HashSet<>();
 
   /**
    * Constructor
@@ -94,12 +94,12 @@ public class ArticleEntity implements Serializable, Persistable<Long> {
     this.preamble = preamble;
   }
 
-  public void addTag(Tag tag) {
+  public void addTag(TagEntity tag) {
     tags.add(tag);
     tag.getArticles().add(this);
   }
 
-  public void removeTag(Tag tag) {
+  public void removeTag(TagEntity tag) {
     tags.remove(tag);
     tag.getArticles().remove(this);
   }

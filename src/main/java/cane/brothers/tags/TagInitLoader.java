@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("dev")
+public class TagInitLoader {
 
   private TagRepository repo;
 
@@ -22,9 +24,9 @@ public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent>
     this.repo = repo;
   }
 
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent event) {
-    List<Tag> existedTags = this.repo.findAll();
+  @EventListener(ContextRefreshedEvent.class)
+  public void onApplicationEvent() {
+    List<TagEntity> existedTags = this.repo.findAll();
     log.info("Number of tags: " + existedTags.size());
 
     if (existedTags.isEmpty()) {
@@ -38,7 +40,7 @@ public class TagInitLoader implements ApplicationListener<ContextRefreshedEvent>
   }
 
   private void addTag(String t) {
-    Tag a = new Tag(t);
+    TagEntity a = new TagEntity(t);
     a = repo.save(a);
     log.info("{} added ", a);
   }

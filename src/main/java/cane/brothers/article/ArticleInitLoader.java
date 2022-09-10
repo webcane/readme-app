@@ -1,6 +1,6 @@
 package cane.brothers.article;
 
-import cane.brothers.tags.Tag;
+import cane.brothers.tags.TagEntity;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public class ArticleInitLoader {
   private static void addTags(ArticleEntity a, String[] tags) {
     if (tags != null && tags.length > 0) {
       for (String tag : tags) {
-        a.addTag(new Tag(tag));
+        a.addTag(new TagEntity(tag));
       }
     }
   }

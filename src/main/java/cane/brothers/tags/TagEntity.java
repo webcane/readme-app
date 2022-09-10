@@ -27,7 +27,7 @@ import org.springframework.data.domain.Persistable;
 @Entity
 @NoArgsConstructor
 @Table(name = "TAG")
-public class Tag implements Serializable, Persistable<Long> {
+public class TagEntity implements Serializable, Persistable<Long> {
 
   private static final long serialVersionUID = 1;
 
@@ -51,7 +51,7 @@ public class Tag implements Serializable, Persistable<Long> {
    *
    * @param value tag name
    */
-  public Tag(String value) {
+  public TagEntity(String value) {
     this.value = value;
   }
 
