@@ -1,11 +1,12 @@
 # stage 1
 FROM node:alpine AS build
+ARG BUILD_CMD=build:prod
 # WORKDIR /opt/ng
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npm run build:prod
+RUN npm run $BUILD_CMD
 
 # stage 2
 FROM nginx:alpine

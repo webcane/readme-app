@@ -57,6 +57,8 @@ services:
     container_name: angular
     build:
       context: ./angular
+      args:
+        BUILD_CMD: build
     expose:
       - "80"
     ports:
