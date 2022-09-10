@@ -13,9 +13,17 @@
     <description>Web application which holds and manages articles to read</description>
     <url>https://github.com/webcane/readme-app</url>
 
+
     <organization>
         <name>Cane Brothers</name>
     </organization>
+
+    <developers>
+        <developer>
+            <id>webcane</id>
+            <email>webcane@yandex.ru</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
