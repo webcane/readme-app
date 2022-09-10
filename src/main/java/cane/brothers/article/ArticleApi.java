@@ -16,14 +16,14 @@ import org.springframework.http.ResponseEntity;
 
 public interface ArticleApi {
 
-  @Operation(summary = "get all articles", responses = {
-      @ApiResponse(responseCode = "200", description = "All articles found",
+  @Operation(summary = "get all articles",  method = "GET", responses = {
+      @ApiResponse(responseCode = "200", description = "All founded articles",
           content = @Content(array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
       @ApiResponse(responseCode = "401", description = "Missing jwt token",
           content = @Content(schema = @Schema(hidden = true)))})
   ResponseEntity<List<ArticleView>> findAllArticles();
 
-  @Operation(summary = "filter articles by tag name", responses = {
+  @Operation(summary = "filter articles by tag name", method = "GET", responses = {
       @ApiResponse(responseCode = "200", description = "There are some articles found by tag name",
           content = @Content(array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
       @ApiResponse(responseCode = "400", description = "Missing tag name",
@@ -40,7 +40,7 @@ public interface ArticleApi {
           required = true,
           style = ParameterStyle.FORM) Collection<String> tags);
 
-  @Operation(summary = "post new article", responses = {
+  @Operation(summary = "post new article",  method = "POST", responses = {
       @ApiResponse(responseCode = "201", description = "New article was stored",
           content = @Content(schema = @Schema(implementation = ArticleView.class))),
       @ApiResponse(responseCode = "400", description = "For example missing or empty url",
