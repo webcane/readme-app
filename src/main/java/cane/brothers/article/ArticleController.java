@@ -84,8 +84,9 @@ public class ArticleController {
 
   @PostMapping(consumes = {"application/json"})
   @Operation(summary = "post new article", responses = {
-      @ApiResponse(responseCode = "CREATED", description = "201 Created. New article was stored"),
-      @ApiResponse(responseCode = "BAD_REQUEST", description = "400 Bad request. TODO",
+      @ApiResponse(responseCode = "CREATED", description = "201 Created. New article was stored",
+          content = @Content(schema = @Schema(implementation = ArticleView.class))),
+      @ApiResponse(responseCode = "BAD_REQUEST", description = "400 Bad request. For example missing or empty url",
           content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(responseCode = "UNAUTHORIZED", description = "401 Unauthorized. Missing jwt token",
           content = @Content(schema = @Schema(hidden = true))),
