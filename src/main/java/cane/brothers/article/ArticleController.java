@@ -63,7 +63,7 @@ public class ArticleController implements ArticleApi {
 
   @Override
   @PostMapping(consumes = {"application/json"})
-  public ResponseEntity<?> postArticle(@Valid @RequestBody ArticleForm request) {
+  public ResponseEntity<String> postArticle(@Valid @RequestBody ArticleForm request) {
     try {
       this.svc.addArticle(request);
       return new ResponseEntity<>(HttpStatus.CREATED);

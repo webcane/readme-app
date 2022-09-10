@@ -42,7 +42,7 @@ public interface ArticleApi {
 
   @Operation(summary = "post new article",  method = "POST", responses = {
       @ApiResponse(responseCode = "201", description = "New article was stored",
-          content = @Content(schema = @Schema(implementation = ArticleView.class))),
+          content = @Content(schema = @Schema(implementation = ArticleForm.class))),
       @ApiResponse(responseCode = "400", description = "For example missing or empty url",
           content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(responseCode = "401", description = "Missing jwt token",
@@ -50,6 +50,6 @@ public interface ArticleApi {
       @ApiResponse(responseCode = "409", description = "Article already exists",
           content = @Content(schema = @Schema(hidden = true)))}
   )
-  ResponseEntity<?> postArticle(@RequestBody(content = @Content(schema = @Schema(implementation = ArticleView.class)))
+  ResponseEntity<String> postArticle(@RequestBody(content = @Content(schema = @Schema(implementation = ArticleForm.class)))
                                 ArticleForm request);
 }
