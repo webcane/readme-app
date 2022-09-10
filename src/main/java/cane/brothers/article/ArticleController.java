@@ -45,15 +45,10 @@ public class ArticleController {
       @ApiResponse(responseCode = "200", description = "There are all articles found",
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
-      @ApiResponse(responseCode = "404", description = "Not found"),
-      @ApiResponse(responseCode = "401", description = "Authentication Failure",
+      @ApiResponse(responseCode = "401", description = "Error: response status is 401",
           content = @Content(schema = @Schema(hidden = true)))})
   public ResponseEntity<List<ArticleView>> findAllArticles() {
-    List<ArticleView> result = svc.findAll();
-    if (result.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    return ResponseEntity.ok(result);
+    return ResponseEntity.ok(svc.findAll());
   }
 
   @GetMapping(value = "/findBy", produces = {"application/json"})

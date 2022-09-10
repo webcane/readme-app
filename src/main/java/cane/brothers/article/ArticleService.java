@@ -28,6 +28,10 @@ public class ArticleService {
     this.tagRepo = tagRepo;
   }
 
+  /**
+   *
+   * @return list of articles. list could be empty.
+   */
   public List<ArticleView> findAll() {
     return artRepo.findAll(ArticleView.class);
   }
