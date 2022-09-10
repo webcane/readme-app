@@ -13,7 +13,7 @@ services:
     expose:
       - 5432
     ports:
-      - 5432:5432
+      - "5432:5432"
     #    env_file:
     #      - 'config/database.yml'
     environment:
@@ -35,9 +35,11 @@ services:
     build:
       context: .
     expose:
-      - "8080"
+      - 8080
+      - 5005
     ports:
-      - "8080:8080"
+      - "8080:8080" #api
+      - "5005:5005" #debug
     restart: always
     environment:
       - APP_AUTH_TOKEN_SECRET=$APP_AUTH_TOKEN_SECRET
