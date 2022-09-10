@@ -5,6 +5,7 @@ springdoc:
       theme: obsidian
     path: /swagger-ui
   #   path: /swagger-ui.html
+  show-actuator: true
 
   # https://springdoc.org/#springdoc-openapi-core-properties
   api-docs:
