@@ -32,10 +32,9 @@ public class TagInitLoader {
     if (existedTags.isEmpty()) {
       log.info("Populate tags");
 
-      List<String> tags = Arrays.asList("java", "docker", "microservice", "helm", "azure");
-      for (String tag : tags) {
-        addTag(tag);
-      }
+      Arrays.asList("java", "docker", "microservice", "helm", "azure")
+          .stream()
+          .forEach(this::addTag);
     }
   }
 

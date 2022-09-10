@@ -3,6 +3,7 @@ package cane.brothers.article;
 import cane.brothers.tags.TagEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -65,9 +66,8 @@ public class ArticleInitLoader {
 
   private static void addTags(ArticleEntity a, String[] tags) {
     if (tags != null && tags.length > 0) {
-      for (String tag : tags) {
-        a.addTag(new TagEntity(tag));
-      }
+      Stream.of(tags)
+          .forEach(tag -> a.addTag(new TagEntity(tag)));
     }
   }
 }
