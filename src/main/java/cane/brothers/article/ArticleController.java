@@ -14,6 +14,7 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -42,10 +43,9 @@ public class ArticleController {
 
   @GetMapping(produces = {"application/json"})
   @Operation(summary = "get all articles", responses = {
-      @ApiResponse(responseCode = "200", description = "There are all articles found",
-          content = @Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
-      @ApiResponse(responseCode = "401", description = "Error: response status is 401",
+      @ApiResponse(responseCode = "OK", description = "200 OK. All articles found",
+          content = @Content(array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
+      @ApiResponse(responseCode = "UNAUTHORIZED", description = "401 Unauthorized. Missing jwt token",
           content = @Content(schema = @Schema(hidden = true)))})
   public ResponseEntity<List<ArticleView>> findAllArticles() {
     return ResponseEntity.ok(svc.findAll());
@@ -53,12 +53,14 @@ public class ArticleController {
 
   @GetMapping(value = "/findBy", produces = {"application/json"})
   @Operation(summary = "filter articles by tag name", responses = {
-      @ApiResponse(responseCode = "200", description = "There are some articles found by tag name",
+      @ApiResponse(responseCode = "OK", description = "200 Ok. There are some articles found by tag name",
           content = @Content(array = @ArraySchema(schema = @Schema(implementation = ArticleView.class)))),
-      @ApiResponse(responseCode = "400", description = "Bad request, For example missing tag name"),
-      @ApiResponse(responseCode = "401", description = "Authentication Failure",
+      @ApiResponse(responseCode = "BAD_REQUEST", description = "400 Bad request. Missing tag name",
           content = @Content(schema = @Schema(hidden = true))),
-      @ApiResponse(responseCode = "404", description = "Not found")})
+      @ApiResponse(responseCode = "UNAUTHORIZED", description = "401 Unauthorized. Missing jwt token",
+          content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(responseCode = "NOT_FOUND", description = "404 Not Found. No articles found by given tag name",
+          content = @Content(schema = @Schema(hidden = true)))})
   public ResponseEntity<List<ArticleView>> findArticlesByTagNames(
       @Parameter(explode = Explode.TRUE,
           name = "tags",
@@ -80,25 +82,28 @@ public class ArticleController {
     return ResponseEntity.ok(result);
   }
 
-  @PostMapping(consumes = {"application/json", "application/x-www-form-urlencoded"})
-  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping(consumes = {"application/json"})
   @Operation(summary = "post new article", responses = {
-      @ApiResponse(responseCode = "201", description = "New article were stored in the DB"),
-      @ApiResponse(responseCode = "400", description = "Bad request, For example second attempt to post the same " +
-          "article"),
-      @ApiResponse(responseCode = "401", description = "Authentication Failure",
+      @ApiResponse(responseCode = "CREATED", description = "201 Created. New article was stored"),
+      @ApiResponse(responseCode = "BAD_REQUEST", description = "400 Bad request. TODO",
           content = @Content(schema = @Schema(hidden = true))),
-      @ApiResponse(responseCode = "409", description = "Article already exists")},
-      parameters = {
-          @Parameter(name = "Article", required = true)
-      }
+      @ApiResponse(responseCode = "UNAUTHORIZED", description = "401 Unauthorized. Missing jwt token",
+          content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(responseCode = "CONFLICT", description = "409 Conflict. Article already exists",
+          content = @Content(schema = @Schema(hidden = true)))}
   )
-  public ResponseEntity<?> postArticle(@Valid @RequestBody ArticleForm request) {
+  public ResponseEntity<?> postArticle(@Valid @RequestBody
+                                       @io.swagger.v3.oas.annotations.parameters.RequestBody(content =
+                                       @Content(schema = @Schema(implementation = ArticleView.class)))
+                                       ArticleForm request) {
     try {
       this.svc.addArticle(request);
       return new ResponseEntity<>(HttpStatus.CREATED);
+    } catch (DataIntegrityViolationException sqlEx) {
+      log.warn("Unable to publish article \"{}\". {}", request.getUrl(), sqlEx.getMessage());
+      return new ResponseEntity<>("Article already exists", HttpStatus.CONFLICT);
     } catch (Exception ex) {
-      log.warn("Unable to add article {}. {}", request, ex.getMessage());
+      log.warn("Unable to add publish {}. {}", request, ex.getMessage());
       return new ResponseEntity<>("Unable to publish the article", HttpStatus.BAD_REQUEST);
     }
   }
