@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
  * Created by cane
  */
 @Repository
-public interface ArticleRepository extends JpaRepository<Article, Long> {
-
-  //List<ArticleView> findAllArticles();
+public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
   /**
    * find all Articles like projections
@@ -21,7 +19,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
    * @param <T>  type of the address projection
    * @return projection's list
    */
-  @Query("select a from Article a")
+  @Query("select a from ArticleEntity a")
   <T> List<T> findAll(Class<T> type);
 
   <T> List<T> findAllByTags_ValueIn(Class<T> type, Collection<String> value);

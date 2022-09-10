@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,20 +15,21 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("dev")
+public class ArticleInitLoader {
 
-  private static List<Article> allArticles = new ArrayList<>();
+  private static final List<ArticleEntity> allArticles = new ArrayList<>();
 
-  private ArticleRepository repo;
+  private final ArticleRepository repo;
 
   @Autowired
   public ArticleInitLoader(ArticleRepository repo) {
     this.repo = repo;
   }
 
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent event) {
-    List<Article> existedArticles = this.repo.findAll();
+  @EventListener(ContextRefreshedEvent.class)
+  public void onApplicationEvent() {
+    List<ArticleEntity> existedArticles = this.repo.findAll();
     log.info("Number of articles: " + existedArticles.size());
 
     if (existedArticles.isEmpty()) {
@@ -48,20 +50,20 @@ public class ArticleInitLoader implements ApplicationListener<ContextRefreshedEv
           getArticle("https://blog.sensu.io/how-kubernetes-works", "How Kubernetes works", "", "kubernetes"));
 
       log.info("Populate articles");
-      for (Article a : allArticles) {
-        Article a2 = repo.save(a);
+      for (ArticleEntity a : allArticles) {
+        ArticleEntity a2 = repo.save(a);
         log.info("{} added ", a2);
       }
     }
   }
 
-  private static Article getArticle(String url, String title, String preamble, String... tags) {
-    Article a = new Article(url, title, preamble);
+  private static ArticleEntity getArticle(String url, String title, String preamble, String... tags) {
+    ArticleEntity a = new ArticleEntity(url, title, preamble);
     addTags(a, tags);
     return a;
   }
 
-  private static void addTags(Article a, String[] tags) {
+  private static void addTags(ArticleEntity a, String[] tags) {
     if (tags != null && tags.length > 0) {
       for (String tag : tags) {
         a.addTag(new Tag(tag));

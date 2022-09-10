@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ArticleService {
 
-  private ArticleRepository artRepo;
+  private final ArticleRepository artRepo;
 
-  private TagRepository tagRepo;
+  private final TagRepository tagRepo;
 
   @Autowired
   public ArticleService(ArticleRepository artRepo, TagRepository tagRepo) {
@@ -41,19 +41,18 @@ public class ArticleService {
   }
 
   @Transactional
-  public boolean addArticle(ArticleForm request) {
-    Article a = new Article(request.getUrl(), request.getTitle(), request.getPreamble());
-    if (request.getTags() != null && request.getTags().size() > 0) {
+  public ArticleEntity addArticle(ArticleForm request) {
+    ArticleEntity a = new ArticleEntity(request.getUrl(), request.getTitle(), request.getPreamble());
+    if (request.getTags() != null && request.getTags().isEmpty()) {
       for (TagForm tv : request.getTags()) {
         Tag t = getTag(tv);
         a.addTag(t);
       }
     }
-    a = artRepo.save(a);
-    return (a != null);
+    return artRepo.save(a);
   }
 
-  private Tag getTag(TagForm tv) {
+  protected Tag getTag(TagForm tv) {
     Tag t = new Tag();
     t.setValue(tv.getValue());
     Example<Tag> example = Example.of(t);

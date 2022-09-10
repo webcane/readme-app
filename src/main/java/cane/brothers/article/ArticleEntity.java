@@ -31,7 +31,7 @@ import org.springframework.data.domain.Persistable;
 @Entity
 @NoArgsConstructor
 @Table(name = "ARTICLE")
-public class Article implements Serializable, Persistable<Long> {
+public class ArticleEntity implements Serializable, Persistable<Long> {
 
   private static final long serialVersionUID = 1;
 
@@ -64,19 +64,19 @@ public class Article implements Serializable, Persistable<Long> {
   /**
    * Constructor
    *
-   * @param url
+   * @param url the article url
    */
-  public Article(String url) {
+  public ArticleEntity(String url) {
     this.url = url;
   }
 
   /**
    * Constructor
    *
-   * @param url
-   * @param title
+   * @param url the article url
+   * @param title the article title
    */
-  public Article(String url, String title) {
+  public ArticleEntity(String url, String title) {
     this.url = url;
     this.title = title;
   }
@@ -84,11 +84,11 @@ public class Article implements Serializable, Persistable<Long> {
   /**
    * Constructor
    *
-   * @param url
-   * @param title
-   * @param preamble
+   * @param url the article url
+   * @param title the article title
+   * @param preamble the article preamble
    */
-  public Article(String url, String title, String preamble) {
+  public ArticleEntity(String url, String title, String preamble) {
     this.url = url;
     this.title = title;
     this.preamble = preamble;

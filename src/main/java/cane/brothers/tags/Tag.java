@@ -1,6 +1,6 @@
 package cane.brothers.tags;
 
-import cane.brothers.article.Article;
+import cane.brothers.article.ArticleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -43,24 +43,24 @@ public class Tag implements Serializable, Persistable<Long> {
   @JsonIgnoreProperties("tags")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags", targetEntity = Article.class)
-  private Set<Article> articles = new HashSet<>();
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags", targetEntity = ArticleEntity.class)
+  private Set<ArticleEntity> articles = new HashSet<>();
 
   /**
    * Constructor
    *
-   * @param value
+   * @param value tag name
    */
   public Tag(String value) {
     this.value = value;
   }
 
-  public void addArticle(Article article) {
+  public void addArticle(ArticleEntity article) {
     articles.add(article);
     article.getTags().add(this);
   }
 
-  public void removeArticle(Article article) {
+  public void removeArticle(ArticleEntity article) {
     articles.remove(article);
     article.getTags().remove(this);
   }
