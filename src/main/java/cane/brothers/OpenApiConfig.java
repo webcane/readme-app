@@ -25,6 +25,8 @@ public class OpenApiConfig {
 
   public static final String AUTH_SCHEME = "bearerAuth";
 
-  private OpenApiConfig() {
-  }
+  /**
+   * Constructor
+   */
+  public OpenApiConfig() {}
 }
