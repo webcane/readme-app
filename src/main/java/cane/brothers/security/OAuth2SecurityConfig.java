@@ -1,5 +1,6 @@
 package cane.brothers.security;
 
+import cane.brothers.AppProperties;
 import cane.brothers.security.oauth2.CustomOAuth2UserService;
 import cane.brothers.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import cane.brothers.security.oauth2.OAuth2AuthenticationFailureHandler;
@@ -36,6 +37,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class OAuth2SecurityConfig {
 
   @Autowired
+  private AppProperties appProperties;
+
+  @Autowired
   private CustomUserDetailsService customUserDetailsService;
 
   @Autowired
@@ -62,7 +66,7 @@ public class OAuth2SecurityConfig {
   */
   @Bean
   public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-    return new HttpCookieOAuth2AuthorizationRequestRepository();
+    return new HttpCookieOAuth2AuthorizationRequestRepository(appProperties);
   }
 
   @Bean

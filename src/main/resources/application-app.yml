@@ -2,7 +2,8 @@ app:
   auth:
     # see env var
     #    tokenSecret:
-    tokenExpirationMsec: 864000000
+    tokenExpiration: 864000000ms
+    cookieExpiration: 180s
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,
     # we'll be generating an auth token for the user and sending the token to the
