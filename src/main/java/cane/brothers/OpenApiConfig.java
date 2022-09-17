@@ -1,6 +1,5 @@
 package cane.brothers;
 
-
 import static cane.brothers.OpenApiConfig.AUTH_SCHEME;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

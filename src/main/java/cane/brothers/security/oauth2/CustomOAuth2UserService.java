@@ -7,7 +7,7 @@ import cane.brothers.user.AppUser;
 import cane.brothers.user.AppUserRepository;
 import cane.brothers.user.AuthProvider;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,10 +21,10 @@ import org.springframework.util.StringUtils;
  * @author mniedre
  */
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-  @Autowired
-  private AppUserRepository userRepository;
+  private final AppUserRepository userRepository;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

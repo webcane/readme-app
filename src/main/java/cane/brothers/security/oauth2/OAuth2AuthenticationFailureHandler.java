@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -16,20 +16,10 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author mniedre
  */
 @Component
+@RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-  private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-
-  /**
-   * Constructor
-   *
-   * @param httpCookieOAuth2AuthorizationRequestRepository
-   */
-  @Autowired
-  public OAuth2AuthenticationFailureHandler(
-      HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-    this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-  }
+  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
