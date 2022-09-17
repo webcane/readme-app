@@ -22,7 +22,7 @@ public class TokenProvider {
 
   private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
-  private AppProperties appProperties;
+  private final AppProperties appProperties;
 
   public TokenProvider(AppProperties appProperties) {
     this.appProperties = appProperties;
@@ -32,19 +32,19 @@ public class TokenProvider {
     UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+    Date expiryDate = new Date(now.getTime() + appProperties.auth().tokenExpirationMsec());
 
     return Jwts.builder()
         .setSubject(Long.toString(userPrincipal.getId()))
         .setIssuedAt(new Date())
         .setExpiration(expiryDate)
-        .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+        .signWith(SignatureAlgorithm.HS512, appProperties.auth().tokenSecret())
         .compact();
   }
 
   public Long getUserIdFromToken(String token) {
     Claims claims = Jwts.parser()
-        .setSigningKey(appProperties.getAuth().getTokenSecret())
+        .setSigningKey(appProperties.auth().tokenSecret())
         .parseClaimsJws(token)
         .getBody();
 
@@ -53,7 +53,8 @@ public class TokenProvider {
 
   public boolean validateToken(String authToken) {
     try {
-      Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+      // TODO Optional<Claims> getClaims(String authToken)
+      Jwts.parser().setSigningKey(appProperties.auth().tokenSecret()).parseClaimsJws(authToken);
       return true;
     } catch (SignatureException ex) {
       logger.error("Invalid JWT signature");
