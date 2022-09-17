@@ -40,6 +40,9 @@ public class OAuth2SecurityConfig {
   private AppProperties appProperties;
 
   @Autowired
+  private TokenProvider tokenProvider;
+
+  @Autowired
   private CustomUserDetailsService customUserDetailsService;
 
   @Autowired
@@ -56,7 +59,7 @@ public class OAuth2SecurityConfig {
 
   @Bean
   public TokenAuthenticationFilter tokenAuthenticationFilter() {
-    return new TokenAuthenticationFilter();
+    return new TokenAuthenticationFilter(tokenProvider, customUserDetailsService);
   }
 
   /*
