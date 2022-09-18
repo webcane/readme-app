@@ -1,17 +1,19 @@
 package cane.brothers.tags;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 
 /**
  * @author mniedre
@@ -22,10 +24,14 @@ class TagServiceTest {
     @Mock
     private TagRepository repo;
 
+    @Mock
+    private TagFormToEntityConverter tagConverter;
+
     @InjectMocks
-    private TagServiceDefault svc;
+    private TagService svc = new TagServiceImpl();
 
     @Test
+    @DisplayName("findAll test")
     void test_findAll() {
         DummyTag testTag = new DummyTag();
         List<TagView> tags = new ArrayList<>();
@@ -39,9 +45,41 @@ class TagServiceTest {
     }
 
     @Test
-    @Disabled("tbi")
+    @DisplayName("findTag positive test")
     void test_findTag() {
-        Assertions.fail("tbi");
+        TagForm testTag = new TagForm();
+        testTag.setValue("test");
+
+        TagEntity tagEntity = new TagEntity("test");
+        TagEntity tagRepoEntity = new TagEntity("test");
+        tagRepoEntity.setId(1L);
+
+        Mockito.when(repo.findOne(Example.of(tagEntity))).thenReturn(Optional.of(tagRepoEntity));
+        Mockito.when(tagConverter.convert(testTag)).thenReturn(tagEntity);
+
+        TagEntity result = svc.findTag(testTag);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getValue()).isSameAs(testTag.getValue());
+        assertThat(result.getId()).isSameAs(tagRepoEntity.getId());
+    }
+
+    @Test
+    @DisplayName("findTag negative test")
+    void test_findTag2() {
+        TagForm testTag = new TagForm();
+        testTag.setValue("test2");
+
+        TagEntity tagEntity = new TagEntity("test2");
+
+        Mockito.when(repo.findOne(Example.of(tagEntity))).thenReturn(Optional.empty());
+        Mockito.when(tagConverter.convert(testTag)).thenReturn(tagEntity);
+
+        TagEntity result = svc.findTag(testTag);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getValue()).isSameAs(testTag.getValue());
+        assertThat(result.getId()).isNull();
     }
 
 }
