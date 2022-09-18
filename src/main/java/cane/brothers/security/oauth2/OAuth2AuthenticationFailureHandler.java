@@ -1,6 +1,5 @@
 package cane.brothers.security.oauth2;
 
-import cane.brothers.utils.CookieUtils;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

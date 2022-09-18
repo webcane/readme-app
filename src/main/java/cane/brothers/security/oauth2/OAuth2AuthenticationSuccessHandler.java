@@ -3,7 +3,6 @@ package cane.brothers.security.oauth2;
 import cane.brothers.AppProperties;
 import cane.brothers.exception.BadRequestException;
 import cane.brothers.security.TokenProvider;
-import cane.brothers.utils.CookieUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;

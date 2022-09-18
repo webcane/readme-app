@@ -1,4 +1,4 @@
-package cane.brothers.utils;
+package cane.brothers.security.oauth2;
 
 import java.util.Base64;
 import java.util.Optional;
