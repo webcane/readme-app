@@ -1,8 +1,8 @@
 package cane.brothers.security.oauth2;
 
 import cane.brothers.security.UserPrincipal;
-import cane.brothers.security.oauth2.user.OAuth2UserInfo;
 import cane.brothers.security.oauth2.user.OAuth2UserInfoFactory;
+import cane.brothers.security.oauth2.user.UserInfo;
 import cane.brothers.user.AppUser;
 import cane.brothers.user.AppUserRepository;
 import cane.brothers.user.AuthProvider;
@@ -26,6 +26,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   private final AppUserRepository userRepository;
 
+  private final OAuth2UserInfoFactory oAuth2UserInfoFactory;
+
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oauth2User = super.loadUser(userRequest);
@@ -41,9 +43,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   }
 
   private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oauth2User) {
-    OAuth2UserInfo oauth2UserInfo =
-        OAuth2UserInfoFactory.getUserInfo(userRequest.getClientRegistration().getRegistrationId(),
-            oauth2User.getAttributes());
+    AuthProvider authProvider = AuthProvider.get(userRequest.getClientRegistration().getRegistrationId());
+    UserInfo oauth2UserInfo = oAuth2UserInfoFactory.getUserInfo(authProvider, oauth2User.getAttributes());
+
     if (!StringUtils.hasLength(oauth2UserInfo.getEmail())) {
       throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
     }
@@ -52,7 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     AppUser user;
     if (userOptional.isPresent()) {
       user = userOptional.get();
-      if (!user.getProvider().equals(AuthProvider.get(userRequest.getClientRegistration().getRegistrationId()))) {
+      if (!user.getProvider().equals(authProvider)) {
         throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
             user.getProvider() + " account. Please use your " + user.getProvider() +
             " account to login.");
@@ -65,7 +67,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     return UserPrincipal.create(user, oauth2User.getAttributes());
   }
 
-  private AppUser registerNewUser(OAuth2UserRequest userRequest, OAuth2UserInfo oauth2UserInfo) {
+  protected AppUser registerNewUser(OAuth2UserRequest userRequest, UserInfo oauth2UserInfo) {
     AppUser user = new AppUser();
 
     user.setProvider(AuthProvider.get(userRequest.getClientRegistration().getRegistrationId()));
@@ -76,7 +78,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     return userRepository.save(user);
   }
 
-  private AppUser updateExistingUser(AppUser existingUser, OAuth2UserInfo oauth2UserInfo) {
+  protected AppUser updateExistingUser(AppUser existingUser, UserInfo oauth2UserInfo) {
     existingUser.setName(oauth2UserInfo.getName());
     existingUser.setImageUrl(oauth2UserInfo.getImageUrl());
     return userRepository.save(existingUser);
