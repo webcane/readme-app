@@ -116,7 +116,6 @@ public class OAuth2SecurityConfig {
             .failureHandler(oAuth2AuthenticationFailureHandler)
         );
 
-    // TODO JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter
     // Add our custom Token based authentication filter
     http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();

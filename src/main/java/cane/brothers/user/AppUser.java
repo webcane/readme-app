@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
 /**
- * TODO rename to AppUser
  *
  * @author mniedre
  */
