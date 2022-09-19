@@ -9,11 +9,16 @@ server:
 logging:
   level:
     web: DEBUG
+    org.hibernate.sql: DEBUG
     org.springframework: INFO
     org.springframework.web: DEBUG
+#    org.springframework.orm.jpa: DEBUG
     org.springframework.security: DEBUG
+#    org.springframework.transaction: DEBUG
+#    org.springframework.transaction.interceptor: TRACE
     cane.brothers: DEBUG
     cane.brothers.spring.FilterableHttpTraceFilter: TRACE
+
 
 spring:
   main:
