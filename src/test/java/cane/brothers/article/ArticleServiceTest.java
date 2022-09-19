@@ -2,6 +2,7 @@ package cane.brothers.article;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import cane.brothers.tags.TagService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -19,15 +20,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ArticleServiceTest {
 
     @Mock
-    private ArticleRepository repo;
+    private ArticleRepository artRepo;
 
+    @Mock
+    private TagService tagSvc;
+//
     @InjectMocks
-    private ArticleServiceDefault svc;
+    private ArticleService artSvc = new ArticleServiceImpl();
 
     @Test
     void test_findAll() {
-        Mockito.when(repo.findAll(ArticleView.class)).thenReturn(DummyArticle.get2Articles());
-        List<ArticleView> allArticles = svc.findAll();
+        Mockito.when(artRepo.findAll(ArticleView.class)).thenReturn(DummyArticle.get2Articles());
+        List<ArticleView> allArticles = artSvc.findAll();
         log.info(allArticles.toString());
 
         assertThat(allArticles).isNotNull().hasSize(2);
