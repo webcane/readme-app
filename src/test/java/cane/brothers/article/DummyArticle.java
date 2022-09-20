@@ -11,16 +11,12 @@ import java.util.Set;
 /**
  * @author mniedre
  */
-public class DummyArticle implements ArticleView {
+public record DummyArticle(boolean withTags, int id) implements ArticleView {
 
     private static int counter;
-    private boolean withTags;
-    private int id = 0;
 
     public DummyArticle(boolean withTags) {
-        this.withTags = withTags;
-        id = ++counter;
-
+        this(withTags, ++counter);
     }
 
     public static List<ArticleView> get2Articles() {
@@ -31,8 +27,7 @@ public class DummyArticle implements ArticleView {
     }
 
     public static List<ArticleView> emptyArticles() {
-        List<ArticleView> testArticles = new ArrayList<>();
-        return testArticles;
+        return new ArrayList<>();
     }
 
     public static ArticleView getArticle(boolean withTags) {
@@ -61,13 +56,5 @@ public class DummyArticle implements ArticleView {
             tags.add(new DummyTag());
         }
         return tags;
-    }
-
-    @Override
-    public String toString() {
-        return "(Url=".concat(getUrl())
-                .concat("; Title=").concat(getTitle())
-                .concat("; Preamble=").concat(getPreamble())
-                .concat(")");
     }
 }
