@@ -2,6 +2,8 @@ management:
   endpoint:
     httptrace:
       enabled: true
+#    health:
+#      show-details: always
   endpoints:
     #    enabled-by-default: true
     web:
