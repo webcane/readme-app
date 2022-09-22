@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: app,dev,db,management,oauth2,openapi
+    active: app,info,dev,db,management,oauth2,openapi
 #  config:
 #    activate:
 #      on-profile: app,dev,db,management,oauth2,openapi

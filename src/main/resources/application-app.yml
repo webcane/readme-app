@@ -13,8 +13,3 @@ app:
       - http://localhost:4200/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
-  url: @project.url@
-  name: @project.name@
-  version: @project.version@
-  description: @project.description@
-  email: @project.developers[0].email@

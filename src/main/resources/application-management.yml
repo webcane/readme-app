@@ -13,3 +13,13 @@ management:
         include: '*' #, env, httptrace, routes, beans
 #     cors:
 #       allowed-origins: http://localhost:5000
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+    git:
+      enabled: true
+      mode: simple

@@ -13,7 +13,6 @@
     <description>Web application which holds and manages articles to read</description>
     <url>https://github.com/webcane/readme-app</url>
 
-
     <organization>
         <name>Cane Brothers</name>
     </organization>
@@ -131,7 +130,6 @@
             <version>${commons-lang3.version}</version>
         </dependency>
 
-
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -211,6 +209,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
 
             <!--	Add integration-test/java directory to be visible by Maven	-->

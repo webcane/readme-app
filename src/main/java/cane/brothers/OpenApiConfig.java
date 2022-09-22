@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 
 @Order(2)
-@Profile("openapi")
+@Profile({"openapi","info"})
 @Configuration
 @OpenAPIDefinition(security = {@SecurityRequirement(name = AUTH_SCHEME)})
 @SecurityScheme(name = AUTH_SCHEME, type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "Bearer")
@@ -25,11 +25,11 @@ public class OpenApiConfig {
   public static final String AUTH_SCHEME = "bearerAuth";
 
   @Bean
-  public OpenAPI readmeAppOpenAPI(@Value("${app.name}") String appName,
-                                  @Value("${app.version}") String appVersion,
-                                  @Value("${app.description}") String appDescription,
-                                  @Value("${app.email}") String appEmail,
-                                  @Value("${app.url}") String appUrl) {
+  public OpenAPI readmeAppOpenAPI(@Value("${info.app.name}") String appName,
+                                  @Value("${info.app.version}") String appVersion,
+                                  @Value("${info.app.description}") String appDescription,
+                                  @Value("${info.app.email}") String appEmail,
+                                  @Value("${info.app.url}") String appUrl) {
     return new OpenAPI()
         .info(new Info()
             .title(appName)

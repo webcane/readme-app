@@ -1,0 +1,7 @@
+info:
+  app:
+    url: '@project.url@'
+    name: '@project.name@'
+    version: '@project.version@'
+    email: '@project.developers[0].email@'
+    description: '@project.description@'
