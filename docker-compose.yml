@@ -49,7 +49,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRETs
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET
+    #env_file:
+        #      - .env
     depends_on:
       - db
 
@@ -72,3 +74,21 @@ services:
         target: /assets/config/envConfig.json
     depends_on:
       - app
+
+  prometheus:
+    image: 'prom/prometheus'
+    hostname: readme-app-prometheus
+    container_name: prometheus
+    volumes:
+      - ./env/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: 'grafana/grafana'
+    hostname: readme-app-grafana
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./env/grafana/grafana.env
