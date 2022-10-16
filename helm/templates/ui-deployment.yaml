@@ -28,4 +28,4 @@ spec:
       volumes:
         - name: configmap-volume
           configMap:
-            name: {{ template "readme-app.fullname" . }}-ui-configmap
+            name: {{ template "ui.name" . }}

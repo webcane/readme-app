@@ -55,13 +55,17 @@ Selector labels
 {{- define "app.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+{{- end -}}
 
 {{- define "ui.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "ui.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+{{- end -}}
 
 {{- define "postgresql.hostname" -}}
 {{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{- define "postgresql.url" -}}
+{{- printf  "jdbc:postgresql://$s-postgresql:$d/$s" .Release.Name .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase -}}
+{{- end }}

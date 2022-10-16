@@ -23,7 +23,11 @@ spec:
             - name: "app"
               containerPort: {{ .Values.app.service.targetPort }}
               protocol: TCP
-          env:
+          envFrom:
+            - configMapRef:
+                name: {{ template "readme-app.name" . }}-env
+            - secretRef:
+                name: {{ template "readme-app.name" . }}-env
           volumeMounts:
             - name: configmap-volume
               # Note: 'app.jar' currently resides within the root folder.
@@ -32,7 +36,7 @@ spec:
       volumes:
         - name: configmap-volume
           configMap:
-            name: {{ template "readme-app.fullname" . }}-app-configmap
+            name: {{ template "app.name" . }}
             items:
                 - key: application.yml
                   path: application.yml

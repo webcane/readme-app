@@ -1,0 +1,10 @@
+# Use config map for not-secret configuration data
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "readme-app.fullname" . }}-env
+data:
+{{- range $key, $val := .Values.app.configs }}
+{{ $key | quote | indent 6}}: {{ $val | quote }}
+{{- end}}
