@@ -5,7 +5,7 @@ volumes:
 
 services:
   db:
-    image: postgres:14.3
+    image: postgres:14.5
     hostname: readme-app-db
     container_name: postgres
     volumes:
