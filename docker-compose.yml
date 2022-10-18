@@ -95,10 +95,12 @@ services:
     hostname: readme-app-grafana
     container_name: grafana
     volumes:
-      - ./env/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./env/grafana/provisioning:/etc/grafana/provisioning
       - grafana-data:/var/lib/grafana
     ports:
       - "3100:3100"
     restart: unless-stopped
-    env_file:
-      - ./env/grafana/grafana.env
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_HTTP_PORT=3100
