@@ -2,6 +2,8 @@ version: '3'
 
 volumes:
   db-data:
+  prometheus-data:
+  grafana-data:
 
 services:
   db:
@@ -81,15 +83,22 @@ services:
     hostname: readme-app-prometheus
     container_name: prometheus
     volumes:
-      - ./env/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./env/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
     ports:
       - "9090:9090"
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
 
   grafana:
     image: 'grafana/grafana'
     hostname: readme-app-grafana
     container_name: grafana
+    volumes:
+      - ./env/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
     ports:
-      - '3100:3100'
+      - "3100:3100"
+    restart: unless-stopped
     env_file:
       - ./env/grafana/grafana.env
