@@ -28,15 +28,13 @@ spec:
                 name: {{ template "readme-app.name" . }}-env
             - secretRef:
                 name: {{ template "readme-app.name" . }}-env
-          volumeMounts:
-            - name: configmap-volume
-              # Note: 'app.jar' currently resides within the root folder.
-              mountPath: /config
-              readOnly: true
-      volumes:
-        - name: configmap-volume
-          configMap:
-            name: {{ template "app.name" . }}
-            items:
-                - key: application.yml
-                  path: application.yml
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "readme-app.name" . }}-postgresql
+                  key: password
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "{{ .Values.postgresql.auth.username }}"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.postgresql.containerPorts.postgresql }}/{{ .Values.postgresql.auth.database }}"

@@ -15,18 +15,9 @@ app:
     targetPort: 8080
   nameOverride: ""
   configs:
+    # DEBUG: true
+    APP_OAUTH2_AUTHORIZEDREDIRECTURIS: ["http://kubernetes.docker.internal/oauth2/redirect"]
   secrets:
-  #Spring related configuration
-  configuration:
-    # debug: true
-    app:
-      oauth2:
-        # After successfully authenticating with the OAuth2 Provider,
-        # we'll be generating an auth token for the user and sending the token to the
-        # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
-        # We're not using cookies because they won't work well in mobile clients.
-        authorizedRedirectUris:
-          - "http://kubernetes.docker.internal/oauth2/redirect"
 
 ui:
   name: readme-app-ui
@@ -49,25 +40,16 @@ ui:
 
 
 ## Postgres chart configuration
-## https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 postgresql:
   ## Whether to deploy the Postgres Chart or not
   enabled: true
-  ## PostgreSQL service configuration
-  service:
-    port: 5432
-  postgresqlUsername: postgres
-  postgresqlDatabase: readmeapp_db
-#  postgresqlConfiguration:
-  ## Disable Postgres Persistence
-#  persistence:
-#    enabled: false
-#  initdbScripts:
-#db:
-#  name: readme-app-db
-#  replicaCount: 1
-#  image: postgres:13.1-alpine
-#  port: 5432
+  auth:
+    database: readmeapp_db
+#    password:
+#    postgresPassword:
+    username: app_user
+
 
 ingress:
   enabled: true
