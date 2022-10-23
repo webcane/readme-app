@@ -184,12 +184,21 @@ Run tests to ensure that the chart is well-formed
 helm lint ./helm
 ```
 
-Debugging Templates
+#### nginx ingress controller
+Deploy the ingress controller with the following command:
+```helm
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+```
+
+#### Debugging Templates
 It will validate and verify your chart by connecting to kubernetes api server and after successful validation it will render the manifest in the form of YAMLs (kubernetes resources) locally.
 ```helm
 helm install readme-app ./helm --dry-run --debug
 ```
 
+#### install 
 install `readme-app` chart to the kubernetes cluster
 ```
 helm install readme-app ./helm
@@ -197,9 +206,9 @@ helm install readme-app ./helm
 
 provides required configs and secrets. It will be dynamically located in `readme-app-env` ConfigMap and Secrets respectively and linked into deployment
 ```helm
-helm install --set app.secrets.APP_AUTH_TOKEN_SECRET=*** 
---set app.secrets.SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=*** 
---set app.secrets.SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=*** 
+helm install --set app.secrets.APP_AUTH_TOKEN_SECRET=*** \
+--set app.secrets.SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=*** \
+--set app.secrets.SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=*** \
 --set postgresql.auth.password=*** --set postgresql.auth.postgresPassword=*** readme-app ./helm
 ```
 

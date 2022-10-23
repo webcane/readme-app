@@ -7,6 +7,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "readme-app.fullname" . }}-ingress
+{{/*  namespace: foo*/}}
   labels:
     {{- include "readme-app.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -14,6 +15,7 @@ metadata:
 {{ toYaml . | indent 4 }}
   {{- end }}
 spec:
+  ingressClassName: nginx
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
