@@ -1,5 +1,6 @@
 app:
   auth:
+    cookieExpiration: 1h
     tokenAudience: local
     tokenExpiration: 1d # 86400000ms
     tokenSecret: topsecret

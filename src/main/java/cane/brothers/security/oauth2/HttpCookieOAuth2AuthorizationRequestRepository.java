@@ -1,5 +1,6 @@
 package cane.brothers.security.oauth2;
 
+import cane.brothers.AppProperties;
 import cane.brothers.utils.CookieUtils;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;

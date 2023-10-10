@@ -12,7 +12,9 @@ import org.springframework.boot.convert.DurationUnit;
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(Auth auth, OAuth2 oauth2) {
 
-  public record Auth(String tokenAudience,
+  public record Auth(@DurationUnit(ChronoUnit.SECONDS)
+                     Duration cookieExpiration,
+                     String tokenAudience,
                      @DurationUnit(ChronoUnit.DAYS)
                      Duration tokenExpiration,
                      String tokenSecret,
