@@ -1,13 +1,13 @@
 package cane.brothers.spring;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
-import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
-import org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter;
+import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
+import org.springframework.boot.actuate.web.exchanges.Include;
+import org.springframework.boot.actuate.web.exchanges.servlet.HttpExchangesFilter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +17,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Profile("management")
-public class FilterableHttpTraceFilter extends HttpTraceFilter {
+public class FilterableHttpTraceFilter extends HttpExchangesFilter {
 
-  private List<String> excludes = Arrays.asList("actuator", "management", "favicon", "build");
+  private List<String> excludes = Arrays.asList("actuator", "management", "favicon", "build", "swagger", "swagger-ui");
 
-  @Autowired
-  public FilterableHttpTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer) {
-    super(repository, tracer);
+  /**
+   * Create a new {@link HttpExchangesFilter} instance.
+   *
+   * @param repository the repository used to record events
+   * @param includes   the include options
+   */
+  public FilterableHttpTraceFilter(HttpExchangeRepository repository, Set<Include> includes) {
+    super(repository, includes);
   }
 
   @Override

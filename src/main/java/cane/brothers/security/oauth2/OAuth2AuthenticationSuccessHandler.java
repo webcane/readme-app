@@ -3,13 +3,17 @@ package cane.brothers.security.oauth2;
 import cane.brothers.AppProperties;
 import cane.brothers.exception.BadRequestException;
 import cane.brothers.security.TokenProvider;
+import cane.brothers.security.UserPrincipal;
+import cane.brothers.utils.CookieUtils;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,11 +27,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-  private final TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-  private final AppProperties appProperties;
+    private final AppProperties appProperties;
 
-  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request,
@@ -52,8 +56,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-    // generate new jwt token
-    String token = tokenProvider.createToken(authentication);
+        Map<String, Object> claims = new HashMap<>();
+        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
+            // TODO claims
+            claims.put("name", userPrincipal.getName());
+        }
+
+        // generate new jwt token
+        String token = tokenProvider.createAccessToken(claims);
 
     // add access token to the target url as param
     return UriComponentsBuilder.fromUriString(targetUrl)

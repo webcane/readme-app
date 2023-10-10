@@ -27,9 +27,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <lombok.version>1.18.24</lombok.version>
-        <openApi.version>1.6.11</openApi.version>
-        <spring.version>5.7.3</spring.version>
+        <lombok.version>1.18.30</lombok.version>
+        <openApi.version>1.7.0</openApi.version>
+        <jjwt.version>0.12.2</jjwt.version>
+<!--        <spring.version>5.3.3.RELEASE</spring.version>-->
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <skip.integration.tests>false</skip.integration.tests>
     </properties>
@@ -37,7 +38,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version>
+        <version>3.1.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -64,8 +65,14 @@
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 
         <dependency>
@@ -104,12 +111,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- DB -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -130,6 +131,7 @@
             <version>${commons-lang3.version}</version>
         </dependency>
 
+
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -147,7 +149,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>${spring.version}</version>
+<!--            <version>${spring.version}</version>-->
             <scope>test</scope>
         </dependency>
 
@@ -201,6 +203,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>cane.brothers.Application</mainClass>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
