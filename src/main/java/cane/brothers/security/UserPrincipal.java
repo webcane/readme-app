@@ -1,12 +1,10 @@
 package cane.brothers.security;
 
+import cane.brothers.security.oauth2.DefaultOAuth2Authorities;
 import cane.brothers.user.AppUser;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -31,14 +29,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
   }
 
   public static UserPrincipal create(AppUser user) {
-    List<GrantedAuthority> authorities = Collections.
-        singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
     return new UserPrincipal(
         user.getId(),
         user.getEmail(),
         user.getPassword(),
-        authorities
+        DefaultOAuth2Authorities.DEFAULT_AUTHORITIES
     );
   }
 
