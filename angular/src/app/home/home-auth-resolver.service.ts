@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '@app/shared/security/auth.service';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import {AuthService} from '@app/shared/security/auth.service';
 import Utils from '@app/shared/service/utils';
 
 @Injectable()
-export class HomeAuthResolver implements Resolve<boolean> {
+export class HomeAuthResolver  {
 
   constructor(
     private router: Router,
@@ -23,7 +23,7 @@ export class HomeAuthResolver implements Resolve<boolean> {
 
       // navigate to home to update header links and reload content
       Utils.reloadUrl(this.router);
-    } 
+    }
 
     return this.authService.isAuthenticated();
   }

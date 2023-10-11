@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
-export class EditorAuthResolver implements Resolve<boolean> {
+export class EditorAuthResolver  {
 
   constructor(
     private router: Router,
