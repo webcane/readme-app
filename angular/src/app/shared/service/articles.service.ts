@@ -18,7 +18,7 @@ export class ArticlesService {
   }
 
   public create(article: Article): Observable<any> {
-    let url = '/articles';
+    let url = '/api/articles';
     return this.apiService.post<Article>(url, article)
     .pipe(
       tap(next => Utils.log('the article were published successfully'),
@@ -65,7 +65,7 @@ export class ArticlesService {
   }
 
   private getUrl(tagName: string): string {
-    let url = '/articles';
+    let url = '/api/articles';
     if (tagName) {
       url = url + '/findBy?tags=' + tagName;
     }

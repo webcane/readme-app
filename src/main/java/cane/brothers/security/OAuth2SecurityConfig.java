@@ -2,8 +2,8 @@ package cane.brothers.security;
 
 import cane.brothers.security.oauth2.CustomOAuth2UserService;
 import cane.brothers.security.preauth.PreAuthSecurityConfigurer;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,8 +16,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -32,10 +32,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class OAuth2SecurityConfig {
 
-  // TODO
-  private final CustomUserDetailsService customUserDetailsService;
-
   private final CustomOAuth2UserService customOAuth2UserService;
+  private final SimpleUrlAuthenticationSuccessHandler successHandler;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,16 +41,24 @@ public class OAuth2SecurityConfig {
     http.csrf(c -> c.disable());
     http.httpBasic(h -> h.disable());
     http.formLogin(f -> f.disable());
+
     // disable session creation on Spring Security
     http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    // TODO redirect to frontend
+    // store SecurityContext in Cookie / delete Cookie on logout
+    //http.securityContext(sc -> sc.securityContextRepository(cookieSecurityContextRepository));
+    //http.logout(l -> l.permitAll().deleteCookies(SignedUserInfoCookie.NAME));
+    // deactivate RequestCache and append originally requested URL as query parameter to login form request
+    //http.requestCache(rc -> rc.disable());
+
     http.authorizeHttpRequests(a ->
         a.requestMatchers("/", "/error", "/favicon.ico",
                 "/*/*.png", "/*/*.gif", "/*/*.svg", "/*/*.jpg",
                 "/*/*.html", "/*/*.css", "/*/*.js").permitAll()
-            .requestMatchers("/auth/*", "/oauth2/*", "/login").permitAll()
+            .requestMatchers("/auth/*", "/oauth2/*", "/login", "/login*", "/login/*").permitAll()
             .requestMatchers("/public/*", "/favicon/*", "/build/*", "/fonts/*").permitAll()
             .requestMatchers("/management/*", "/actuator/*").permitAll()
-            .requestMatchers("/tags", "/articles", "/user").hasAnyRole("USER")
+            .requestMatchers("/api/tags", "/api/articles", "/api/user").hasAnyRole("USER")
             .anyRequest().authenticated()
     );
 //    http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
@@ -61,7 +67,9 @@ public class OAuth2SecurityConfig {
     http.exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(new Http403ForbiddenEntryPoint(),
         AnyRequestMatcher.INSTANCE));
     // 1. oauth2 login and preAuth token generation
-    http.oauth2Login(o -> o.userInfoEndpoint(u -> u.userService(customOAuth2UserService)));
+    http.oauth2Login(o -> o.defaultSuccessUrl("/login/token")
+        .successHandler(successHandler)
+        .userInfoEndpoint(u -> u.userService(customOAuth2UserService)));
     // 2. preAuth token direct usage
     http.apply(preAuthSecurityConfigurer());
     return http.build();
@@ -72,17 +80,9 @@ public class OAuth2SecurityConfig {
   }
 
   @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    // configuration.applyPermitDefaultValues();
-    //configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
-    configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Authorization"));
-    // configuration.setMaxAge();
-    // this line is important it sends only specified domain instead of *
-    configuration.setAllowCredentials(true);
+  CorsConfigurationSource corsConfigurationSource(CorsEndpointProperties corsProperties) {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
+    source.registerCorsConfiguration("/**", corsProperties.toCorsConfiguration());
     return source;
   }
 }

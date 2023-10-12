@@ -14,6 +14,7 @@ logging:
     org.springframework.web: DEBUG
 #    org.springframework.orm.jpa: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.security.web.authentication: TRACE
 #    org.springframework.transaction: DEBUG
 #    org.springframework.transaction.interceptor: TRACE
     cane.brothers: DEBUG

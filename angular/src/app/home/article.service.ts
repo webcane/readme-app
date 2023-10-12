@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Article } from '@app/shared/model/article.model';
-import { Tag } from '@app/shared/model/tag.model';
-import { ApiService } from '@app/shared/service/api.service';
-import { BehaviorSubject, from, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, delay, map, skip, switchMap, take, tap, toArray } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Article} from '@app/shared/model/article.model';
+import {Tag} from '@app/shared/model/tag.model';
+import {ApiService} from '@app/shared/service/api.service';
+import {BehaviorSubject, from, Observable, of, Subject} from 'rxjs';
+import {catchError, debounceTime, delay, map, skip, switchMap, take, tap, toArray} from 'rxjs/operators';
 
 interface SearchResult {
   articles: Article[];
@@ -142,7 +142,7 @@ export class ArticleService {
   }
 
   private static getUrl(tagName: string): string {
-    let url = '/articles';
+    let url = '/api/articles';
     if (tagName) {
       url = url + '/findBy?tags=' + tagName;
     }

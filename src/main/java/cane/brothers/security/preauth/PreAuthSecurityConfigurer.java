@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedG
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
 import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 public class PreAuthSecurityConfigurer extends AbstractHttpConfigurer<PreAuthSecurityConfigurer, HttpSecurity> {
@@ -48,7 +49,7 @@ public class PreAuthSecurityConfigurer extends AbstractHttpConfigurer<PreAuthSec
     // do not throw exception when header is not present
     filter.setExceptionIfHeaderMissing(false);
     // TODO
-    //filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/**"));
+    filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/**"));
     filter.setAuthenticationManager(authenticationManager);
     filter.setAuthenticationDetailsSource((AuthenticationDetailsSource<HttpServletRequest,
         PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails>) (request) ->

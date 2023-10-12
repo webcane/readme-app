@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/api/articles")
 @Tag(name = "article-controller", description = "The articles API")
 @RequiredArgsConstructor
 public class ArticleController implements ArticleApi {

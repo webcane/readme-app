@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Tag} from '@app/shared/model/tag.model';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {Article} from '@app/shared/model/article.model';
 import {ApiService} from '@app/shared/service/api.service';
 import Utils from '@app/shared/service/utils';
 
@@ -31,7 +30,7 @@ export class TagsService {
   }
 
   private getTags(): Observable<Tag[]> {
-    const url = '/tags';
+    const url = '/api/tags';
 
     return this.apiService.get<Tag[]>(url)
       .pipe(

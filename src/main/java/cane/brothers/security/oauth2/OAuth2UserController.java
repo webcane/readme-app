@@ -31,7 +31,7 @@ public class OAuth2UserController {
 //    }
 
 
-  @GetMapping("/user")
+  @GetMapping("/api/user")
   @PreAuthorize("hasRole('USER')")
   public AppUser getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
     return userRepository.findById(userPrincipal.getId())

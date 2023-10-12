@@ -11,8 +11,12 @@ management:
       exposure:
         # include: httptrace,env,info,health,metrics,conditions,beans,configprops #, env, httptrace, routes, beans
         include: '*' #, env, httptrace, routes, beans
-#     cors:
-#       allowed-origins: http://localhost:5000
+      cors:
+        allowed-origins: "http://localhost:8080,http://localhost:4200,https://${domain}"
+        allowed-methods: "*"
+        allowed-headers: "accept,api_key,Authorization,Content-Type,Origin"
+        allow-credentials: true # sends only specified domain instead of *
+        # max-age: 1800
   info:
     build:
       enabled: true

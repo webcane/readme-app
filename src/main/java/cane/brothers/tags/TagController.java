@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by cane
  */
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/api/tags")
 public class TagController implements TagApi {
 
   private TagService svc;
