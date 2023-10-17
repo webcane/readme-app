@@ -2,6 +2,7 @@ package cane.brothers.security;
 
 import cane.brothers.security.oauth2.CustomOAuth2UserService;
 import cane.brothers.security.preauth.PreAuthSecurityConfigurer;
+import cane.brothers.security.stateless.OAuth2AuthenticationFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -32,8 +35,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class OAuth2SecurityConfig {
 
+
+  public static final String DEFAULT_LOGIN_REDIRECT_URI = "/login/token";
+
   private final CustomOAuth2UserService customOAuth2UserService;
   private final SimpleUrlAuthenticationSuccessHandler successHandler;
+  private final OAuth2AuthenticationFailureHandler failureHandler;
+
+  private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> cookieAuthorizationRequestRepository;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -67,9 +76,19 @@ public class OAuth2SecurityConfig {
     http.exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(new Http403ForbiddenEntryPoint(),
         AnyRequestMatcher.INSTANCE));
     // 1. oauth2 login and preAuth token generation
-    http.oauth2Login(o -> o.defaultSuccessUrl("/login/token")
+    http.oauth2Login(o -> o.defaultSuccessUrl(DEFAULT_LOGIN_REDIRECT_URI)
+        /**
+         By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
+         the authorization request. But, since our service is stateless, we can't save it in
+         the session. We'll save the request in a Base64 encoded cookie instead.
+         */
+        .authorizationEndpoint(a -> a.authorizationRequestRepository(cookieAuthorizationRequestRepository))
+        .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+        // remove cookie, generate access token and redirect
         .successHandler(successHandler)
-        .userInfoEndpoint(u -> u.userService(customOAuth2UserService)));
+        // remove cookie and redirect
+        .failureHandler(failureHandler));
+
     // 2. preAuth token direct usage
     http.apply(preAuthSecurityConfigurer());
     return http.build();

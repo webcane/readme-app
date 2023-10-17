@@ -1,14 +1,9 @@
-package cane.brothers.security;
+package cane.brothers.security.jwt;
 
 import cane.brothers.AppProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwe;
+import cane.brothers.security.UserPrincipal;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import java.security.Key;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -26,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TokenProvider {
+class JwtTokenProvider {
 
   private final AppProperties appProperties;
 
@@ -59,27 +54,4 @@ public class TokenProvider {
         .signWith(key, signatureAlgorithm);
     return jwtBuilder.compact();
   }
-
-  public Claims getTokenClaims(String bearerToken) {
-    try {
-      var jwt = Jwts.parser()
-          .verifyWith(this.keys)
-          .build()
-          .parse(bearerToken)
-          .accept(Jwe.CLAIMS);
-      return jwt.getPayload();
-    } catch (SignatureException ex) {
-      log.error("Invalid JWT signature", ex.getCause());
-    } catch (MalformedJwtException ex) {
-      log.error("Invalid JWT token", ex.getCause());
-    } catch (ExpiredJwtException ex) {
-      log.error("Expired JWT token", ex.getCause());
-    } catch (UnsupportedJwtException ex) {
-      log.error("Unsupported JWT token", ex.getCause());
-    } catch (IllegalArgumentException ex) {
-      log.error("JWT claims string is empty.", ex.getCause());
-    }
-    return null;
-  }
-
 }

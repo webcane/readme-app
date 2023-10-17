@@ -1,5 +1,7 @@
 package cane.brothers.security.login;
 
+import static cane.brothers.security.OAuth2SecurityConfig.DEFAULT_LOGIN_REDIRECT_URI;
+
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ public class LoginController {
     response.sendRedirect("/oauth2/authorization/github");
   }
 
-  @RequestMapping(value = "/login/token")
+  @RequestMapping(value = DEFAULT_LOGIN_REDIRECT_URI)
   // @CurrentUser UserPrincipal userPrincipal
   public void loginToken() {
     //log.info("login " + userPrincipal.getName());

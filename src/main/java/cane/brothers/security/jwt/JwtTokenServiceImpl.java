@@ -1,17 +1,16 @@
 package cane.brothers.security.jwt;
 
 import cane.brothers.AppProperties;
-import cane.brothers.security.TokenProvider;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JwtTokenServiceImpl implements JwtTokenService {
+class JwtTokenServiceImpl implements JwtTokenService {
 
 
-  private final TokenProvider tokenProvider;
+  private final JwtTokenProvider jwtTokenProvider;
 
   private final AppProperties appProperties;
 
@@ -21,6 +20,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         "role", "user",
         "sub", appProperties.auth().tokenSubject(),
         "aud", appProperties.auth().tokenAudience());
-    return tokenProvider.createAccessToken(claims);
+    return jwtTokenProvider.createAccessToken(claims);
   }
 }
