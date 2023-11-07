@@ -3,6 +3,7 @@ package cane.brothers.security;
 import cane.brothers.security.oauth2.CustomOAuth2UserService;
 import cane.brothers.security.preauth.PreAuthSecurityConfigurer;
 import cane.brothers.security.stateless.OAuth2AuthenticationFailureHandler;
+import cane.brothers.security.stateless.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +14,11 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,10 +38,12 @@ public class OAuth2SecurityConfig {
   public static final String DEFAULT_LOGIN_REDIRECT_URI = "/login/token";
 
   private final CustomOAuth2UserService customOAuth2UserService;
-  private final SimpleUrlAuthenticationSuccessHandler successHandler;
+  private final OAuth2AuthenticationSuccessHandler successHandler;
   private final OAuth2AuthenticationFailureHandler failureHandler;
 
   private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> cookieAuthorizationRequestRepository;
+
+  private final PreAuthSecurityConfigurer preAuthConfigurer;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,6 +76,7 @@ public class OAuth2SecurityConfig {
 //        response.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
     http.exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(new Http403ForbiddenEntryPoint(),
         AnyRequestMatcher.INSTANCE));
+
     // 1. oauth2 login and preAuth token generation
     http.oauth2Login(o -> o.defaultSuccessUrl(DEFAULT_LOGIN_REDIRECT_URI)
         /**
@@ -90,12 +92,8 @@ public class OAuth2SecurityConfig {
         .failureHandler(failureHandler));
 
     // 2. preAuth token direct usage
-    http.apply(preAuthSecurityConfigurer());
+    http.apply(preAuthConfigurer);
     return http.build();
-  }
-
-  private AbstractHttpConfigurer<PreAuthSecurityConfigurer, HttpSecurity> preAuthSecurityConfigurer() {
-    return new PreAuthSecurityConfigurer();
   }
 
   @Bean
