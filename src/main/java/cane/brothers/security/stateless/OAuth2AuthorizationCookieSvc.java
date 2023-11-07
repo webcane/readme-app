@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OAuth2AuthorizationOAuth2AuthorizationCookieSvc implements OAuth2AuthorizationCookieService {
+public class OAuth2AuthorizationCookieSvc implements OAuth2AuthorizationCookieService {
 
   private final AppProperties appProperties;
 

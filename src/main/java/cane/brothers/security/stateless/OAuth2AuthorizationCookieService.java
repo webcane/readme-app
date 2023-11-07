@@ -19,7 +19,7 @@ public interface OAuth2AuthorizationCookieService {
   }
 
   default Optional<Cookie> getRedirectUriCookie(HttpServletRequest request) {
-    return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+    return CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME);
   }
 
   void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
