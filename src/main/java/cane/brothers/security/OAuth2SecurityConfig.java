@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,8 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.util.matcher.AnyRequestMatcher;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -61,6 +61,7 @@ public class OAuth2SecurityConfig {
     // deactivate RequestCache and append originally requested URL as query parameter to login form request
     //http.requestCache(rc -> rc.disable());
 
+    // restrict access to endpoints
     http.authorizeHttpRequests(a ->
         a.requestMatchers("/", "/error", "/favicon.ico",
                 "/*/*.png", "/*/*.gif", "/*/*.svg", "/*/*.jpg",
@@ -71,13 +72,19 @@ public class OAuth2SecurityConfig {
             .requestMatchers("/api/tags", "/api/articles", "/api/user").hasAnyRole("USER")
             .anyRequest().authenticated()
     );
-//    http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+
 //    http.exceptionHandling(e -> e.authenticationEntryPoint((request, response, authException) ->
 //        response.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
-    http.exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(new Http403ForbiddenEntryPoint(),
-        AnyRequestMatcher.INSTANCE));
+//    http.exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(new Http403ForbiddenEntryPoint(),
+//        AnyRequestMatcher.INSTANCE));
 
-    // 1. oauth2 login and preAuth token generation
+    // throws Access Denied exception only once
+    http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN)));
+
+    // preAuth token direct usage
+    http.apply(preAuthConfigurer);
+
+    // oauth2 login and preAuth token generation
     http.oauth2Login(o -> o.defaultSuccessUrl(DEFAULT_LOGIN_REDIRECT_URI)
         /**
          By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
@@ -91,8 +98,8 @@ public class OAuth2SecurityConfig {
         // remove cookie and redirect
         .failureHandler(failureHandler));
 
-    // 2. preAuth token direct usage
-    http.apply(preAuthConfigurer);
+
+
     return http.build();
   }
 
