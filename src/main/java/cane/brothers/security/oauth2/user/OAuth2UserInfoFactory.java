@@ -1,7 +1,6 @@
 package cane.brothers.security.oauth2.user;
 
 import cane.brothers.security.oauth2.OAuth2AuthenticationProcessingException;
-import cane.brothers.user.AuthProvider;
 import java.util.Map;
 
 /**

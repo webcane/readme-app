@@ -2,10 +2,9 @@ package cane.brothers.security.oauth2;
 
 
 import cane.brothers.exception.ResourceNotFoundException;
-import cane.brothers.security.CurrentUser;
-import cane.brothers.security.UserPrincipal;
-import cane.brothers.user.AppUser;
-import cane.brothers.user.AppUserRepository;
+import cane.brothers.security.appuser.AppUser;
+import cane.brothers.security.appuser.AppUserRepository;
+import cane.brothers.security.oauth2.user.CurrentUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;

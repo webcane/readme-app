@@ -1,4 +1,4 @@
-package cane.brothers.security;
+package cane.brothers.security.oauth2.user;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

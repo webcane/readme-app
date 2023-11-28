@@ -27,6 +27,13 @@ Below you can find endpoints exposed by this microservice.
 * [Configprops](http://localhost:8080/management/configprops)
 * [Mappings](http://localhost:8080/management/mappings)
 * [Trace](http://localhost:8080/management/trace)
+* [Prometheus](http://localhost:8080/management/Prometheus)
+
+# Monitoring
+
+To collect metrics uses [Prometheus](http://localhost:9090).
+
+[Grafana](http://localhost:3000) monitors metrics
 
 ## Running on local machine
 ### environmental variables

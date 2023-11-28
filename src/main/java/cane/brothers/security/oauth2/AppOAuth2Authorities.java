@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.GrantedAuthoritiesContainer;
 
-public class DefaultOAuth2Authorities implements GrantedAuthoritiesContainer {
+public class AppOAuth2Authorities implements GrantedAuthoritiesContainer {
 
   public static final List<GrantedAuthority> DEFAULT_AUTHORITIES = AuthorityUtils.createAuthorityList("ROLE_USER");
 

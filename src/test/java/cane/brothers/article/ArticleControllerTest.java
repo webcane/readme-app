@@ -1,5 +1,10 @@
 package cane.brothers.article;
 
+import cane.brothers.Api;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * @author mniedre
@@ -48,7 +48,7 @@ public class ArticleControllerTest {
     void test_whenNoArticlesExist_thenHttp200_andEmptyArticlesListReturned() throws Exception {
         Mockito.doReturn(DummyArticle.emptyArticles()).when(svc).findAll();
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(Api.Article.PATH))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value()))
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -60,7 +60,7 @@ public class ArticleControllerTest {
     void test_when2ArticlesExist_thenHttp200_and2ArticlesReturned() throws Exception {
         Mockito.doReturn(DummyArticle.get2Articles()).when(svc).findAll();
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(Api.Article.PATH))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value()))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ public class ArticleControllerTest {
         testArticles.add(DummyArticle.getArticle(true));
         Mockito.doReturn(testArticles).when(svc).findByTagNames(tagsToSearch);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tags=" + tagName))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(Api.Article.PATH + "/findBy?tags=" + tagName))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value()))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -96,7 +96,7 @@ public class ArticleControllerTest {
         List<ArticleView> testArticles = new ArrayList<>();
         Mockito.doReturn(testArticles).when(svc).findByTagNames(tagsToSearch);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tags=" + tagName))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(Api.Article.PATH  + "/findBy?tags=" + tagName))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()));
     }
@@ -105,7 +105,8 @@ public class ArticleControllerTest {
     void test_whenFilterArticlesByEmptyTag_thenHttp400() throws Exception {
         final String tagName = "";
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/articles/findBy?tag=" + tagName))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(Api.Article.PATH + "" +
+                "/findBy?tag=" + tagName))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.BAD_REQUEST.value()));
     }

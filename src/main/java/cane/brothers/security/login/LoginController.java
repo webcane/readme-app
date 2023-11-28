@@ -1,17 +1,16 @@
 package cane.brothers.security.login;
 
-import static cane.brothers.security.OAuth2SecurityConfig.DEFAULT_LOGIN_REDIRECT_URI;
+import static cane.brothers.security.SecurityConfig.DEFAULT_LOGIN_REDIRECT_URI;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 public class LoginController {
 
   @RequestMapping(value = "/login")
@@ -23,5 +22,10 @@ public class LoginController {
   // @CurrentUser UserPrincipal userPrincipal
   public void loginToken() {
     //log.info("login " + userPrincipal.getName());
+  }
+
+  @GetMapping("/favicon.ico")
+  void returnNoFavicon() {
+    // gracefully disable favicon
   }
 }

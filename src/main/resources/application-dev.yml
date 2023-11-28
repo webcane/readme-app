@@ -12,6 +12,7 @@ logging:
     org.hibernate.sql: DEBUG
     org.springframework: INFO
     org.springframework.web: DEBUG
+    org.springframework.boot.actuate: INFO
 #    org.springframework.orm.jpa: DEBUG
     org.springframework.security: DEBUG
     org.springframework.security.web.authentication: TRACE

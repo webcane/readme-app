@@ -7,6 +7,7 @@ import cane.brothers.tags.TagService;
 import java.util.Collection;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +30,12 @@ class ArticleServiceTest {
     private TagService tagSvc;
 //
     @InjectMocks
-    private ArticleService artSvc = new ArticleServiceImpl();
+    private ArticleServiceImpl artSvc;
+
+    @BeforeEach
+    public void setUp() {
+        artSvc = new ArticleServiceImpl(artRepo, tagSvc);
+    }
 
     @Test
     void test_findAll() {

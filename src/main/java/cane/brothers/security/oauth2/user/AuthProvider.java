@@ -1,4 +1,4 @@
-package cane.brothers.user;
+package cane.brothers.security.oauth2.user;
 
 import org.springframework.util.Assert;
 

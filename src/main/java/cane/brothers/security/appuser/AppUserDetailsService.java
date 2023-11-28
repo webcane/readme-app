@@ -1,7 +1,7 @@
-package cane.brothers.security;
+package cane.brothers.security.appuser;
 
 import cane.brothers.exception.ResourceNotFoundException;
-import cane.brothers.user.AppUserRepository;
+import cane.brothers.security.oauth2.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class AppUserDetailsService implements UserDetailsService {
 
   private final AppUserRepository userRepository;
 

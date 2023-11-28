@@ -1,7 +1,7 @@
 package cane.brothers.security.jwt;
 
 import cane.brothers.AppProperties;
-import cane.brothers.security.UserPrincipal;
+import cane.brothers.security.oauth2.UserPrincipal;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;

@@ -1,7 +1,6 @@
-package cane.brothers.security;
+package cane.brothers.security.oauth2;
 
-import cane.brothers.security.oauth2.DefaultOAuth2Authorities;
-import cane.brothers.user.AppUser;
+import cane.brothers.security.appuser.AppUser;
 import java.util.Collection;
 import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,7 +32,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         user.getId(),
         user.getEmail(),
         user.getPassword(),
-        DefaultOAuth2Authorities.DEFAULT_AUTHORITIES
+        AppOAuth2Authorities.DEFAULT_AUTHORITIES
     );
   }
 

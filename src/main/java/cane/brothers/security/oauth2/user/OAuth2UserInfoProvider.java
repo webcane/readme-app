@@ -1,6 +1,5 @@
 package cane.brothers.security.oauth2.user;
 
-import cane.brothers.user.AuthProvider;
 import java.util.Map;
 
 /**

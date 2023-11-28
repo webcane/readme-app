@@ -1,6 +1,6 @@
 package cane.brothers.security;
 
-import cane.brothers.security.oauth2.CustomOAuth2UserService;
+import cane.brothers.security.oauth2.AppOAuth2UserService;
 import cane.brothers.security.preauth.PreAuthSecurityConfigurer;
 import cane.brothers.security.stateless.OAuth2AuthenticationFailureHandler;
 import cane.brothers.security.stateless.OAuth2AuthenticationSuccessHandler;
@@ -15,6 +15,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -32,12 +33,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class OAuth2SecurityConfig {
+public class SecurityConfig {
 
 
   public static final String DEFAULT_LOGIN_REDIRECT_URI = "/login/token";
 
-  private final CustomOAuth2UserService customOAuth2UserService;
+  private final AppOAuth2UserService appOAuth2UserService;
   private final OAuth2AuthenticationSuccessHandler successHandler;
   private final OAuth2AuthenticationFailureHandler failureHandler;
 
@@ -63,12 +64,9 @@ public class OAuth2SecurityConfig {
 
     // restrict access to endpoints
     http.authorizeHttpRequests(a ->
-        a.requestMatchers("/", "/error", "/favicon.ico",
-                "/*/*.png", "/*/*.gif", "/*/*.svg", "/*/*.jpg",
-                "/*/*.html", "/*/*.css", "/*/*.js").permitAll()
+        a.requestMatchers("/", "/error").permitAll()
             .requestMatchers("/auth/*", "/oauth2/*", "/login", "/login*", "/login/*").permitAll()
             .requestMatchers("/public/*", "/favicon/*", "/build/*", "/fonts/*").permitAll()
-            .requestMatchers("/management/*", "/actuator/*").permitAll()
             .requestMatchers("/api/tags", "/api/articles", "/api/user").hasAnyRole("USER")
             .anyRequest().authenticated()
     );
@@ -92,13 +90,11 @@ public class OAuth2SecurityConfig {
          the session. We'll save the request in a Base64 encoded cookie instead.
          */
         .authorizationEndpoint(a -> a.authorizationRequestRepository(cookieAuthorizationRequestRepository))
-        .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+        .userInfoEndpoint(u -> u.userService(appOAuth2UserService))
         // remove cookie, generate access token and redirect
         .successHandler(successHandler)
         // remove cookie and redirect
         .failureHandler(failureHandler));
-
-
 
     return http.build();
   }
@@ -108,5 +104,22 @@ public class OAuth2SecurityConfig {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsProperties.toCorsConfiguration());
     return source;
+  }
+
+  @Bean
+  public WebSecurityCustomizer webSecurity() {
+    return web -> web.ignoring()
+        // swagger
+        .requestMatchers("/webjars/**", "/v3/api-docs/**", "/swagger", "/swagger/swagger-config",
+            "/swagger-ui", "/swagger-ui/**")
+        // jwt
+        .requestMatchers("/jwt", "/jwt/**", "/token/**")
+        // login
+        .requestMatchers("/login", DEFAULT_LOGIN_REDIRECT_URI + "*")
+        // resources
+        .requestMatchers("/favicon.ico", "/*/*.png", "/*/*.gif", "/*/*.svg", "/*/*.jpg", "/*/*.html",
+            "/*/*.css", "/*/*.js")
+        // actuator
+        .requestMatchers("/management", "/management/**", "/actuator/**");
   }
 }

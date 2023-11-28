@@ -1,6 +1,6 @@
 package cane.brothers.security.preauth;
 
-import cane.brothers.security.oauth2.DefaultOAuth2Authorities;
+import cane.brothers.security.oauth2.AppOAuth2Authorities;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +33,6 @@ public class PreAuthSecurityConfig {
   protected AuthenticationDetailsSource<HttpServletRequest,
       PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails> authDetailsSource() {
     return (request) -> new PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails(request,
-            DefaultOAuth2Authorities.DEFAULT_AUTHORITIES);
+            AppOAuth2Authorities.DEFAULT_AUTHORITIES);
   }
 }

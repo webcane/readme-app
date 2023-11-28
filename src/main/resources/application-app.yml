@@ -2,6 +2,7 @@ app:
   auth:
     cookieExpiration: 1h
     tokenAudience: local
+    tokenSubject: readme-app
     tokenExpiration: 1d # 86400000ms
     tokenSecret: topsecret
   oauth2:
@@ -9,4 +10,4 @@ app:
     # we'll be generating an auth token for the user and sending the token to the
     # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
     # We're not using cookies because they won't work well in mobile clients.
-    authorizedRedirectUri: ${authorizedRedirectUri}
+    authorizedRedirectUri: "http://localhost:4200/oauth2/redirect"

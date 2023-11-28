@@ -1,5 +1,6 @@
-package cane.brothers.user;
+package cane.brothers.security.appuser;
 
+import cane.brothers.security.oauth2.user.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

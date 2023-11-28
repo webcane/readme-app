@@ -1,5 +1,6 @@
 package cane.brothers.article;
 
+import cane.brothers.Api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Collection;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/articles")
+@RequestMapping(Api.Article.PATH)
 @Tag(name = "article-controller", description = "The articles API")
 @RequiredArgsConstructor
 public class ArticleController implements ArticleApi {
@@ -31,11 +32,7 @@ public class ArticleController implements ArticleApi {
 
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<ArticleView>> findAllArticles() {
-        List<ArticleView> result = svc.findAll();
-        if (result.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(svc.findAll());
     }
 
     @GetMapping(value = "/findBy", produces = {"application/json"})

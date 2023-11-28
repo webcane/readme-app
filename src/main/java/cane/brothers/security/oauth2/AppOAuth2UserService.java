@@ -1,11 +1,10 @@
 package cane.brothers.security.oauth2;
 
-import cane.brothers.security.UserPrincipal;
+import cane.brothers.security.appuser.AppUser;
+import cane.brothers.security.appuser.AppUserRepository;
+import cane.brothers.security.oauth2.user.AuthProvider;
 import cane.brothers.security.oauth2.user.OAuth2UserInfo;
 import cane.brothers.security.oauth2.user.OAuth2UserInfoFactory;
-import cane.brothers.user.AppUser;
-import cane.brothers.user.AppUserRepository;
-import cane.brothers.user.AuthProvider;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -22,7 +21,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
     private final AppUserRepository userRepository;
 

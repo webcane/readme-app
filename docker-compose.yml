@@ -1,28 +1,28 @@
 version: '3'
 
 volumes:
-  db-data:
+  pg-data:
   prometheus-data:
   grafana-data:
 
 services:
   db:
-    image: postgres:14.5
+    build:
+      context: .
+      dockerfile: env/postgres/pg.Dockerfile
     hostname: readme-app-db
     container_name: postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     expose:
       - 5432
     ports:
       - "5432:5432"
-    #    env_file:
-    #      - 'config/database.yml'
     environment:
       - POSTGRES_PASSWORD=$SPRING_DATASOURCE_PASSWORD
       - POSTGRES_USER=$SPRING_DATASOURCE_USERNAME
-      - POSTGRES_DB=readmeapp_db
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=$DBNAME
+      - PGDATA=/var/lib/postgresql/data/pg-data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -44,12 +44,16 @@ services:
       - "5005:5005" #debug
     restart: always
     environment:
+      - HOST=db
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - APP_AUTH_TOKEN_SECRET=$APP_AUTH_TOKEN_SECRET
+      - APP_AUTH_TOKEN_SUBJECT=$APP_AUTH_TOKEN_SUBJECT
+      - APP_AUTH_TOKEN_AUDIENCE=$APP_AUTH_TOKEN_AUDIENCE
+      - APP_AUTH_TOKEN_EXPIRATION=$APP_AUTH_TOKEN_EXPIRATION
+      - APP_OAUTH2_AUTHORIZED_REDIRECT_URI=$APP_OAUTH2_AUTHORIZED_REDIRECT_URI
       - SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/readmeapp_db
       - SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME
       - SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET
       - MANAGEMENT_METRICS_TAGS_APPLICATION=$MANAGEMENT_METRICS_TAGS_APPLICATION
@@ -82,25 +86,30 @@ services:
     image: 'prom/prometheus'
     hostname: readme-app-prometheus
     container_name: prometheus
+    restart: unless-stopped
     volumes:
       - ./env/prometheus:/etc/prometheus
       - prometheus-data:/prometheus
     ports:
       - "9090:9090"
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "9090" ]
 
 
   grafana:
-    image: 'grafana/grafana'
+    image: 'grafana/grafana:9.0.4'
     hostname: readme-app-grafana
     container_name: grafana
     volumes:
       - ./env/grafana/provisioning:/etc/grafana/provisioning
       - grafana-data:/var/lib/grafana
     ports:
-      - "3100:3100"
+      - "3000:3000"
     restart: unless-stopped
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SERVER_HTTP_PORT=3100
+    env_file:
+      - ./env/grafana/grafana.env
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "3000" ]
