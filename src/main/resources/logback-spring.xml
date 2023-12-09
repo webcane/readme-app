@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %yellow(%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC}) %cyan([${hostname}:%thread]) %highlight(%-5level) %yellow(%logger{36}\(%file:%line\)) - %msg%n%throwable
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="cane.brothers" level="trace"/>
+</configuration>
