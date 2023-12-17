@@ -1,10 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
-import { Article } from '@app/shared/model/article.model';
-import { ArticlesService } from '@app/shared/service/articles.service';
-import { TagsService } from '@app/shared/service/tags.service';
-import { Observable } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
+import {Article} from '@app/shared/model/article.model';
+import {ArticlesService} from '@app/shared/service/articles.service';
+import {TagsService} from '@app/shared/service/tags.service';
+import {Observable} from 'rxjs';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from "@angular/router";
 
 export const urlValidator: ValidatorFn =
    (control: AbstractControl): ValidationErrors | null => {
@@ -35,7 +44,8 @@ export class EditorComponent implements OnInit {
   constructor(private fb: FormBuilder,
     public articleService: ArticlesService,
     public tagsService: TagsService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -66,6 +76,7 @@ export class EditorComponent implements OnInit {
       .create(this.articleForm.getRawValue() as Article)
       .subscribe((): void => {
         this.articleForm.reset();
+        this.router.navigate(['']);
       }, error => {
         this.toastrService.error(error, 'article saving');
       });
