@@ -332,6 +332,6 @@ dist
 # Eclipse
 .classpath
 .project
-!/.idea/
-!/.fleet/
+/.idea/
+/.fleet/
 /helm.txt
