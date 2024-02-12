@@ -7,15 +7,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -45,8 +48,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
-    handle(request, response, authentication);
-    this.clearAuthenticationAttributes(request, response);
+    //handle(request, response, authentication);
+   // this.clearAuthenticationAttributes(request, response);
+    String targetUrl = determineTargetUrl(request, response, authentication);
+
+    if (response.isCommitted()) {
+      logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+    }
+
+    clearAuthenticationAttributes(request, response);
+    getRedirectStrategy().sendRedirect(request, response, targetUrl);
   }
 
   /**
@@ -75,9 +86,38 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     // redirect to front-end or to default redirect url
     String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+    //String targetUrl = getDefaultTargetUrl();
 
-    // generate new jwt token
-    var accessToken = tokenSvc.createAccessToken();
+    String accessToken = "";
+
+    //  Map<String, Object> claims = Map.of("iss", "readme-app",
+    //        "role", "user",
+    //        "sub", appProperties.auth().tokenSubject(),
+    //        "aud", appProperties.auth().tokenAudience());
+
+    //   OAuth2UserInfo oauth2UserInfo = OAuth2UserInfoFactory.getUserInfo(
+    //   userRequest.getClientRegistration().getRegistrationId(),
+    //   oauth2User.getAttributes());
+
+    if (authentication instanceof OAuth2AuthenticationToken appToken) {
+      var attributes = appToken.getPrincipal().getAttributes();
+
+      var issuer = appToken.getPrincipal().getName();
+      var groups = attributes.get("groups");
+      var role = getMaxRole(groups);
+
+      // generate new jwt token
+      var accessClaims = new HashMap<String, Object>();
+
+      accessClaims.put("role", role);
+      accessClaims.put("email", attributes.get("email"));
+      accessClaims.put("name", accessClaims.get("name"));
+      accessClaims.put("username", accessClaims.get("preffered_username"));
+      accessClaims.put("nickname", accessClaims.get("nickname"));
+      accessClaims.put("groups", groups);
+
+      accessToken = tokenSvc.createAccessToken(accessClaims, issuer);
+    }
 
     return UriComponentsBuilder.fromUriString(targetUrl)
         .queryParam("token", accessToken)
@@ -92,5 +132,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     URI authorizedURI = URI.create(authorizedRedirectUri);
     return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
         && authorizedURI.getPort() == clientRedirectUri.getPort();
+  }
+
+  private String getMaxRole(Object groups) {
+    // todo
+    return "USER";
   }
 }

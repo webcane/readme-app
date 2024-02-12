@@ -3,8 +3,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${host:localhost}:${port:5432}/${dbname:readmeapp_db}
-    username: postgres
-    password: postgres
+    #username: ${username:postgres}
+    #password: ${password:postgres}
   jpa:
     show-sql: true
     generate-ddl: true

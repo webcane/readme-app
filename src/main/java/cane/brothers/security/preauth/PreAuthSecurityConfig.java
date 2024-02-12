@@ -14,25 +14,25 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedG
 @RequiredArgsConstructor
 public class PreAuthSecurityConfig {
 
-  @Bean
-  protected PreAuthenticatedAuthenticationProvider preAuthProvider(
-      PreAuthenticatedGrantedAuthoritiesUserDetailsService preAuthUserDetailsService) {
-    var provider = new PreAuthenticatedAuthenticationProvider();
-    provider.setPreAuthenticatedUserDetailsService(preAuthUserDetailsService);
-    return provider;
-  }
+    @Bean
+    protected AuthenticationDetailsSource<HttpServletRequest,
+            PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails> authDetailsSource() {
+        return (request) -> new PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails(request,
+                AppOAuth2Authorities.DEFAULT_AUTHORITIES);
+    }
 
-  @Bean
-  protected PreAuthenticatedGrantedAuthoritiesUserDetailsService preAuthUserDetailsService() {
-    // TODO
-    var userDetailsServer = new PreAuthenticatedGrantedAuthoritiesUserDetailsService();
-    return userDetailsServer;
-  }
+    @Bean
+    protected PreAuthenticatedAuthenticationProvider preAuthProvider(
+            PreAuthenticatedGrantedAuthoritiesUserDetailsService preAuthUserDetailsService) {
+        var provider = new PreAuthenticatedAuthenticationProvider();
+        provider.setPreAuthenticatedUserDetailsService(preAuthUserDetailsService);
+        return provider;
+    }
 
-  @Bean
-  protected AuthenticationDetailsSource<HttpServletRequest,
-      PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails> authDetailsSource() {
-    return (request) -> new PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails(request,
-            AppOAuth2Authorities.DEFAULT_AUTHORITIES);
-  }
+    @Bean
+    protected PreAuthenticatedGrantedAuthoritiesUserDetailsService preAuthUserDetailsService() {
+        return new PreAuthenticatedGrantedAuthoritiesUserDetailsService();
+    }
+
+
 }

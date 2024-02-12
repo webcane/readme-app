@@ -5,7 +5,6 @@ import cane.brothers.security.appuser.AppUserRepository;
 import cane.brothers.security.oauth2.user.AuthProvider;
 import cane.brothers.security.oauth2.user.OAuth2UserInfo;
 import cane.brothers.security.oauth2.user.OAuth2UserInfoFactory;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -15,6 +14,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 /**
  * @author mniedre
@@ -41,7 +42,7 @@ public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oauth2User) {
         OAuth2UserInfo oauth2UserInfo = OAuth2UserInfoFactory.getUserInfo(userRequest.getClientRegistration().getRegistrationId(), oauth2User.getAttributes());
-        if (StringUtils.isEmpty(oauth2UserInfo.getEmail())) {
+        if (!StringUtils.hasLength(oauth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
