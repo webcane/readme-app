@@ -24,24 +24,25 @@ public class PreAuthSecurityConfigurer extends AbstractHttpConfigurer<PreAuthSec
 
   @Override
   public void configure(HttpSecurity http) {
-    AuthenticationManagerBuilder authenticationManagerBuilder =
-        http.getSharedObject(AuthenticationManagerBuilder.class);
-    authenticationManagerBuilder.authenticationProvider(authProvider);
-    AuthenticationManager authenticationManager = authenticationManagerBuilder.getOrBuild();
+    AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+    builder.authenticationProvider(authProvider);
+    AuthenticationManager authenticationManager = builder.getOrBuild();
 
-    // Add preAuth token based authentication filter
+    // add preAuth token based authentication filter
     http.addFilterAfter(preAuthenticationFilter(authenticationManager), HeaderWriterFilter.class);
   }
 
-  protected RequestHeaderAuthenticationFilter preAuthenticationFilter(AuthenticationManager authenticationManager) {
+  protected RequestHeaderAuthenticationFilter preAuthenticationFilter(AuthenticationManager authManager) {
     var filter = new RequestHeaderAuthenticationFilter();
     // Authorization holds Bearer preAuth token
     filter.setPrincipalRequestHeader("Authorization");
     // do not throw exception when header is not present
     filter.setExceptionIfHeaderMissing(false);
     filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/**"));
-    filter.setAuthenticationManager(authenticationManager);
+    filter.setAuthenticationManager(authManager);
     filter.setAuthenticationDetailsSource(authDetailsSource);
+    // TODO
+    // filter.setAuthenticationSuccessHandler();
     return filter;
   }
 }

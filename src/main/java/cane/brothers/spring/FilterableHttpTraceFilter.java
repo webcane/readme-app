@@ -1,15 +1,16 @@
 package cane.brothers.spring;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
 import org.springframework.boot.actuate.web.exchanges.Include;
 import org.springframework.boot.actuate.web.exchanges.servlet.HttpExchangesFilter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author mniedre
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Profile("management")
 public class FilterableHttpTraceFilter extends HttpExchangesFilter {
 
-  private List<String> excludes = Arrays.asList("actuator", "management", "favicon", "build", "swagger", "swagger-ui");
+  private final List<String> excludes = Arrays.asList("actuator", "management", "favicon", "build", "swagger", "swagger-ui");
 
   /**
    * Create a new {@link HttpExchangesFilter} instance.
@@ -34,7 +35,7 @@ public class FilterableHttpTraceFilter extends HttpExchangesFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String reqPath = request.getRequestURI();
-    boolean exclude = excludes.stream().anyMatch(ex -> reqPath.contains(ex));
+    boolean exclude = excludes.stream().anyMatch(reqPath::contains);
     if (!exclude) {
       log.trace(reqPath);
     }

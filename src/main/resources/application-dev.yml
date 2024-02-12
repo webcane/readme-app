@@ -8,13 +8,21 @@ server:
 
 logging:
   level:
-    web: DEBUG
+    org.hibernate.id: DEBUG
     org.hibernate.sql: DEBUG
+    org.zaxxer.hikari: DEBUG
     org.springframework: INFO
+    org.hibernate.event: DEBUG
     org.springframework.web: DEBUG
-    org.springframework.boot.actuate: INFO
-#    org.springframework.orm.jpa: DEBUG
+    org.springframework.orm.jpa: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.data.rest: DEBUG
+    org.springframework.web.servlet: INFO
+    org.springframework.boot.actuate: INFO
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.security.authorization: TRACE
+    org.springframework.security.authentication: TRACE
     org.springframework.security.web.authentication: TRACE
 #    org.springframework.transaction: DEBUG
 #    org.springframework.transaction.interceptor: TRACE

@@ -1,13 +1,15 @@
 springdoc:
   # https://springdoc.org/#swagger-ui-properties
   swagger-ui:
+    enabled: true
     syntaxHighlight:
       theme: obsidian
     path: /swagger-ui
-  #   path: /swagger-ui.html
+    operationsSorter: method
+  docExpansion: none
   show-actuator: true
-
   # https://springdoc.org/#springdoc-openapi-core-properties
   api-docs:
+    enabled: true
     path: /swagger
 #   path: /v3/api-docs
