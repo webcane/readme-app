@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -62,12 +61,6 @@ public class OpenApiConfig {
         secReq.addList(AUTH_HEADER);
 
         return new OpenAPI()
-                .addTagsItem(new Tag()
-                        .name("article api")
-                        .description("article's operations"))
-                .addTagsItem(new Tag()
-                        .name("tag api")
-                        .description("tag's operations"))
                 .info(new Info()
                         .title("Readme app REST API")
                         .description("Spring Boot RESTful service using springdoc-openapi and OpenAPI 3.")

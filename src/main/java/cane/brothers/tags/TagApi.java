@@ -6,9 +6,12 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.util.List;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
+@Tag(name = "Tag's API", description = "tag's operations")
 public interface TagApi {
 
   @Operation(summary = "get all tags", method = "GET", responses = {

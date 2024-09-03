@@ -10,10 +10,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.util.Collection;
-import java.util.List;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collection;
+import java.util.List;
+
+@Tag(name = "Article's API", description = "Article's operations")
 public interface ArticleApi {
 
   @Operation(summary = "get all articles", tags = {"article", "articles"},
