@@ -30,7 +30,7 @@
         <lombok.version>1.18.30</lombok.version>
         <openApi.version>2.3.0</openApi.version>
 <!--        <spring.version>5.3.3.RELEASE</spring.version>-->
-        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <git-commit-id.version>4.9.10</git-commit-id.version>
         <skip.integration.tests>false</skip.integration.tests>
     </properties>
